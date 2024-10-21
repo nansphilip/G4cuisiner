@@ -21,6 +21,8 @@
             "@actions/*": ["./actions/*"],
             "@app/*": ["./app/*"],
             "@comps/*": ["./components/*"],
+            "@prisma/*": ["./prisma/*"],
+            "@public/*": ["./public/*"],
             "@/*": ["./*"]
         }
     },

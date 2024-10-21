@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# G4cuisiner
 
-## Getting Started
+G4cuisiner is G4 School student project.
 
-First, run the development server:
+## Project installation (local)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Make sure you already had installed:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  - Git
+  - Node JS
+  - PNPM
+  - MySQL
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Install project dependencies
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  ```bash
+  pnpm install
+  ```
 
-## Learn More
+- Creates a database user and a password
 
-To learn more about Next.js, take a look at the following resources:
+  ```sql
+  CREATE USER 'g4cuisiner-user'@'localhost' IDENTIFIED BY 'g4cuisiner-password';
+  ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  - Allows user to connect to database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  ```sql
+  GRANT ALL PRIVILEGES ON *.* TO 'g4cuisiner-user'@'localhost';
+  ```
 
-## Deploy on Vercel
+- Add an `.env` file at the root of the project, with the following variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  - Database connection ([Prisma Docs](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases/connect-your-database-typescript-mysql))
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  ```js
+  DATABASE_URL=mysql://g4cuisiner-user:g4cuisiner-password@localhost:3306/g4cuisiner-db
+  ```
+
+  - Session secret ([Better Auth Docs](https://www.better-auth.com/docs/installation))
+
+  ```js
+  BETTER_AUTH_SECRET=session-encryption-key
+  BETTER_AUTH_URL=http://localhost:3000
+  ```
+
+- Generate the Prisma client
+
+  ```bash
+  pnpx prisma generate
+  ```
+
+- Run Prisma database migrations
+
+  ```bash
+  pnpx prisma migrate dev --name initial-migration
+  ```
+
+- Run server project
+
+   ```bash
+   pnpm run dev
+   ```
