@@ -12,7 +12,7 @@ type ButtonProps = {
 
     variant?: variantType,
     buttonSize?: "none" | "sm" | "md" | "lg",
-    fontSize?: "none" | "xs" | "sm" | "md" | "lg" | "xl",
+    fontSize?: "xs" | "sm" | "md" | "lg" | "xl",
     roundedSize?: "none" | "default" | "md" | "lg",
     ring?: "default" | "none",
     className?: string,
@@ -92,7 +92,6 @@ export default function Button({
     }
 
     const fontSizeClass = {
-        none: "",
         xs: "text-xs",
         sm: "text-sm",
         md: "text-base",
@@ -171,6 +170,7 @@ const wave = (e: React.MouseEvent<HTMLButtonElement>,
     // Release the radial effect
     setTimeout(() => {
         buttonEl.style.background = bgColor
+        // eslint
         buttonEl.offsetHeight
         buttonEl.style.transition = `background ${collapseDuration}ms`
         buttonEl.style.background = ""

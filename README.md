@@ -61,3 +61,7 @@ G4cuisiner is G4 School student project.
    ```bash
    pnpm run dev
    ```
+
+- (optional)
+
+    Clear your `localhost:3000` browser cookies is you have an error

@@ -1,4 +1,5 @@
 import "@/globals.css";
+import HeaderClient from "@comps/client/header";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -14,9 +15,14 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = false;
+
     return (
-        <html lang="fr">
-            <body className={`${inter.className}`}>{children}</body>
+        <html lang="fr" className="h-full">
+            <body className={`${inter.className} flex h-full flex-col items-center justify-center`}>
+                <HeaderClient session={session} />
+                {children}
+            </body>
         </html>
     );
 }

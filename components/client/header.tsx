@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { combo } from "@comps/combo";
-import SlidingHoverClient from "@comps/client/sliding-motion";
+import SlidingHover from "@comps/client/sliding-motion";
 import Button from "@comps/client/button";
 
 type LinkProps = {
@@ -44,7 +44,6 @@ export default function HeaderClient(props: HeaderProps) {
                 { label: "Server Fruits", href: "/random-fruit" },
             ],
         },
-        { label: "Nans's Shortcuts", href: "/shortcut" },
         {
             label: "My Account",
             href: "/dashboard",
@@ -66,7 +65,7 @@ export default function HeaderClient(props: HeaderProps) {
     return (
         <header>
             <nav className="flex justify-center bg-white pb-1.5 pt-2">
-                <SlidingHoverClient
+                <SlidingHover
                     className="flex items-start justify-center gap-1"
                     color="bg-gray-200"
                     rounded="rounded-md"
@@ -75,7 +74,7 @@ export default function HeaderClient(props: HeaderProps) {
                     {linkList.map((linkOrGroup, index) => (
                         <HeaderDisplay key={index} index={index} linkOrGroup={linkOrGroup} session={session} />
                     ))}
-                </SlidingHoverClient>
+                </SlidingHover>
             </nav>
             <div className="absolute z-10 h-1 w-full bg-gradient-to-b from-white to-transparent"></div>
         </header>

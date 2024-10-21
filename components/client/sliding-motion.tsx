@@ -18,7 +18,7 @@ import { useEffect } from "react"
     </SlidingHoverClient>
  * ```
  */
-export default function SlidingHoverClient({ color, rounded, duration, className, children }: {
+export default function SlidingHover({ color, rounded, duration, className, children }: {
     color?: string,
     rounded?: string
     duration?: string

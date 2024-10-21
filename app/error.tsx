@@ -3,7 +3,7 @@
 import Button from "@comps/client/button"
 import { useEffect } from "react"
 
-export default function Error({ error, reset }: {
+export default function ErrorPage({ error, reset }: {
     error: Error,
     reset: () => void
 }) {
