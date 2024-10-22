@@ -19,7 +19,7 @@ export default function RootLayout({
 
     return (
         <html lang="fr" className="h-full">
-            <body className={`${inter.className} flex h-full flex-col items-center justify-center`}>
+            <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-x-hidden`}>
                 <HeaderClient session={session} />
                 {children}
             </body>

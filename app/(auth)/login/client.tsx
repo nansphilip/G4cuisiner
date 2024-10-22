@@ -43,7 +43,7 @@ export default function LoginClient(props: LoginClientProps) {
         <form action={loginAsync} className={className}>
             {children}
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <Button type="submit" disabled={disabled} ring="none" className="flex items-center justify-center gap-2">
+            <Button type="submit" disabled={disabled} className="flex items-center justify-center gap-2">
                 <ButtonContent loading={loading} />
             </Button>
         </form>

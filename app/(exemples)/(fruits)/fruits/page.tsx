@@ -1,15 +1,14 @@
-// Imports des composants nécessaires
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardImage, CardTitle } from "@ui/card";
-import Button from "@comps/ui/button";
-import kiwiImage from "@images/kiwi.webp";
-import mangueImage from "@images/mangue.webp";
-import ananasImage from "@images/ananas.webp";
+import Image from "next/image";
+import kiwiImage from "@public/images/kiwi.webp";
+import mangueImage from "@public/images/mangue.webp";
+import ananasImage from "@public/images/ananas.webp";
 import { StaticImageData } from "next/image";
+import Button from "@comps/client/button";
 
 // Composant Page Fruits
 export default function FruitsPage() {
     // Liste de fruits et de leur image
-    const fruitsList = [
+    const fruitList = [
         { nom: "Kiwi", image: kiwiImage },
         { nom: "Mangue", image: mangueImage },
         { nom: "Ananas", image: ananasImage },
@@ -21,7 +20,7 @@ export default function FruitsPage() {
             <p>These fruits cards are based on a reusable component created for each fruit from the list.</p>
             <div className="flex flex-row flex-wrap items-center justify-center gap-4">
                 {/* Rend le composant carte fruit pour chaque fruit dans la liste */}
-                {fruitsList.map((fruit, index) => FruitCard({ index, fruitName: fruit.nom, fruitImage: fruit.image }))}
+                {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.nom, fruitImage: fruit.image }))}
             </div>
         </main>
     );
@@ -34,32 +33,22 @@ type FruitProps = {
     fruitImage: StaticImageData;
 };
 
-// Composant Carte Fruit
 const FruitCard = (props: FruitProps) => {
-    // Destructuration des props en variables
     const { index, fruitName, fruitImage } = props;
 
-    // Affichage du composant carte fruit
     return (
-        <Card
-            key={index}
-            className="w-[300px] overflow-hidden transition-all duration-200 hover:scale-105 hover:shadow-md hover:shadow-gray-300"
-        >
-            <CardImage src={fruitImage} alt={fruitName} />
-            <CardHeader>
-                <CardTitle>{fruitName}</CardTitle>
-                <CardDescription>Fruit exotique</CardDescription>
-            </CardHeader>
-            <CardContent className="line-clamp-3">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi sint dolore tempore accusantium,
-                atque, alias minima dolorum adipisci magni aliquid.
-            </CardContent>
-            <CardFooter className="flex justify-between">
-                <Button type="button" variant="outline">
-                    Preview
-                </Button>
-                <Button type="button">Open</Button>
-            </CardFooter>
-        </Card>
+        <div key={index} className="flex flex-col overflow-hidden rounded-lg border shadow transition-transform duration-150 hover:scale-105">
+            <Image className="aspect-[5/4] object-cover" placeholder="blur" src={fruitImage} height={200} width={250} alt={fruitName} />
+            <div className="flex flex-col gap-4 p-4">
+                <div>
+                    <p>{fruitName}</p>
+                    <p className="text-xs text-gray-500">Fruit exotique</p>
+                </div>
+                <div className="flex flex-row justify-between">
+                    <Button type="button" variant="outline">Preview</Button>
+                    <Button type="button">Open fruit</Button>
+                </div>
+            </div>
+        </div>
     );
 };
