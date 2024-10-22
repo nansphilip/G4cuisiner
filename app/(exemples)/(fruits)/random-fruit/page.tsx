@@ -2,11 +2,7 @@
 "use client";
 
 // Imports des composants nécessaires
-import { Card, CardDescription, CardHeader, CardImage, CardTitle } from "@ui/card";
-import Button from "@comps/ui/button";
-import { RandomFruitType, RandomFruits } from "@/actions/fruits";
 import { useState } from "react";
-import Loader from "@server/loader";
 
 // Composant Page Fruits
 export default function FruitsPage() {
@@ -26,7 +22,7 @@ export default function FruitsPage() {
 
     // Afficher le contenu de la page
     return (
-        <>
+        <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
             <p>Click button to dynamically fetch fruits from server.</p>
             <div className="flex flex-wrap items-center justify-center gap-4">
                 {fruitList.map((fruit, index) => (
@@ -52,6 +48,6 @@ export default function FruitsPage() {
             >
                 {isLoading ? <Loader active={isLoading} /> : fruitList ? "Obtenir un fruit" : "Encore un fuit ?"}
             </Button>
-        </>
+        </main>
     );
 }

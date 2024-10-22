@@ -162,15 +162,15 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                         group.filter((link) => pathname === link.href).length > 0 && "font-bold"
                     )}
                     onMouseEnter={() => setIsOpen(true)}
-                onMouseLeave={() => setIsOpen(false)}
+                    onMouseLeave={() => setIsOpen(false)}
                 >
                     <span>{label}</span>
                     <ChevronDown className={combo("transition-transform duration-300", isOpen && "-rotate-180")} />
                 </Button>
                 {/* Navigation popup */}
                 <div
-                onMouseEnter={() => setIsOpen(true)}
-                onMouseLeave={() => setIsOpen(false)}
+                    onMouseEnter={() => setIsOpen(true)}
+                    onMouseLeave={() => setIsOpen(false)}
                     id={`popup-nav-${index}`}
                     className={combo(
                         "z-30 p-2 border absolute opacity-100 transition-opacity duration-200 flex flex-col gap-1 rounded-lg",
@@ -189,10 +189,12 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                         !isOpen && "opacity-0 pointer-events-none"
                     )}
                 ></div>
-                {/* Hover zone */} 
-                <div id={`popup-hov-${index}`} className={combo("absolute z-30", !isOpen && "pointer-events-none")}
-                onMouseEnter={() => setIsOpen(true)}
-                onMouseLeave={() => setIsOpen(false)}
+                {/* Hover zone */}
+                <div
+                    id={`popup-hov-${index}`}
+                    className={combo("absolute z-30", !isOpen && "pointer-events-none")}
+                    onMouseEnter={() => setIsOpen(true)}
+                    onMouseLeave={() => setIsOpen(false)}
                 ></div>
             </div>
         );

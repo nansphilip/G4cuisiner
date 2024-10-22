@@ -17,13 +17,13 @@ export default function FruitsPage() {
 
     // Afficher le contenu de la page
     return (
-        <>
+        <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
             <p>These fruits cards are based on a reusable component created for each fruit from the list.</p>
             <div className="flex flex-row flex-wrap items-center justify-center gap-4">
                 {/* Rend le composant carte fruit pour chaque fruit dans la liste */}
                 {fruitsList.map((fruit, index) => FruitCard({ index, fruitName: fruit.nom, fruitImage: fruit.image }))}
             </div>
-        </>
+        </main>
     );
 }
 

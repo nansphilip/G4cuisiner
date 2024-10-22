@@ -4,7 +4,7 @@ import ZustandSetClient from "./client";
 export default function ZustandSetPage() {
 
     return (
-        <main className="flex flex-1 flex-col items-center justify-center gap-2 overflow-y-auto px-6 pb-6">
+        <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
             <div className="flex items-center gap-4">
                 <ZustandSetClient/>
             </div>

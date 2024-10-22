@@ -6,7 +6,7 @@ import ZustandGetClient from "./client";
 export default function ZustandGetPage() {
 
     return (
-        <main className="flex flex-1 flex-col items-center justify-center gap-2 overflow-y-auto px-6 pb-6">
+        <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
                 <div>
                     <span>Switch state is{" "}</span>
                     <ZustandGetClient/>

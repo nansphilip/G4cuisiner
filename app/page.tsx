@@ -1,8 +1,8 @@
 import Button from "@comps/client/button";
 
-export default async function Home() {
+export default async function HomePage() {
     // const session = await GetSession();
-    const session = false
+    const session = false;
 
     return (
         <main className="flex flex-1 flex-col items-center justify-center gap-2">
