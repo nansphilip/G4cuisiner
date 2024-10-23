@@ -54,8 +54,15 @@ export default async function RegisterPage() {
                             autoComplete="on"
                         />
                     </label>
+                    <label className="flex w-full flex-col gap-1">
+                        <input
+                            className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 focus:ring-2"
+                            name="image"
+                            type="file"
+                        />
+                    </label>
                 </RegisterClient>
-            
+
                 <Button type="link" variant="link" ring="none" fontSize="sm" href="/login">
                     Already registered?
                 </Button>
