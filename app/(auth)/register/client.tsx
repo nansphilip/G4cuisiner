@@ -4,6 +4,7 @@ import FormFeedback, { FormFeedbackProps } from "@comps/server/form-feedback";
 import Button from "@comps/client/button";
 import Loader from "@comps/server/loader";
 import { useState } from "react";
+import { signUp } from "@/auth-cient";
 
 type RegisterClientProps = {
     className: string;
@@ -18,18 +19,23 @@ export default function RegisterClient(props: RegisterClientProps) {
     const [mode, setMode] = useState<FormFeedbackProps["mode"]>("hidden");
     const [message, setMessage] = useState("");
 
-    const registerAsync = async () => {
+    const register = async (formData: FormData) => {
         // Start loading
         setLoading(true);
         setDisabled(true);
 
-        // const success = await login();
-        const success = true;
+        const { data, error } = await signUp({
+            email: formData.get("email"),
+            password: formData.get("password"),
+            // firstname: formData.get("firstname"),
+            // lastname: formData.get("lastname"),
+            // image: formData.get("image"),
+        });
 
-        if (success) {
+        if (data) {
             setMode("success");
             setMessage("Login successful.");
-        } else {
+        } else if (error) {
             setMode("danger");
             setMessage("Login failed.");
         }
@@ -40,7 +46,7 @@ export default function RegisterClient(props: RegisterClientProps) {
     };
 
     return (
-        <form action={registerAsync} className={className}>
+        <form action={register} className={className}>
             {children}
             <FormFeedback mode={mode}>{message}</FormFeedback>
             <Button type="submit" disabled={disabled} className="flex items-center justify-center gap-2">

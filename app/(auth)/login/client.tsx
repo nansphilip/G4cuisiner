@@ -4,6 +4,7 @@ import Loader from "@comps/server/loader";
 import Button from "@comps/client/button";
 import { useState } from "react";
 import FormFeedback, { FormFeedbackProps } from "@comps/server/form-feedback";
+import { signIn } from "@/auth-cient";
 
 type LoginClientProps = {
     className?: string;
@@ -18,18 +19,20 @@ export default function LoginClient(props: LoginClientProps) {
     const [mode, setMode] = useState<FormFeedbackProps["mode"]>("hidden");
     const [message, setMessage] = useState("");
 
-    const loginAsync = async () => {
+    const login = async (formData: FormData) => {
         // Start loading
         setLoading(true);
         setDisabled(true);
 
-        // const success = await login();
-        const success = true;
+        const { data, error } = await signIn({
+            email: formData.get("email"),
+            password: formData.get("password")
+        });
 
-        if (success) {
+        if (data) {
             setMode("success");
             setMessage("Login successful.");
-        } else {
+        } else if (error) {
             setMode("danger");
             setMessage("Login failed.");
         }
@@ -40,7 +43,7 @@ export default function LoginClient(props: LoginClientProps) {
     };
 
     return (
-        <form action={loginAsync} className={className}>
+        <form action={login} className={className}>
             {children}
             <FormFeedback mode={mode}>{message}</FormFeedback>
             <Button type="submit" disabled={disabled} className="flex items-center justify-center gap-2">
