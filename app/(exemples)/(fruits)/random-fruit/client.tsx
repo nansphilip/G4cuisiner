@@ -2,9 +2,8 @@
 
 import { GetRandomFruits } from "@actions/database/Fruit";
 import { FruitType } from "@actions/types/Fruit";
-import Button from "@comps/client/button";
 import FruitCard from "@comps/server/fruit-card";
-import Loader from "@comps/server/loader";
+import LoadingButton from "@comps/server/loading-button";
 import { useState } from "react";
 
 export default function FruitsClient() {
@@ -27,15 +26,7 @@ export default function FruitsClient() {
             <div className="flex flex-wrap items-center justify-center gap-4">
                 {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.imageUrl }))}
             </div>
-            <Button
-                type="button"
-                disabled={isLoading}
-                className="flex h-10 w-40 items-center justify-center p-6"
-                onClick={GetFruit}
-                ring="none"
-            >
-                {isLoading ? <Loader active={isLoading} /> : fruitList ? "Obtenir un fruit" : "Encore un fuit ?"}
-            </Button>
+            <LoadingButton type="button" onClick={GetFruit} label="Obtenir un fruit" loading={isLoading} className="px-4 py-2"/>
         </>
     );
 }

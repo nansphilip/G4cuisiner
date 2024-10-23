@@ -54,11 +54,11 @@ export default function Button(props: ButtonProps) {
     };
 
     const variantClass = {
-        default: "bg-black text-white hover:bg-gray-800 disabled:bg-gray-800 disabled:text-gray-300",
-        outline: "border bg-white hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-700",
-        ghost: "hover:bg-gray-100 bg-white disabled:bg-gray-100 disabled:text-gray-700",
-        danger: "bg-red-500 text-white hover:bg-red-600 disabled:bg-red-600 disabled:text-gray-300",
-        link: "text-gray-500 decoration-gray-500 hover:underline disabled:text-gray-400 disabled:no-underline",
+        default: "bg-black text-white hover:bg-gray-700 disabled:bg-gray-700 disabled:text-gray-300",
+        outline: "border bg-white hover:bg-gray-200 disabled:bg-gray-200 disabled:text-gray-700",
+        ghost: "hover:bg-gray-200 bg-white disabled:bg-gray-200 disabled:text-gray-700",
+        danger: "bg-red-500 text-white hover:bg-red-700 disabled:bg-red-700 disabled:text-gray-300",
+        link: "text-gray-500 decoration-gray-500 hover:underline disabled:text-gray-300 disabled:no-underline",
         transparent: "",
     };
 
@@ -85,7 +85,7 @@ export default function Button(props: ButtonProps) {
     };
 
     const classList = combo(
-        "text-center",
+        "text-center transition-all duration-150",
         ringClass[ring],
         variantClass[variant],
         buttonSizeClass[buttonSize],

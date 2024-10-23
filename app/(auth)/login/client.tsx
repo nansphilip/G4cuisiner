@@ -14,18 +14,18 @@ export default function LoginClient(props: LoginClientProps) {
     const { className, children } = props;
 
     const [loading, setLoading] = useState(false);
-    const [disabled, setDisabled] = useState(false);
     const [mode, setMode] = useState<FormFeedbackProps["mode"]>("hidden");
     const [message, setMessage] = useState("");
 
-    const login = async (formData: FormData) => {
+    const Login = async (formData: FormData) => {
         // Start loading
         setLoading(true);
-        setDisabled(true);
 
         const { data, error } = await signIn.email({
             email: formData.get("email") as string,
-            password: formData.get("password") as string
+            password: formData.get("password") as string,
+            dontRememberMe: !formData.get("rememberMe"),
+            callbackURL: "/dashboard",
         });
 
         if (data) {
@@ -38,14 +38,13 @@ export default function LoginClient(props: LoginClientProps) {
 
         // Stop loading
         setLoading(false);
-        setDisabled(false);
     };
 
     return (
-        <form action={login} className={className}>
+        <form action={Login} className={className}>
             {children}
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <LoadingButton label="Login" loading={loading} disabled={disabled} />
+            <LoadingButton type="submit" label="Login" loading={loading} />
         </form>
     );
 }

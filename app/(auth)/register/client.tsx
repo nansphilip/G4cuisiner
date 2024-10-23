@@ -14,20 +14,19 @@ export default function RegisterClient(props: RegisterClientProps) {
     const { className, children } = props;
 
     const [loading, setLoading] = useState(false);
-    const [disabled, setDisabled] = useState(false);
     const [mode, setMode] = useState<FormFeedbackProps["mode"]>("hidden");
     const [message, setMessage] = useState("");
 
-    const register = async (formData: FormData) => {
+    const Register = async (formData: FormData) => {
         // Start loading
         setLoading(true);
-        setDisabled(true);
 
         const { data, error } = await signUp.email({
             email: formData.get("email") as string,
             password: formData.get("password") as string,
             name: formData.get("firstname") + " " + formData.get("lastname"),
-            image: formData.get("image") ? convertImageToBase64(formData.get("image")) : undefined,
+            image: formData.get("image") ? convertImageToBase64(formData.get("profilePicture")) : undefined,
+            callbackURL: "/dashboard",
         });
 
         if (data) {
@@ -40,14 +39,13 @@ export default function RegisterClient(props: RegisterClientProps) {
 
         // Stop loading
         setLoading(false);
-        setDisabled(false);
     };
 
     return (
-        <form action={register} className={className}>
+        <form action={Register} className={className}>
             {children}
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <LoadingButton label="Register" loading={loading} disabled={disabled} />
+            <LoadingButton type="submit" label="Register" loading={loading} />
         </form>
     );
 }

@@ -1,17 +1,26 @@
 import Button from "@comps/client/button";
+import { combo } from "@comps/combo";
 import Loader from "@comps/server/loader";
 
 type ButtonProps = {
+    type: "button" | "submit";
     label: string;
     loading: boolean;
-    disabled: boolean;
+    disabled?: boolean;
+    className?: string;
+    onClick?: () => void;
 };
 
 export default function LoadingButton(props: ButtonProps) {
-    const { label, loading, disabled } = props;
+    const { type, label, loading, disabled = false, className, onClick } = props;
 
     return (
-        <Button type="submit" disabled={disabled} className="flex items-center justify-center gap-2">
+        <Button
+            type={type}
+            disabled={disabled ?? loading}
+            className={combo("flex items-center justify-center gap-2", className)}
+            onClick={onClick}
+        >
             {loading ? (
                 <>
                     <Loader />

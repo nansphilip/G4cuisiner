@@ -76,6 +76,18 @@ model Verification {
     @@map("verification")
 }
 
+model RateLimit {
+    id     String @id @unique @default(uuid())
+    window Int
+    max    Int
+    count  Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("rateLimit")
+}
+
 model Recipe {
     id          String @id @unique @default(uuid())
     name        String
