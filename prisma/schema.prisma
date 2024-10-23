@@ -14,9 +14,9 @@ datasource db {
 }
 
 model User {
-    id            String  @id
+    id            String  @id @unique @default(uuid())
     name          String
-    email         String @unique
+    email         String  @unique
     emailVerified Boolean
     image         String?
 
@@ -30,7 +30,7 @@ model User {
 }
 
 model Session {
-    id        String   @id
+    id        String   @id @unique @default(uuid())
     expiresAt DateTime
     ipAddress String?
     userAgent String?
@@ -45,13 +45,13 @@ model Session {
 }
 
 model Account {
-    id           String    @id
-    accountId    String
-    providerId   String
+    id         String @id @unique @default(uuid())
+    accountId  String
+    providerId String
 
-    userId       String
-    user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
     accessToken  String?
     refreshToken String?
     idToken      String?
@@ -65,7 +65,7 @@ model Account {
 }
 
 model Verification {
-    id         String   @id
+    id         String   @id @unique @default(uuid())
     identifier String
     value      String
     expiresAt  DateTime
@@ -77,7 +77,7 @@ model Verification {
 }
 
 model Recipe {
-    id          String @id
+    id          String @id @unique @default(uuid())
     name        String
     description String
     image       String
@@ -89,10 +89,10 @@ model Recipe {
 }
 
 model Fruit {
-    id          String @id
+    id          String @id @unique @default(uuid())
     name        String
     description String
-    image       String
+    imageUrl    String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
