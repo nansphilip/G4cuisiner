@@ -18,9 +18,7 @@ export default function FormFeedback(props: FormFeedbackProps) {
         "warning": "bg-orange-200 border-orange-400",
     }
 
-    const classList = `${color[mode]} border w-full rounded px-2 text-sm `
-
-    return <div className={combo(classList, className)}>
+    return <div className={combo('border w-full rounded px-2 text-sm', color[mode], className)}>
         {children}
     </div>
 }

@@ -18,17 +18,31 @@ export default function RegisterClient(props: RegisterClientProps) {
     const [message, setMessage] = useState("");
 
     const Register = async (formData: FormData) => {
-        // Start loading
-        setLoading(true);
+        const { data, error } = await signUp.email(
+            {
+                email: formData.get("email") as string,
+                password: formData.get("password") as string,
+                name: (formData.get("firstname") + " " + formData.get("lastname")) as string,
+                image: undefined, // TODO: implement `convertImageToBase64(formData.get("profilePicture"))`
+                callbackURL: "/dashboard",
+            },
+            {
+                onRequest: (ctx) => {
+                    setLoading(true);
+                    console.log("Register start :", ctx);
+                },
+                onSuccess: (ctx) => {
+                    setLoading(false);
+                    console.log("Register end :", ctx);
+                },
+                onError: (ctx) => {
+                    setLoading(false);
+                    console.log("Register failed :", ctx);
+                },
+            }
+        );
 
-        const { data, error } = await signUp.email({
-            email: formData.get("email") as string,
-            password: formData.get("password") as string,
-            name: formData.get("firstname") + " " + formData.get("lastname"),
-            image: formData.get("image") ? convertImageToBase64(formData.get("profilePicture")) : undefined,
-            callbackURL: "/dashboard",
-        });
-
+        // Display feedback
         if (data) {
             setMode("success");
             setMessage("Register successful.");
@@ -36,9 +50,6 @@ export default function RegisterClient(props: RegisterClientProps) {
             setMode("danger");
             setMessage("Register failed.");
         }
-
-        // Stop loading
-        setLoading(false);
     };
 
     return (

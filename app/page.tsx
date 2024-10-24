@@ -1,7 +1,7 @@
 import Button from "@comps/client/button";
 
 export default async function HomePage() {
-    // const session = await GetSession();
+
     const session = false;
 
     return (

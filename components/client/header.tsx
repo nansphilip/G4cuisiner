@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { combo } from "@comps/combo";
 import SlidingHover from "@comps/client/sliding-motion";
 import Button from "@comps/client/button";
+import { BetterSessionData, useSession } from "@/auth-cient";
 
 type LinkProps = {
     label: string;
@@ -19,12 +20,8 @@ type LinkGroup = {
 };
 type LinkPropsList = (LinkProps | LinkGroup)[];
 
-type HeaderProps = {
-    session: boolean | null; // TODO: change to Better Auth Session type
-};
-
-export default function HeaderClient(props: HeaderProps) {
-    const { session } = props;
+export default function HeaderClient() {
+    const {data: session} = useSession();
 
     const linkList: LinkPropsList = [
         { label: "Home", href: "/" },
@@ -84,7 +81,7 @@ export default function HeaderClient(props: HeaderProps) {
 type HeaderDisplayProps = {
     index: number;
     linkOrGroup: LinkProps | LinkGroup;
-    session: boolean | null; // TODO: change to Better Auth Session type
+    session: BetterSessionData;
 };
 
 const HeaderDisplay = (props: HeaderDisplayProps) => {
@@ -143,7 +140,8 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
         const { label, href, group } = linkOrGroup;
 
         const sessionActive = group.map((link) => link.sessionActive).includes(true);
-        const displayButton = (session && sessionActive) || (!session && !sessionActive) || sessionActive === undefined;
+        const displayButton =
+            (session && sessionActive) || (!session && !sessionActive) || sessionActive === undefined;
 
         if (!displayButton) return <></>;
 
@@ -206,7 +204,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
 
 type HeaderLinkProps = {
     link: LinkProps;
-    session: boolean | null; // TODO: change to Better Auth Session type
+    session: BetterSessionData;
 };
 
 const HeaderLink = (props: HeaderLinkProps) => {
@@ -217,7 +215,8 @@ const HeaderLink = (props: HeaderLinkProps) => {
     const pathname = usePathname();
 
     // Display the button only if the session is active or not
-    const displayButton = (session && sessionActive) || (!session && !sessionActive) || sessionActive === undefined;
+    const displayButton =
+        (session && sessionActive) || (!session && !sessionActive) || sessionActive === undefined;
     if (!displayButton) return <></>;
 
     return (

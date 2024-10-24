@@ -18,15 +18,28 @@ export default function LoginClient(props: LoginClientProps) {
     const [message, setMessage] = useState("");
 
     const Login = async (formData: FormData) => {
-        // Start loading
-        setLoading(true);
-
-        const { data, error } = await signIn.email({
-            email: formData.get("email") as string,
-            password: formData.get("password") as string,
-            dontRememberMe: !formData.get("rememberMe"),
-            callbackURL: "/dashboard",
-        });
+        const { data, error } = await signIn.email(
+            {
+                email: formData.get("email") as string,
+                password: formData.get("password") as string,
+                dontRememberMe: !formData.get("rememberMe"),
+                callbackURL: "/dashboard",
+            },
+            {
+                onRequest: (ctx) => {
+                    setLoading(true);
+                    console.log("Register start :", ctx);
+                },
+                onSuccess: (ctx) => {
+                    setLoading(false);
+                    console.log("Register end :", ctx);
+                },
+                onError: (ctx) => {
+                    setLoading(false);
+                    console.log("Register failed :", ctx);
+                },
+            }
+        );
 
         if (data) {
             setMode("success");
@@ -35,9 +48,6 @@ export default function LoginClient(props: LoginClientProps) {
             setMode("danger");
             setMessage("Login failed.");
         }
-
-        // Stop loading
-        setLoading(false);
     };
 
     return (

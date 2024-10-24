@@ -10,17 +10,16 @@ export const metadata: Metadata = {
     description: "Application de partage de recettes",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const session = false;
 
     return (
         <html lang="fr" className="h-full">
             <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-x-hidden`}>
-                <HeaderClient session={session} />
+                <HeaderClient />
                 {children}
             </body>
         </html>
