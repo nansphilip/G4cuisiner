@@ -1,37 +1,24 @@
-"use client"
+"use client";
 
-import { DestroySession, GetSession } from "@actions/cookies/session"
-import { DeleteSessionDB, SelectSessionDB } from "@actions/database/Session"
-import { SessionDatabase } from "@type/database"
-import { useRouter } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { signOut, useSession } from "@/auth-client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function LogoutClient({ children }: {
-    children: React.ReactNode
-}) {
-    // Initialize router
-    const router = useRouter()
-    const alreadyLogoutRef = useRef(false)
+export default function LogoutClient({ children }: { children: React.ReactNode }) {
+    const router = useRouter();
+    const {data: session} = useSession();
+
+    if (!session) {
+        router.push("/login");
+    }
+
+    const logout = async () => {
+        await signOut();
+    };
 
     useEffect(() => {
-        // Prevent multiple calls to emailVerification
-        if (alreadyLogoutRef.current) return
-        alreadyLogoutRef.current = true
+        logout();
+    }, []);
 
-        // Get session from cookies
-        GetSession().then((session) => {
-            // Get session from database
-            SelectSessionDB({ userId: session?.data.id }).then((sessionDB) => {
-                // Delete session from database
-                DeleteSessionDB({ id: (sessionDB as SessionDatabase).id }).then(() => {
-                    // Destroy session from cookie
-                    DestroySession().then(() => {
-                        router.push("/")
-                    })
-                })
-            })
-        })
-    }, [router])
-
-    return <>{children}</>
+    return <>{children}</>;
 }

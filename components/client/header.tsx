@@ -6,12 +6,12 @@ import { ChevronDown } from "lucide-react";
 import { combo } from "@comps/combo";
 import SlidingHover from "@comps/client/sliding-motion";
 import Button from "@comps/client/button";
-import { BetterSessionData, useSession } from "@/auth-cient";
+import { BetterSessionData, useSession } from "@/auth-client";
 
 type LinkProps = {
     label: string;
     href: string;
-    sessionActive?: boolean | undefined;
+    sessionActive?: boolean;
 };
 type LinkGroup = {
     label: string;
@@ -21,7 +21,7 @@ type LinkGroup = {
 type LinkPropsList = (LinkProps | LinkGroup)[];
 
 export default function HeaderClient() {
-    const {data: session} = useSession();
+    const { data: session } = useSession();
 
     const linkList: LinkPropsList = [
         { label: "Home", href: "/" },
@@ -47,6 +47,7 @@ export default function HeaderClient() {
             group: [
                 { label: "Dashboard", href: "/dashboard", sessionActive: true },
                 { label: "Profile", href: "/profile", sessionActive: true },
+                { label: "Logout", href: "/logout", sessionActive: true },
             ],
         },
         {
@@ -139,11 +140,15 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
     if ("group" in linkOrGroup) {
         const { label, href, group } = linkOrGroup;
 
-        const sessionActive = group.map((link) => link.sessionActive).includes(true);
-        const displayButton =
-            (session && sessionActive) || (!session && !sessionActive) || sessionActive === undefined;
+        const displayGroup =
+            // If session is active and at least one sessionActive is true
+            (session && group.find(({ sessionActive }) => sessionActive)) ||
+            // If session is not active and at least one sessionActive is false
+            (!session && group.find(({ sessionActive }) => !sessionActive)) ||
+            // If sessionActive is undefined
+            group.find(({ sessionActive }) => sessionActive === undefined);
 
-        if (!displayButton) return <></>;
+        if (!displayGroup) return <></>;
 
         return (
             <div className="flex flex-col gap-2">
@@ -209,14 +214,17 @@ type HeaderLinkProps = {
 
 const HeaderLink = (props: HeaderLinkProps) => {
     const { link, session } = props;
-    const { label, href, sessionActive } = link;
+    const { label, href, sessionActive = undefined } = link;
 
     // Get the current pathname
     const pathname = usePathname();
 
     // Display the button only if the session is active or not
     const displayButton =
-        (session && sessionActive) || (!session && !sessionActive) || sessionActive === undefined;
+        (session && sessionActive) || // If session is active and sessionActive is true
+        (!session && !sessionActive) || // If session is not active and sessionActive is false
+        sessionActive === undefined; // If sessionActive is undefined
+
     if (!displayButton) return <></>;
 
     return (

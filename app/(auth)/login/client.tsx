@@ -2,28 +2,40 @@
 
 import { useState } from "react";
 import FormFeedback, { FormFeedbackProps } from "@comps/server/form-feedback";
-import { signIn } from "@/auth-cient";
+import { signIn, useSession } from "@/auth-client";
 import LoadingButton from "@comps/server/loading-button";
+import { useRouter } from "next/navigation";
 
 type LoginClientProps = {
     className?: string;
-    children: React.ReactNode;
 };
 
 export default function LoginClient(props: LoginClientProps) {
-    const { className, children } = props;
+    const router = useRouter();
+    const {data: session} = useSession();
+
+    if (session) {
+        router.push("/dashboard");
+    }
+
+    const { className } = props;
 
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<FormFeedbackProps["mode"]>("hidden");
     const [message, setMessage] = useState("");
 
-    const Login = async (formData: FormData) => {
+    // Inputs states
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
+
+    const Login = async () => {
         const { data, error } = await signIn.email(
             {
-                email: formData.get("email") as string,
-                password: formData.get("password") as string,
-                dontRememberMe: !formData.get("rememberMe"),
-                callbackURL: "/dashboard",
+                email: email,
+                password: password,
+                dontRememberMe: !rememberMe,
+                callbackURL: "/",
             },
             {
                 onRequest: (ctx) => {
@@ -51,10 +63,42 @@ export default function LoginClient(props: LoginClientProps) {
     };
 
     return (
-        <form action={Login} className={className}>
-            {children}
+        <div className={className}>
+            <label className="flex w-full flex-col gap-1">
+                Email
+                <input
+                    className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
+                    name="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoFocus
+                />
+            </label>
+            <label className="flex w-full flex-col gap-1">
+                Password
+                <input
+                    className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
+                    name="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+            </label>
+            <label className="flex w-full flex-row items-center justify-center gap-1 hover:cursor-pointer">
+                <input
+                    className="transition-all duration-150 checked:accent-gray-500 hover:cursor-pointer hover:accent-gray-700"
+                    name="rememberMe"
+                    type="checkbox"
+                    value={rememberMe ? "on" : "off"}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <span className="text-gray-500 transition-all duration-150 hover:text-gray-700">Remember me</span>
+            </label>
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <LoadingButton type="submit" label="Login" loading={loading} />
-        </form>
+            <LoadingButton type="button" onClick={Login} label="Login" loading={loading} />
+        </div>
     );
 }

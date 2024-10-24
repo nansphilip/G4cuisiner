@@ -1,13 +1,9 @@
-import { GetSession } from "@actions/cookies/session"
-import ResetClient from "@app/(auth)/reset/client"
+import Button from "@comps/client/button";
 
 export default async function ResetPage() {
 
-    const session = await GetSession()
-
-    return <>
-        <ResetClient session={session} className="flex w-[260px] flex-col items-center justify-center gap-2 rounded-xl border p-4 shadow">
-            <h2 className="text-2xl font-bold">Forgot password</h2>
-        </ResetClient>
-    </>
+    return <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
+        <p>Cette page n&apos;est pas disponible pour le moment.</p>
+        <Button type="link" href="/" variant="outline">Retour Accueil</Button>
+    </main>
 }

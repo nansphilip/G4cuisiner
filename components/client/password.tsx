@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { ChangeEventHandler, useEffect, useState } from "react"
 import { CircleCheck, CircleAlert, ChevronDown, Eye, EyeOff } from "lucide-react"
 import Button from "@comps/client/button"
 
@@ -8,16 +8,17 @@ type PasswordInputClientProps = {
     name: string
     className: string
     required: boolean
-    autoComplete: "on" | "off"
+    autoComplete: "on" | "off",
+    password: string,
+    setPassword: ChangeEventHandler<HTMLInputElement>
     autoFocus?: boolean
 }
 
 export default function PasswordInputClient (props: PasswordInputClientProps) {
 
-    const { name, className, required, autoComplete, autoFocus } = props
+    const { name, className, required, autoComplete, password, setPassword, autoFocus } = props
 
     const [showPassword, setShowPassword] = useState(false)
-    const [password, setPassword] = useState('')
     const [expanded, setExpanded] = useState(false)
     const [strength, setStrength] = useState<'Too week' | 'Better' | 'Great' | 'Almost perfect' | 'Perfect' | ''>('Too week')
     const [color, setColor] = useState('')
@@ -66,7 +67,7 @@ export default function PasswordInputClient (props: PasswordInputClientProps) {
                 name={name}
                 type={showPassword ? 'text' : 'password'}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={setPassword}
                 required={required}
                 autoComplete={autoComplete}
                 autoFocus={autoFocus}

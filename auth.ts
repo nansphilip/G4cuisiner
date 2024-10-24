@@ -13,7 +13,7 @@ export const auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
-    }
+    },
     // emailVerification: {
         // sendOnSignUp: true,
         // sendVerificationEmail: async (user, url, token) => {
@@ -87,12 +87,3 @@ export const auth = betterAuth({
         // },
     // },
 });
-
-
-// Export the session type
-const { $Infer } = auth;
-
-/**
- * Session from server
- */
-export const { Session } = $Infer;
