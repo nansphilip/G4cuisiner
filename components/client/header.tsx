@@ -3,10 +3,11 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { combo } from "@comps/combo";
+import { combo } from "@lib/combo";
 import SlidingHover from "@comps/client/sliding-motion";
 import Button from "@comps/client/button";
-import { BetterSessionData, useSession } from "@/auth-client";
+import { BetterSessionClient, useSession } from "@lib/client";
+import { BetterSessionServer } from "@lib/auth";
 
 type LinkProps = {
     label: string;
@@ -20,8 +21,14 @@ type LinkGroup = {
 };
 type LinkPropsList = (LinkProps | LinkGroup)[];
 
-export default function HeaderClient() {
-    const { data: session } = useSession();
+type HeaderClientProps = {
+    serverSession: BetterSessionServer;
+};
+
+export default function HeaderClient(props: HeaderClientProps) {
+    const { serverSession } = props;
+    const { data: sessionClient } = useSession();
+    const session = sessionClient ?? serverSession;
 
     const linkList: LinkPropsList = [
         { label: "Home", href: "/" },
@@ -82,7 +89,7 @@ export default function HeaderClient() {
 type HeaderDisplayProps = {
     index: number;
     linkOrGroup: LinkProps | LinkGroup;
-    session: BetterSessionData;
+    session: BetterSessionClient['data'];
 };
 
 const HeaderDisplay = (props: HeaderDisplayProps) => {
@@ -209,7 +216,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
 
 type HeaderLinkProps = {
     link: LinkProps;
-    session: BetterSessionData;
+    session: BetterSessionClient['data'];
 };
 
 const HeaderLink = (props: HeaderLinkProps) => {

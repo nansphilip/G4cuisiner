@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut, useSession } from "@/auth-client";
+import { signOut, useSession } from "@lib/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -9,7 +9,7 @@ export default function LogoutClient({ children }: { children: React.ReactNode }
     const {data: session} = useSession();
 
     if (!session) {
-        router.push("/login");
+        router.push("/");
     }
 
     const logout = async () => {

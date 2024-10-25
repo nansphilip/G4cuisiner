@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from "@comps/zustand";
+import { useStore } from "@lib/zustand";
 
 export default function ZustandGetClient() {
     const { switchState } = useStore();

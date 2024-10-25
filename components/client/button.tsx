@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { combo } from "../combo";
+import { combo } from "../../lib/combo";
 
 type ButtonProps = {
     id?: string;

@@ -7,7 +7,7 @@ export default async function LoginPage() {
             <div className="flex flex-col items-center justify-center gap-2 rounded-xl border p-4 shadow">
                 <h2 className="text-2xl font-bold">Login</h2>
                 <p className="text-center text-xs text-gray-500">Login with your email and password.</p>
-                <LoginClient className="flex flex-col items-center justify-center gap-2" />
+                <LoginClient className="flex w-[240px] flex-col items-center justify-center gap-2" />
                 <div className="flex flex-col items-center justify-center">
                     <Button type="link" variant="link" ring="none" fontSize="sm" href="/register">
                         Not registered yet?

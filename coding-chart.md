@@ -64,7 +64,7 @@ Cependant, il arrive que le `rebase` soit trop complexe. Dans ce cas, effectuez 
 
 #### Process de mise à jours d'une branche `feature`
 
-- Se positionner sur `feature`
+- Se positionner sur `dev`
 ```
 git checkout dev
 ```

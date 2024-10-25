@@ -1,5 +1,5 @@
 import Button from "@comps/client/button";
-import { combo } from "@comps/combo";
+import { combo } from "@lib/combo";
 
 type SwitchProps = {
     checked: boolean;

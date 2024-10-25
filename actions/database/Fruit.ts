@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@actions/lib/prisma";
+import prisma from "@lib/prisma";
 import { FruitType } from "@actions/types/Fruit";
 
 export const GetFruits = async (): Promise<FruitType[]> => {

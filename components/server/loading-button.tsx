@@ -1,5 +1,5 @@
 import Button from "@comps/client/button";
-import { combo } from "@comps/combo";
+import { combo } from "@lib/combo";
 import Loader from "@comps/server/loader";
 
 type ButtonProps = {

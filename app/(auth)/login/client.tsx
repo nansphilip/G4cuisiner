@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import FormFeedback, { FormFeedbackProps } from "@comps/server/form-feedback";
-import { signIn, useSession } from "@/auth-client";
+import { signIn } from "@lib/client";
 import LoadingButton from "@comps/server/loading-button";
 import { useRouter } from "next/navigation";
 
@@ -11,14 +11,8 @@ type LoginClientProps = {
 };
 
 export default function LoginClient(props: LoginClientProps) {
-    const router = useRouter();
-    const {data: session} = useSession();
-
-    if (session) {
-        router.push("/dashboard");
-    }
-
     const { className } = props;
+    const router = useRouter();
 
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<FormFeedbackProps["mode"]>("hidden");
@@ -30,36 +24,37 @@ export default function LoginClient(props: LoginClientProps) {
     const [rememberMe, setRememberMe] = useState(false);
 
     const Login = async () => {
+        // Start loading
+        setLoading(true);
+
         const { data, error } = await signIn.email(
             {
                 email: email,
                 password: password,
                 dontRememberMe: !rememberMe,
-                callbackURL: "/",
+                // callbackURL: "/dashboard",
             },
             {
-                onRequest: (ctx) => {
-                    setLoading(true);
-                    console.log("Register start :", ctx);
-                },
-                onSuccess: (ctx) => {
-                    setLoading(false);
-                    console.log("Register end :", ctx);
-                },
-                onError: (ctx) => {
-                    setLoading(false);
-                    console.log("Register failed :", ctx);
-                },
+                onRequest: (ctx) => console.log("Register start :", ctx),
+                onSuccess: (ctx) => console.log("Register end :", ctx),
+                onError: (ctx) => console.log("Register failed :", ctx),
             }
         );
 
+        // Display feedback
         if (data) {
             setMode("success");
-            setMessage("Login successful.");
+            setMessage("Login successful, redirecting...");
+            setTimeout(() => {
+                router.push("/dashboard");
+            }, 1500);
         } else if (error) {
             setMode("danger");
-            setMessage("Login failed.");
+            setMessage("Login failed, email or password may be incorrect.");
         }
+
+        // End loading
+        setLoading(false);
     };
 
     return (

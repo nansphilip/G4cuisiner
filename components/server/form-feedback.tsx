@@ -1,4 +1,4 @@
-import { combo } from "@comps/combo";
+import { combo } from "@lib/combo";
 
 export type FormFeedbackProps = {
     mode: "hidden" | "success" | "danger" | "warning",

@@ -9,9 +9,4 @@ export const { signIn, signUp, signOut, useSession } = authClient;
 /**
  * Type for the session data
  */
-export type BetterSession = ReturnType<typeof useSession>;
-
-/**
- * Type for the session data
- */
-export type BetterSessionData = ReturnType<typeof useSession>["data"];
+export type BetterSessionClient = ReturnType<typeof useSession>;

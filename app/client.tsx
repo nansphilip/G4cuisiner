@@ -1,10 +1,17 @@
 "use client";
 
-import { useSession } from "@/auth-client";
+import { BetterSessionServer } from "@lib/auth";
+import { useSession } from "@lib/client";
 import Button from "@comps/client/button";
 
-export default function HomeClient() {
-    const { data: session } = useSession();
+type HomeClientProps = {
+    serverSession: BetterSessionServer;
+};
+
+export default function HomeClient(props: HomeClientProps) {
+    const { serverSession } = props;
+    const { data: sessionClient } = useSession();
+    const session = sessionClient ?? serverSession;
 
     if (session) {
         return (
