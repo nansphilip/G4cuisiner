@@ -1,5 +1,7 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
+
 export interface IdRecipeType {
     id: string;
 }
@@ -15,6 +17,8 @@ export interface SlugRecipeType {
 export interface CreateRecipeType extends NameRecipeType {
     description: string;
     image: string | null;
+    ingredient: Prisma.IngredientUncheckedUpdateManyWithoutRecipeNestedInput | undefined;
+    userId: string;
 }
 
 export interface RecipeType extends IdRecipeType, SlugRecipeType, CreateRecipeType {

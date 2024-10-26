@@ -22,6 +22,7 @@ model User {
 
     Session Session[]
     Account Account[]
+    Recipe  Recipe[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -64,30 +65,6 @@ model Account {
     @@map("account")
 }
 
-model Verification {
-    id         String   @id @unique @default(uuid())
-    identifier String
-    value      String
-    expiresAt  DateTime
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@map("verification")
-}
-
-model RateLimit {
-    id     String @id @unique @default(uuid())
-    window Int
-    max    Int
-    count  Int
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@map("rateLimit")
-}
-
 model Recipe {
     id          String  @id @unique @default(uuid())
     name        String  @unique
@@ -95,12 +72,33 @@ model Recipe {
     description String
     image       String?
 
+    ingredient Ingredient[]
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     @@map("recipe")
 }
 
+model Ingredient {
+    id          String  @id @unique @default(uuid())
+    name        String  @unique
+    slug        String  @unique
+    description String
+    image       String?
+
+    Recipe Recipe[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("ingredient")
+}
+
+// Example
 model Fruit {
     id          String  @id @unique @default(uuid())
     name        String  @unique

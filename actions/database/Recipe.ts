@@ -12,7 +12,7 @@ import { IdRecipeType, CreateRecipeType, RecipeType, NameRecipeType, SlugRecipeT
  */
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
-        const { name, description, image } = props;
+        const { name, description, image, ingredient, userId } = props;
 
         // Check if recipe already exists
         const existingRecipe = await SelectRecipeByName({ name });
@@ -27,6 +27,8 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
                 slug: name.replace(/\s/g, "-").toLowerCase(),
                 description,
                 image,
+                ingredient,
+                userId,
             },
         });
         console.log("Created recipe -> ", recipe);
@@ -151,7 +153,7 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
  */
 export const UpdateRecipeById = async (props: RecipeType): Promise<RecipeType> => {
     try {
-        const { id, name, description, image } = props;
+        const { id, name, description, image, ingredient, userId } = props;
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
             throw new Error("Recipe does not exist");
@@ -165,6 +167,8 @@ export const UpdateRecipeById = async (props: RecipeType): Promise<RecipeType> =
                 slug: name.replace(/\s/g, "-").toLowerCase(),
                 description,
                 image,
+                ingredient,
+                userId
             },
         });
         console.log("Updated recipe -> ", recipe);
