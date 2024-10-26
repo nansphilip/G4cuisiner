@@ -10,7 +10,7 @@ export default function ErrorPage({ error, reset }: {
 
     useEffect(() => {
         // console.clear()
-        console.log(error.message as string)
+        // console.log(error.message as string)
     }, [error])
 
     return <main className="flex flex-1 flex-col items-center justify-center gap-2">

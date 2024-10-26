@@ -39,13 +39,7 @@ export default function RegisterClient(props: RegisterClientProps) {
                 name: firstname + " " + lastname,
                 image: undefined, // TODO: Add image conversion to base64 -> imageToBase64(profilePicture)
                 // callbackURL: "/dashboard",
-            },
-            {
-                onRequest: (ctx) => console.log("Register start :", ctx),
-                onSuccess: (ctx) => console.log("Register end :", ctx),
-                onError: (ctx) => console.log("Register failed :", ctx),
-            }
-        );
+            });
 
         // Display feedback
         if (data) {
@@ -57,6 +51,7 @@ export default function RegisterClient(props: RegisterClientProps) {
         } else if (error) {
             setMode("danger");
             setMessage("Registration failed, something went wrong.");
+            console.error(error);
         }
 
         // End loading

@@ -65,6 +65,11 @@ export default function HeaderClient(props: HeaderClientProps) {
                 { label: "Server Fruits", href: "/random-fruit" },
             ],
         },
+        {
+            label: "Create recipe",
+            href: "/create-recipe",
+            sessionActive: true,
+        },
         ...slugLinkList,
         {
             label: "My Account",

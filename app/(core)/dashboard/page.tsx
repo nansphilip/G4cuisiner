@@ -13,8 +13,6 @@ export default async function DashboardPage() {
     const email = session.user.email;
     const emailVerified = session.user.emailVerified;
 
-    console.log(session);
-
     const timerList: {
         type: "Created" | "Updated" | "Expires";
         date: Date;

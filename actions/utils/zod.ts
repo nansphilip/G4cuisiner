@@ -47,7 +47,6 @@ export const ZodParse = async ({ zodSchema, dataToParse }: {
         return await zodSchema.parseAsync(dataToParse)
     } catch (error) {
         if ((error as ZodError).errors[0].path.includes("newPassword")) throw new Error("PASSWORD_TOO_WEAK")
-        //  console.log((error as ZodError).errors)
         throw new Error("ZodTypes parsing error -> " + (error as ZodError).errors[0].path + ": " + (error as ZodError).errors[0].message)
     }
 }

@@ -33,13 +33,7 @@ export default function LoginClient(props: LoginClientProps) {
                 password: password,
                 dontRememberMe: !rememberMe,
                 // callbackURL: "/dashboard",
-            },
-            {
-                onRequest: (ctx) => console.log("Register start :", ctx),
-                onSuccess: (ctx) => console.log("Register end :", ctx),
-                onError: (ctx) => console.log("Register failed :", ctx),
-            }
-        );
+            });
 
         // Display feedback
         if (data) {
@@ -51,6 +45,7 @@ export default function LoginClient(props: LoginClientProps) {
         } else if (error) {
             setMode("danger");
             setMessage("Login failed, email or password may be incorrect.");
+            console.error(error);
         }
 
         // End loading
