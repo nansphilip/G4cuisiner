@@ -1,17 +1,12 @@
 "use server";
 
-export type DbFruitType = {
+export type FruitType = {
     id: string;
     name: string;
-    description?: string;
-    imageUrl: string;
+    slug: string;
+    description: string;
+    image: string | null;
 
     createdAt: Date;
     updatedAt: Date;
-};
-
-export type FruitType = {
-    name: string;
-    description: string;
-    imageUrl: string;
 }

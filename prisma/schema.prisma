@@ -89,10 +89,11 @@ model RateLimit {
 }
 
 model Recipe {
-    id          String @id @unique @default(uuid())
-    name        String
+    id          String  @id @unique @default(uuid())
+    name        String  @unique
+    slug        String  @unique
     description String
-    image       String
+    image       String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -101,10 +102,11 @@ model Recipe {
 }
 
 model Fruit {
-    id          String @id @unique @default(uuid())
-    name        String
+    id          String  @id @unique @default(uuid())
+    name        String  @unique
+    slug        String  @unique
     description String
-    imageUrl    String
+    image       String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

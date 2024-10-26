@@ -24,9 +24,20 @@ export default function FruitsClient() {
     return (
         <>
             <div className="flex flex-wrap items-center justify-center gap-4">
-                {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.imageUrl }))}
+                {fruitList.map((fruit, index) => {
+                    if (fruit.image === null) {
+                        return null;
+                    }
+                    return FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.image });
+                })}
             </div>
-            <LoadingButton type="button" onClick={GetFruit} label="Obtenir un fruit" loading={isLoading} className="px-4 py-2"/>
+            <LoadingButton
+                type="button"
+                onClick={GetFruit}
+                label="Obtenir un fruit"
+                loading={isLoading}
+                className="px-4 py-2"
+            />
         </>
     );
 }

@@ -1,15 +1,15 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: "Logout",
-    description: "Logout page.",
+    title: "Recipe",
+    description: "Recipe page.",
 }
 
-export default function LogoutLayout({
+export default function ProfileLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
 
-    return <>{children}</>;
+    return <>{children}</>
 }

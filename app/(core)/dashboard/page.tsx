@@ -1,5 +1,4 @@
 import Button from "@comps/client/button";
-import DashboardClient from "./client";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CircleAlert, CircleCheck } from "lucide-react";
@@ -26,7 +25,7 @@ export default async function DashboardPage() {
     ];
 
     return (
-        <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
+        <>
             <div className="flex w-[240px] flex-col items-start justify-center gap-2 rounded-xl border p-4 shadow">
                 <h2 className="text-2xl font-bold">User</h2>
                 <div className="flex w-full flex-col gap-4">
@@ -72,7 +71,7 @@ export default async function DashboardPage() {
                     Logout
                 </Button>
             </div>
-        </main>
+        </>
     );
 }
 

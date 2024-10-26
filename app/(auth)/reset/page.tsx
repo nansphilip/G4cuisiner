@@ -1,9 +1,14 @@
 import Button from "@comps/client/button";
+import { getSession } from "@lib/auth";
+import { redirect } from "next/navigation";
 
 export default async function ResetPage() {
 
-    return <main className="flex flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
+    const session = await getSession();
+    if (session) redirect("/dashboard");
+
+    return <>
         <p>Cette page n&apos;est pas disponible pour le moment.</p>
         <Button type="link" href="/" variant="outline">Retour Accueil</Button>
-    </main>
+    </>
 }

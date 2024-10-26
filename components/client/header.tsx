@@ -23,12 +23,29 @@ type LinkPropsList = (LinkProps | LinkGroup)[];
 
 type HeaderClientProps = {
     serverSession: BetterSessionServer;
+    slugPageList: {
+        group: string;
+        route: string;
+        slugList: {
+            name: string;
+            slug: string;
+        }[];
+    }[];
 };
 
 export default function HeaderClient(props: HeaderClientProps) {
-    const { serverSession } = props;
+    const { serverSession, slugPageList } = props;
     const { data: sessionClient } = useSession();
     const session = sessionClient ?? serverSession;
+
+    const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
+        label: group,
+        href: `${route}/${slugList[0].name}`,
+        group: slugList.map(({name, slug }) => ({
+            label: name,
+            href: `${route}/${slug}`,
+        })),
+    }));
 
     const linkList: LinkPropsList = [
         { label: "Home", href: "/" },
@@ -48,6 +65,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                 { label: "Server Fruits", href: "/random-fruit" },
             ],
         },
+        ...slugLinkList,
         {
             label: "My Account",
             href: "/dashboard",
@@ -89,7 +107,7 @@ export default function HeaderClient(props: HeaderClientProps) {
 type HeaderDisplayProps = {
     index: number;
     linkOrGroup: LinkProps | LinkGroup;
-    session: BetterSessionClient['data'];
+    session: BetterSessionClient["data"];
 };
 
 const HeaderDisplay = (props: HeaderDisplayProps) => {
@@ -216,7 +234,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
 
 type HeaderLinkProps = {
     link: LinkProps;
-    session: BetterSessionClient['data'];
+    session: BetterSessionClient["data"];
 };
 
 const HeaderLink = (props: HeaderLinkProps) => {
