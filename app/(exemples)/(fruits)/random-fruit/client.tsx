@@ -11,13 +11,19 @@ export default function FruitsClient() {
     const [isLoading, setIsLoading] = useState(false);
 
     const GetFruit = async () => {
+        // Start loader
         setIsLoading(true);
+
+        // Fetch a new fruit
         const newFruit = await GetRandomFruits();
 
-        if (newFruit) {
-            const newFruitList = [...fruitList, newFruit];
-            setFruitList(newFruitList);
-        }
+        // Create a new array with the new fruit
+        const newFruitList = [...fruitList, newFruit];
+        
+        // Update the state of the fruit list
+        setFruitList(newFruitList);
+
+        // Stop loader
         setIsLoading(false);
     };
 

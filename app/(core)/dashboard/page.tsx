@@ -4,6 +4,12 @@ import { redirect } from "next/navigation";
 import { CircleAlert, CircleCheck } from "lucide-react";
 import TimerClient from "@comps/client/timer";
 import { combo } from "@lib/combo";
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Dashboard",
+    description: "Dashboard page.",
+}
 
 export default async function DashboardPage() {
     const session = await getSession();

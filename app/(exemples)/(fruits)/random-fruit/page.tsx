@@ -1,7 +1,12 @@
 // Composant client
 import FruitsClient from "./client";
+import type { Metadata } from "next"
 
-// Composant Page Fruits
+export const metadata: Metadata = {
+    title: "Random fruit",
+    description: "Random fruit page.",
+}
+
 export default function FruitsPage() {
 
     return (

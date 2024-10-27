@@ -1,5 +1,11 @@
 import Button from "@comps/client/button";
 import ZustandSetClient from "./client";
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Zustand Set",
+    description: "Zustand Set page.",
+}
 
 export default function ZustandSetPage() {
 

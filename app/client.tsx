@@ -13,15 +13,13 @@ export default function HomeClient(props: HomeClientProps) {
     const { data: sessionClient } = useSession();
     const session = sessionClient ?? serverSession;
 
-    if (session) {
-        return (
+    return session ? (
+        <>
             <Button type="link" href="/logout" variant="outline">
                 Logout
             </Button>
-        );
-    }
-
-    return (
+        </>
+    ) : (
         <>
             <Button type="link" href="/register" variant="outline">
                 Register

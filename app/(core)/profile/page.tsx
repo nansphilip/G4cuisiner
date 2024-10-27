@@ -1,5 +1,11 @@
 import Button from "@comps/client/button";
 import ProfileClient from "./client";
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Profile",
+    description: "Profile page.",
+}
 
 export default async function ProfilePage() {
 

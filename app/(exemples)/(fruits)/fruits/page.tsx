@@ -1,8 +1,15 @@
 import { GetFruits } from "@actions/database/Fruit";
 import FruitCard from "@comps/server/fruit-card";
 import FruitsClient from "./client";
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Fruits",
+    description: "Fruits page.",
+}
 
 export default async function FruitsPage() {
+    // Fetch fruits from server
     const fruitList = await GetFruits();
 
     return (

@@ -1,4 +1,10 @@
 import CreateRecipe from "./client";
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Create recipe",
+    description: "Create recipe page.",
+}
 
 export default async function CreateRecipePage() {
 

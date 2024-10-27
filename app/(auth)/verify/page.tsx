@@ -1,4 +1,10 @@
 import Button from "@comps/client/button";
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Verify",
+    description: "Verify page.",
+}
 
 export default async function VerifyPage() {
 

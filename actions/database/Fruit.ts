@@ -1,11 +1,11 @@
 "use server";
 
-import prisma from "@lib/prisma";
+import Prisma from "@lib/prisma";
 import { FruitType } from "@actions/types/Fruit";
 
 export const GetFruits = async (): Promise<FruitType[]> => {
     try {
-        const fruitList = await prisma.fruit.findMany();
+        const fruitList = await Prisma.fruit.findMany();
 
         // Simulate server delay of 1 second
         // Classic return: return fruitList

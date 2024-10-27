@@ -2,6 +2,12 @@ import LoginClient from "@app/(auth)/login/client";
 import Button from "@comps/client/button";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Login",
+    description: "Login page.",
+};
 
 export default async function LoginPage() {
 
