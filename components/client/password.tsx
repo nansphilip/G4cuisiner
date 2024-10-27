@@ -84,9 +84,9 @@ export default function PasswordInputClient (props: PasswordInputClientProps) {
                     <span>Strength: </span>
                     <span className={`${color}`}>{strength}</span>
                 </div>
-                <ChevronDown className={`group-hover:bg-gray-100 rounded-md transition duration-300 ` + (expanded ? "rotate-180" : "")} />
+                <ChevronDown className={`group-hover:bg-gray-100 rounded-md transition-all duration-150 ` + (expanded ? "rotate-180" : "")} />
             </Button>
-            <div className={"overflow-hidden transition-all duration-300 " + (expanded ? 'h-[100px]' : 'h-0')}>
+            <div className={"overflow-hidden transition-all duration-150 " + (expanded ? 'h-[100px]' : 'h-0')}>
                 <Condition valid={Boolean(password.match(/[a-z]/))} condition="At least 1 lowercase letter" />
                 <Condition valid={Boolean(password.match(/[A-Z]/))} condition="At least 1 uppercase letter" />
                 <Condition valid={Boolean(password.match(/[0-9]/))} condition="At least 1 digit" />

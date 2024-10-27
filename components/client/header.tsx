@@ -134,19 +134,33 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const backgroundEl = document.querySelector(`#popup-bg-${index}`) as HTMLElement;
             const hoverZoneEl = document.querySelector(`#popup-hov-${index}`) as HTMLElement;
 
+            // Check if elements exist to prevent a rendering error
             if (!buttonEl || !navigationEl || !backgroundEl || !hoverZoneEl) {
                 return;
             }
+
+            // Get the largest link element width
+            const subButtonLinkList = Array.from(navigationEl.querySelectorAll('a')) as HTMLElement[];
+            const subButtonWidthList = subButtonLinkList.map((element) => element.scrollWidth);
+            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b), 0);
 
             // Get button dimensions and position
             const buttonRect = buttonEl.getBoundingClientRect();
             const buttonHeight = buttonRect.height;
             const buttonWidth = buttonRect.width;
             const buttonTop = buttonRect.top;
+            const buttonLeft = buttonRect.left;
+
+            // Get the largest width between the largest link and the button
+            const subButtonIsLarger = largestSubButtonWidth > buttonWidth ? "auto" : null;
 
             // Set navigation dimensions and position
             navigationEl.style.top = `${buttonTop + buttonHeight + offset}px`;
-            navigationEl.style.width = `${buttonWidth}px`;
+            navigationEl.style.width = subButtonIsLarger ?? `${buttonWidth}px`;
+            if (subButtonIsLarger) {
+                // Center the navigation popup
+                navigationEl.style.left = `${buttonLeft - (largestSubButtonWidth - buttonWidth) / 2 - 8}px`;
+            }
 
             // Get navigation dimensions
             const navigationRect = navigationEl.getBoundingClientRect();
