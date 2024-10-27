@@ -8,6 +8,7 @@ import SlidingHover from "@comps/client/sliding-motion";
 import Button from "@comps/client/button";
 import { BetterSessionClient, useSession } from "@lib/client";
 import { BetterSessionServer } from "@lib/auth";
+import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
 
 type LinkProps = {
     label: string;
@@ -26,10 +27,7 @@ type HeaderClientProps = {
     slugPageList: {
         group: string;
         route: string;
-        slugList: {
-            name: string;
-            slug: string;
-        }[];
+        slugList: TitleAndSlugRecipeType[];
     }[];
 };
 
@@ -40,9 +38,9 @@ export default function HeaderClient(props: HeaderClientProps) {
 
     const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
         label: group,
-        href: `${route}/${slugList[0].name}`,
-        group: slugList.map(({name, slug }) => ({
-            label: name,
+        href: `${route}/${slugList[0].title}`,
+        group: slugList.map(({title, slug }) => ({
+            label: title,
             href: `${route}/${slug}`,
         })),
     }));
@@ -135,6 +133,10 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const navigationEl = document.querySelector(`#popup-nav-${index}`) as HTMLElement;
             const backgroundEl = document.querySelector(`#popup-bg-${index}`) as HTMLElement;
             const hoverZoneEl = document.querySelector(`#popup-hov-${index}`) as HTMLElement;
+
+            if (!buttonEl || !navigationEl || !backgroundEl || !hoverZoneEl) {
+                return;
+            }
 
             // Get button dimensions and position
             const buttonRect = buttonEl.getBoundingClientRect();

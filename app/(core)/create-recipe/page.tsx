@@ -9,7 +9,7 @@ export default async function CreateRecipePage() {
                 Title
                 <input
                     className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
-                    name="name"
+                    name="title"
                     type="text"
                     required
                     autoFocus

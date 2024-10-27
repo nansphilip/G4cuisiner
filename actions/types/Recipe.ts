@@ -1,23 +1,21 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
-
 export interface IdRecipeType {
     id: string;
 }
 
-export interface NameRecipeType {
-    name: string;
+export interface TitleRecipeType {
+    title: string;
 }
 
 export interface SlugRecipeType {
     slug: string;
 }
 
-export interface CreateRecipeType extends NameRecipeType {
+export interface CreateRecipeType extends TitleRecipeType {
     description: string;
     image: string | null;
-    ingredient: Prisma.IngredientUncheckedUpdateManyWithoutRecipeNestedInput | undefined;
+    // ingredientIdList: Prisma.IngredientUncheckedCreateNestedManyWithoutRecipeIdListInput | Prisma.IngredientCreateNestedManyWithoutRecipeIdListInput | undefined;
     userId: string;
 }
 
@@ -26,4 +24,4 @@ export interface RecipeType extends IdRecipeType, SlugRecipeType, CreateRecipeTy
     updatedAt: Date;
 };
 
-export interface NameAndSlugRecipeType extends NameRecipeType, SlugRecipeType {};
+export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {};

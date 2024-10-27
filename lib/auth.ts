@@ -102,7 +102,7 @@ const { getSession: getSessionThroughApi } = api;
  */
 export const getSession = async () => {
     const session = await getSessionThroughApi({
-        headers: headers(),
+        headers: await headers(),
     });
     return session;
 };

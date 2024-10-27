@@ -59,7 +59,7 @@ export default function TimerClient(props: TimerClientProps) {
             const intervalId = setInterval(refreshTimer, 1000);
             return () => clearInterval(intervalId);
         }
-    }, []);
+    });
 
     return (
         <span className={className}>

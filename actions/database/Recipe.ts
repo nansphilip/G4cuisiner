@@ -1,7 +1,7 @@
 "use server";
 
 import Prisma from "@lib/prisma";
-import { IdRecipeType, CreateRecipeType, RecipeType, NameRecipeType, SlugRecipeType, NameAndSlugRecipeType } from "@actions/types/Recipe";
+import { IdRecipeType, CreateRecipeType, RecipeType, TitleRecipeType, SlugRecipeType, TitleAndSlugRecipeType } from "@actions/types/Recipe";
 
 /**
  * Creates a new recipe.
@@ -12,10 +12,10 @@ import { IdRecipeType, CreateRecipeType, RecipeType, NameRecipeType, SlugRecipeT
  */
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
-        const { name, description, image, ingredient, userId } = props;
+        const { title, description, image, userId } = props;
 
         // Check if recipe already exists
-        const existingRecipe = await SelectRecipeByName({ name });
+        const existingRecipe = await SelectRecipeByTitle({ title });
         if (existingRecipe) {
             throw new Error("Recipe already exists");
         }
@@ -23,11 +23,10 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
         // Create recipe
         const recipe = await Prisma.recipe.create({
             data: {
-                name,
-                slug: name.replace(/\s/g, "-").toLowerCase(),
+                title,
+                slug: title.replace(/\s/g, "-").toLowerCase(),
                 description,
                 image,
-                ingredient,
                 userId,
             },
         });
@@ -64,18 +63,18 @@ export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType 
 };
 
 /**
- * Selects a recipe by its name.
+ * Selects a recipe by its title.
  *
- * @param {NameRecipeType} props - The name of the recipe to select.
+ * @param {TitleRecipeType} props - The title of the recipe to select.
  * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
  * @throws {Error} - If there is an error during selection.
  */
-export const SelectRecipeByName = async (props: NameRecipeType): Promise<RecipeType | null> => {
+export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<RecipeType | null> => {
     try {
-        const { name } = props;
+        const { title } = props;
         const recipe = await Prisma.recipe.findUnique({
             where: {
-                name,
+                title,
             },
         });
         // console.log("Selected recipe -> ", recipe);
@@ -113,11 +112,11 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeT
     }
 };
 
-export const SelectEveryRecipeSlugs = async (): Promise<NameAndSlugRecipeType[]> => {
+export const SelectEveryRecipeSlugs = async (): Promise<TitleAndSlugRecipeType[]> => {
     try {
         const recipeList = await Prisma.recipe.findMany({
             select: {
-                name: true,
+                title: true,
                 slug: true,
             },
         });
@@ -153,7 +152,7 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
  */
 export const UpdateRecipeById = async (props: RecipeType): Promise<RecipeType> => {
     try {
-        const { id, name, description, image, ingredient, userId } = props;
+        const { id, title, description, image, userId } = props;
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
             throw new Error("Recipe does not exist");
@@ -163,11 +162,10 @@ export const UpdateRecipeById = async (props: RecipeType): Promise<RecipeType> =
                 id,
             },
             data: {
-                name,
-                slug: name.replace(/\s/g, "-").toLowerCase(),
+                title,
+                slug: title.replace(/\s/g, "-").toLowerCase(),
                 description,
                 image,
-                ingredient,
                 userId
             },
         });

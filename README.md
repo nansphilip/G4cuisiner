@@ -56,7 +56,7 @@ G4cuisiner is G4 School student project.
   pnpx prisma migrate dev --name initial-migration
   ```
 
-- Insert fixtures provided in `/primsa/sql/fixtures.sql`
+- Insert fixtures provided in `/prisma/sql/fixtures.sql`
 
 - Run server project
 

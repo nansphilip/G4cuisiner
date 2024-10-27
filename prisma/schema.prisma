@@ -67,12 +67,12 @@ model Account {
 
 model Recipe {
     id          String  @id @unique @default(uuid())
-    name        String  @unique
+    title       String  @unique
     slug        String  @unique
     description String
     image       String?
 
-    ingredient Ingredient[]
+    ingredientIdList Ingredient[] @relation(name: "IngredientToRecipe")
 
     userId String
     user   User   @relation(fields: [userId], references: [id])
@@ -86,11 +86,10 @@ model Recipe {
 model Ingredient {
     id          String  @id @unique @default(uuid())
     name        String  @unique
-    slug        String  @unique
     description String
     image       String?
 
-    Recipe Recipe[]
+    recipeIdList Recipe[] @relation(name: "IngredientToRecipe")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -102,7 +101,6 @@ model Ingredient {
 model Fruit {
     id          String  @id @unique @default(uuid())
     name        String  @unique
-    slug        String  @unique
     description String
     image       String?
 

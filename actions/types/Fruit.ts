@@ -3,7 +3,6 @@
 export type FruitType = {
     id: string;
     name: string;
-    slug: string;
     description: string;
     image: string | null;
 

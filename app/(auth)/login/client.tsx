@@ -32,7 +32,6 @@ export default function LoginClient(props: LoginClientProps) {
                 email: email,
                 password: password,
                 dontRememberMe: !rememberMe,
-                // callbackURL: "/dashboard",
             });
 
         // Display feedback
@@ -45,11 +44,8 @@ export default function LoginClient(props: LoginClientProps) {
         } else if (error) {
             setMode("danger");
             setMessage("Login failed, email or password may be incorrect.");
-            console.error(error);
+            setLoading(false);
         }
-
-        // End loading
-        setLoading(false);
     };
 
     return (
