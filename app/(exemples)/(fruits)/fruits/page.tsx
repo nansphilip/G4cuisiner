@@ -16,12 +16,7 @@ export default async function FruitsPage() {
         <>
             <p>These fruits cards are based on a reusable component created for each fruit from the list.</p>
             <div className="flex flex-row flex-wrap items-center justify-center gap-4">
-                {fruitList.map((fruit, index) => {
-                    if (fruit.image === null) {
-                        return null;
-                    }
-                    return FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.image });
-                })}
+                {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.image }))}
             </div>
             <FruitsClient />
         </>

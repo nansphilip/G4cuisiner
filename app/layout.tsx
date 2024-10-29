@@ -1,6 +1,7 @@
 import "@/globals.css";
 import { SelectEveryRecipeSlugs } from "@actions/database/Recipe";
 import HeaderClient from "@comps/client/header";
+import MainCenterOrStartClient from "@comps/client/main-center-or-start";
 import { getSession } from "@lib/auth";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -19,15 +20,17 @@ export default async function RootLayout({
 }>) {
     const session = await getSession();
 
-    const slugPageList = [{ group: "Recipe", route: "/recipe", slugList: await SelectEveryRecipeSlugs() }];
+    const slugPageList = [
+        { group: "Recipe", route: "/recipe", slugList: await SelectEveryRecipeSlugs() },
+    ];
 
     return (
         <html lang="fr" className="h-full">
             <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-x-hidden`}>
-                <HeaderClient serverSession={session} slugPageList={slugPageList} />
-                <main className="flex w-full flex-1 flex-col items-center justify-center gap-2 px-4 pb-4">
+                <HeaderClient serverSession={session} slugPageList={slugPageList} className="w-full" />
+                <MainCenterOrStartClient>
                     {children}
-                </main>
+                </MainCenterOrStartClient>
             </body>
         </html>
     );

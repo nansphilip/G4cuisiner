@@ -10,8 +10,8 @@ type HomeClientProps = {
 
 export default function HomeClient(props: HomeClientProps) {
     const { serverSession } = props;
-    const { data: sessionClient } = useSession();
-    const session = sessionClient ?? serverSession;
+    const { data: sessionClient, isPending } = useSession();
+    const session = isPending ? serverSession : sessionClient;
 
     return session ? (
         <>

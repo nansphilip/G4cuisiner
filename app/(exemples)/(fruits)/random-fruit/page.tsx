@@ -1,4 +1,5 @@
-// Composant client
+// Composant serveur
+
 import FruitsClient from "./client";
 import type { Metadata } from "next"
 

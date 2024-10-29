@@ -29,12 +29,13 @@ type HeaderClientProps = {
         route: string;
         slugList: TitleAndSlugRecipeType[];
     }[];
+    className?: string;
 };
 
 export default function HeaderClient(props: HeaderClientProps) {
-    const { serverSession, slugPageList } = props;
-    const { data: sessionClient } = useSession();
-    const session = sessionClient ?? serverSession;
+    const { serverSession, slugPageList, className } = props;
+    const { data: sessionClient, isPending } = useSession();
+    const session = isPending ? serverSession : sessionClient;
 
     const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
         label: group,
@@ -89,7 +90,7 @@ export default function HeaderClient(props: HeaderClientProps) {
     ];
 
     return (
-        <header>
+        <header className={className}>
             <nav className="flex justify-center bg-white pb-1.5 pt-2">
                 <SlidingHover
                     className="flex items-start justify-center gap-1"
@@ -102,7 +103,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                     ))}
                 </SlidingHover>
             </nav>
-            <div className="absolute z-10 h-1 w-full bg-gradient-to-b from-white to-transparent"></div>
+            {/* <div className="absolute z-10 h-2 w-full bg-gradient-to-b from-white to-transparent"></div> */}
         </header>
     );
 }

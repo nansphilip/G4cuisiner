@@ -1,9 +1,10 @@
 # Todo
 
-- [ ] Coding chart
+- [ ] Header
+  - [ ] Mobile
 
 - [ ] Authentification
-
-- [ ] CRUD exemple
+  - [ ] Register
+    - [ ] Image to base64
 
 - [ ] Todo comment ?

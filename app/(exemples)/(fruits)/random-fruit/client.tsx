@@ -1,3 +1,4 @@
+// Composant client
 "use client";
 
 import { GetRandomFruits } from "@actions/database/Fruit";
@@ -30,12 +31,7 @@ export default function FruitsClient() {
     return (
         <>
             <div className="flex flex-wrap items-center justify-center gap-4">
-                {fruitList.map((fruit, index) => {
-                    if (fruit.image === null) {
-                        return null;
-                    }
-                    return FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.image });
-                })}
+                {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.image }))}
             </div>
             <LoadingButton
                 type="button"

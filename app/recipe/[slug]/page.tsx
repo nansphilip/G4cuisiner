@@ -24,13 +24,17 @@ export default async function RecipePage({ params }: RecipePageProps) {
 
     const recipe = await SelectRecipeBySlug({ slug: slug });
 
+    if (!recipe) {
+        throw new Error("Recipe not found");
+    }
+
     return (
         <div className="flex flex-row items-baseline gap-8">
             <p className="font-bold">Recipe</p>
             <p>{"->"}</p>
-            <p>{recipe?.title}</p>
+            <p>{recipe.title}</p>
             <p>{"->"}</p>
-            <p>{recipe?.description}</p>
+            <p>{recipe.description}</p>
             <RecipeClient />
         </div>
     );

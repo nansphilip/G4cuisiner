@@ -12,7 +12,7 @@ type ButtonProps = {
 };
 
 export default function LoadingButton(props: ButtonProps) {
-    const { type, label, loading, disabled = false, className, onClick } = props;
+    const { type, label, loading, disabled = null, className, onClick } = props;
 
     return (
         <Button
