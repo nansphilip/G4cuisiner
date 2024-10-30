@@ -1,7 +1,7 @@
 "use server";
 
 import Prisma from "@lib/prisma";
-import { IdRecipeType, CreateRecipeType, RecipeType, TitleRecipeType, SlugRecipeType, TitleAndSlugRecipeType } from "@actions/types/Recipe";
+import { IdRecipeType, CreateRecipeType, RecipeType, TitleRecipeType, SlugRecipeType, TitleAndSlugRecipeType, UpdateRecipeType } from "@actions/types/Recipe";
 
 /**
  * Creates a new recipe.
@@ -150,13 +150,22 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
  * @returns {Promise<RecipeType>} - The updated recipe.
  * @throws {Error} - If the recipe does not exist or if there is an error during update.
  */
-export const UpdateRecipeById = async (props: RecipeType): Promise<RecipeType> => {
+export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {
     try {
         const { id, title, description, image, userId } = props;
+
+        // Check if recipe exists
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
             throw new Error("Recipe does not exist");
         }
+
+        // Check if new title is available
+        const isNewTitleAlreadyExists = await SelectRecipeByTitle({ title });
+        if (isNewTitleAlreadyExists && isNewTitleAlreadyExists.id !== id) {
+            throw new Error("New title already exists");
+        }
+
         const recipe = await Prisma.recipe.update({
             where: {
                 id,

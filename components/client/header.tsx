@@ -40,7 +40,7 @@ export default function HeaderClient(props: HeaderClientProps) {
     const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
         label: group,
         href: `${route}/${slugList[0].title}`,
-        group: slugList.map(({title, slug }) => ({
+        group: slugList.map(({ title, slug }) => ({
             label: title,
             href: `${route}/${slug}`,
         })),
@@ -64,18 +64,16 @@ export default function HeaderClient(props: HeaderClientProps) {
                 { label: "Server Fruits", href: "/random-fruit" },
             ],
         },
-        {
-            label: "Create recipe",
-            href: "/create-recipe",
-            sessionActive: true,
-        },
         ...slugLinkList,
         {
             label: "My Account",
             href: "/dashboard",
             group: [
+                { label: "Create recipe", href: "/recipe/create", sessionActive: true },
+                { label: "Edit recipe", href: "/recipe/edit", sessionActive: true },
+                { label: "Favorites", href: "/favorites", sessionActive: true },
                 { label: "Dashboard", href: "/dashboard", sessionActive: true },
-                { label: "Profile", href: "/profile", sessionActive: true },
+                { label: "Edit profile", href: "/profile", sessionActive: true },
                 { label: "Logout", href: "/logout", sessionActive: true },
             ],
         },
@@ -141,7 +139,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             }
 
             // Get the largest link element width
-            const subButtonLinkList = Array.from(navigationEl.querySelectorAll('a')) as HTMLElement[];
+            const subButtonLinkList = Array.from(navigationEl.querySelectorAll("a")) as HTMLElement[];
             const subButtonWidthList = subButtonLinkList.map((element) => element.scrollWidth);
             const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b), 0);
 

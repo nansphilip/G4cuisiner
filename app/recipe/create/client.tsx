@@ -29,19 +29,23 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
                 throw new Error("You must be logged in to create a recipe.");
             }
 
-            const title = formData.get("title") as string;
-            const description = formData.get("description") as string;
-            const image = null; // TODO: gérer la validation d'image, taille, format, stockage et sauvegarder l'url du dossier ici
-            const userId = session.user.id;
+            const newRecipe = {
+                title: formData.get("title") as string,
+                description: formData.get("description") as string,
+                image: null, // TODO: gérer la validation d'image, taille, format, stockage et sauvegarder l'url du dossier ici
+                userId: session.user.id
+            }
 
-            const response = await CreateRecipe({ title, description, image, userId });
+            const response = await CreateRecipe(newRecipe);
 
             setMode("success");
             setMessage("Recipe created successfully.");
+
             console.log(response);
         } catch (error) {
             setMode("danger");
             setMessage("Failed to create recipe.");
+            
             console.error(error);
         }
 

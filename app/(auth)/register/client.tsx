@@ -110,7 +110,7 @@ export default function RegisterClient(props: RegisterClientProps) {
                     setPassword={(e) => setPassword(e.target.value)}
                 />
             </label>
-            <label className="flex w-full flex-col gap-1">
+            {/* <label className="flex w-full flex-col gap-1">
                 <div>
                     <span>Profile picture</span>
                 </div>
@@ -121,7 +121,7 @@ export default function RegisterClient(props: RegisterClientProps) {
                     accept="image/*"
                     onChange={(e) => setProfilePicture(e.target.files?.[0])}
                 />
-            </label>
+            </label> */}
             <FormFeedback mode={mode}>{message}</FormFeedback>
             <LoadingButton type="button" onClick={Register} label="Register" loading={loading} />
         </div>

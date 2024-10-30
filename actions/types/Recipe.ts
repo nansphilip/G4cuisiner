@@ -19,6 +19,8 @@ export interface CreateRecipeType extends TitleRecipeType {
     userId: string;
 }
 
+export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {};
+
 export interface RecipeType extends IdRecipeType, SlugRecipeType, CreateRecipeType {
     createdAt: Date;
     updatedAt: Date;

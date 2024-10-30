@@ -30,10 +30,12 @@ export default function MainCenterOrStartClient(props: MainCenterOrStartClientPr
     useEffect(() => {
         window.addEventListener("load", CheckMainScrollState);
         window.addEventListener("resize", CheckMainScrollState);
-
+        window.addEventListener("mousemove", CheckMainScrollState); // Todo : find a better solution ?
+        
         return () => {
             window.removeEventListener("load", CheckMainScrollState);
             window.removeEventListener("resize", CheckMainScrollState);
+            window.removeEventListener("mousemove", CheckMainScrollState);
         };
     }, []);
 
