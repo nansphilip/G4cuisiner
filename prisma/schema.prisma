@@ -102,7 +102,7 @@ model Fruit {
     id          String  @id @unique @default(uuid())
     name        String  @unique
     description String
-    image       String?
+    image       String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

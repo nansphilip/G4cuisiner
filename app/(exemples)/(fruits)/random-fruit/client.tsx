@@ -31,7 +31,7 @@ export default function FruitsClient() {
     return (
         <>
             <div className="flex flex-wrap items-center justify-center gap-4">
-                {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.name, fruitImageUrl: fruit.image }))}
+                {fruitList.map((fruit, index) => FruitCard({ index, fruitName: fruit.name, fruitImage: fruit.image }))}
             </div>
             <LoadingButton
                 type="button"

@@ -25,8 +25,8 @@ export default async function RootLayout({
     ];
 
     return (
-        <html lang="fr" className="h-full">
-            <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-x-hidden`}>
+        <html lang="fr" className="h-full overflow-y-hidden">
+            <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-y-hidden`}>
                 <HeaderClient serverSession={session} slugPageList={slugPageList} className="w-full" />
                 <MainCenterOrStartClient>
                     {children}

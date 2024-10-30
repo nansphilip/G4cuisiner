@@ -34,12 +34,12 @@ type HeaderClientProps = {
 
 export default function HeaderClient(props: HeaderClientProps) {
     const { serverSession, slugPageList, className } = props;
-    const { data: sessionClient, isPending } = useSession();
-    const session = isPending ? serverSession : sessionClient;
+    const { data: sessionClient } = useSession();
+    const session = sessionClient ?? serverSession;
 
     const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
         label: group,
-        href: `${route}/${slugList[0].title}`,
+        href: `${route}/${slugList[0].slug}`,
         group: slugList.map(({ title, slug }) => ({
             label: title,
             href: `${route}/${slug}`,

@@ -19,7 +19,7 @@ export default function MainCenterOrStartClient(props: MainCenterOrStartClientPr
         const headerEl = document.querySelector("header") as HTMLElement;
         const mainEl = document.querySelector("main") as HTMLElement;
 
-        const documentHeight = document.documentElement.scrollHeight;
+        const documentHeight = document.documentElement.offsetHeight;
         const headerHeight = headerEl.scrollHeight;
         const mainScrollHeight = mainEl.scrollHeight;
 
@@ -30,12 +30,12 @@ export default function MainCenterOrStartClient(props: MainCenterOrStartClientPr
     useEffect(() => {
         window.addEventListener("load", CheckMainScrollState);
         window.addEventListener("resize", CheckMainScrollState);
-        window.addEventListener("mousemove", CheckMainScrollState); // Todo : find a better solution ?
+        // window.addEventListener("mousemove", CheckMainScrollState); // Todo : find a better solution ?
         
         return () => {
             window.removeEventListener("load", CheckMainScrollState);
             window.removeEventListener("resize", CheckMainScrollState);
-            window.removeEventListener("mousemove", CheckMainScrollState);
+            // window.removeEventListener("mousemove", CheckMainScrollState);
         };
     }, []);
 

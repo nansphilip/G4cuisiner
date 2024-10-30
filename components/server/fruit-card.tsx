@@ -4,15 +4,15 @@ import Image from "next/image";
 export type FruitProps = {
     index: number;
     fruitName: string;
-    fruitImageUrl: string;
+    fruitImage: string;
 };
 
 export default function FruitCard (props: FruitProps) {
-    const { index, fruitName, fruitImageUrl } = props;
+    const { index, fruitName, fruitImage } = props;
 
     return (
         <div key={index} className="flex flex-col overflow-hidden rounded-lg border shadow transition-transform duration-150 hover:scale-105">
-            <Image className="aspect-[5/4] object-cover" src={fruitImageUrl} height={200} width={250} alt={fruitName} />
+            <Image className="aspect-[5/4] object-cover" src={fruitImage} height={200} width={250} alt={fruitName} />
             <div className="flex flex-col gap-4 p-4">
                 <div>
                     <p>{fruitName}</p>
