@@ -12,13 +12,14 @@ export default function ImageSquare(props: ImageSquareProps) {
     const { image, alt, divClassName, imgClassName } = props;
 
     return (
-        <div className={combo("flex aspect-square", divClassName)}>
+        <div className={combo("aspect-square", divClassName)}>
             <Image
-                className={combo("object-cover", imgClassName)}
+                className={combo(imgClassName)}
                 src={image}
                 alt={alt}
-                height={200}
-                width={200}
+                height={100}
+                width={100}
+                layout="responsive"
             />
         </div>
     );
