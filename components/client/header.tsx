@@ -136,7 +136,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             // Get the largest link element width
             const subButtonLinkList = Array.from(navigationEl.querySelectorAll("a")) as HTMLElement[];
             const subButtonWidthList = subButtonLinkList.map((element) => element.scrollWidth);
-            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b), 0);
+            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b));
 
             // Get button dimensions and position
             const buttonRect = buttonEl.getBoundingClientRect();
