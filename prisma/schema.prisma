@@ -24,6 +24,7 @@ model User {
     Session Session[]
     Account Account[]
     Recipe  Recipe[]
+    Favorite Recipe[] @relation(name: "UserToRecipe")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -83,6 +84,7 @@ model Recipe {
     preparationTime Int? // in minutes
     difficultyLevel Difficulty @default(MEDIUM)
 
+    favoriteUsers User[] @relation(name: "UserToRecipe")
     ingredient Ingredient[] @relation(name: "IngredientToRecipe")
     lunchType  LunchType[]  @relation(name: "LunchTypeToRecipe")
     lunchStep  LunchStep[]  @relation(name: "LunchStepToRecipe")
