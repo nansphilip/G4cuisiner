@@ -19,6 +19,7 @@ model User {
     email         String  @unique
     emailVerified Boolean
     image         String?
+    role          Role    @default(USER)
 
     Session Session[]
     Account Account[]
@@ -28,6 +29,12 @@ model User {
     updatedAt DateTime @updatedAt
 
     @@map("user")
+}
+
+enum Role {
+    USER
+    MODO
+    ADMIN
 }
 
 model Session {
@@ -72,7 +79,13 @@ model Recipe {
     description String
     image       String?
 
-    ingredientIdList Ingredient[] @relation(name: "IngredientToRecipe")
+    numberOfServing Int?
+    preparationTime Int? // in minutes
+    difficultyLevel Difficulty @default(MEDIUM)
+
+    ingredient Ingredient[] @relation(name: "IngredientToRecipe")
+    lunchType  LunchType[]  @relation(name: "LunchTypeToRecipe")
+    lunchStep  LunchStep[]  @relation(name: "LunchStepToRecipe")
 
     userId String
     user   User   @relation(fields: [userId], references: [id])
@@ -81,6 +94,12 @@ model Recipe {
     updatedAt DateTime @updatedAt
 
     @@map("recipe")
+}
+
+enum Difficulty {
+    EASY
+    MEDIUM
+    HARD
 }
 
 model Ingredient {
@@ -97,10 +116,26 @@ model Ingredient {
     @@map("ingredient")
 }
 
+model LunchType {
+    id     Int      @id @default(autoincrement())
+    name   String   @unique
+    recipe Recipe[] @relation(name: "LunchTypeToRecipe")
+
+    @@map("LunchType")
+}
+
+model LunchStep {
+    id     Int      @id @default(autoincrement())
+    name   String   @unique
+    recipe Recipe[] @relation(name: "LunchStepToRecipe")
+
+    @@map("LunchStep")
+}
+
 // Example
 model Fruit {
-    id          String  @id @unique @default(uuid())
-    name        String  @unique
+    id          String @id @unique @default(uuid())
+    name        String @unique
     description String
     image       String
 
