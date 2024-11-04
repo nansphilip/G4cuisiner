@@ -48,6 +48,7 @@ export default function HeaderClient(props: HeaderClientProps) {
 
     const linkList: LinkPropsList = [
         { label: "Home", href: "/" },
+        { label: "Search", href: "/search-page" },
         {
             label: "Exemples",
             href: "/fruits",
