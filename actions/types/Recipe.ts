@@ -4,6 +4,26 @@ export interface IdRecipeType {
     id: string;
 }
 
+export interface LunchType {
+    id: number;
+    name: string;
+}
+
+export interface LunchStep {
+    id: number;
+    name: string;
+}
+
+export interface LunchType {
+    id: number;
+    name: string;
+}
+
+export interface LunchStep {
+    id: number;
+    name: string;
+}
+
 export interface TitleRecipeType {
     title: string;
 }
@@ -17,13 +37,19 @@ export interface CreateRecipeType extends TitleRecipeType {
     image: string | null;
     // ingredientIdList: Prisma.IngredientUncheckedCreateNestedManyWithoutRecipeIdListInput | Prisma.IngredientCreateNestedManyWithoutRecipeIdListInput | undefined;
     userId: string;
+    preparationTime: number;
 }
 
-export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {};
+export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
 
-export interface RecipeType extends IdRecipeType, SlugRecipeType, CreateRecipeType {
+export interface RecipeType
+    extends IdRecipeType,
+        SlugRecipeType,
+        CreateRecipeType {
     createdAt: Date;
     updatedAt: Date;
-};
+}
 
-export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {};
+export interface TitleAndSlugRecipeType
+    extends TitleRecipeType,
+        SlugRecipeType {}
