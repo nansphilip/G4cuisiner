@@ -37,7 +37,7 @@ export interface CreateRecipeType extends TitleRecipeType {
     image: string | null;
     // ingredientIdList: Prisma.IngredientUncheckedCreateNestedManyWithoutRecipeIdListInput | Prisma.IngredientCreateNestedManyWithoutRecipeIdListInput | undefined;
     userId: string;
-    preparationTime: number;
+    preparationTime: number | null;
 }
 
 export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
