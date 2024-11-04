@@ -49,20 +49,15 @@ export default function HeaderClient(props: HeaderClientProps) {
     const linkList: LinkPropsList = [
         { label: "Home", href: "/" },
         {
-            label: "Zustand Examples",
-            href: "/zustand-set",
-            group: [
-                { label: "Zustand Set", href: "/zustand-set" },
-                { label: "Zustand Get", href: "/zustand-get" },
-            ],
-        },
-        {
-            label: "Fruits Exemples",
+            label: "Exemples",
             href: "/fruits",
             group: [
+                { label: "Cropper", href: "/cropper" },
+                { label: "Zustand Set", href: "/zustand-set" },
+                { label: "Zustand Get", href: "/zustand-get" },
                 { label: "Display Fruits", href: "/fruits" },
                 { label: "Server Fruits", href: "/random-fruit" },
-            ],
+            ]
         },
         ...slugLinkList,
         {
@@ -141,7 +136,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             // Get the largest link element width
             const subButtonLinkList = Array.from(navigationEl.querySelectorAll("a")) as HTMLElement[];
             const subButtonWidthList = subButtonLinkList.map((element) => element.scrollWidth);
-            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b), 0);
+            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b));
 
             // Get button dimensions and position
             const buttonRect = buttonEl.getBoundingClientRect();
@@ -176,7 +171,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
 
             // Set hover zone dimensions and position
             hoverZoneEl.style.height = `${offset}px`;
-            hoverZoneEl.style.width = `${buttonWidth}px`;
+            hoverZoneEl.style.width = `${navigationWidth}px`;
             hoverZoneEl.style.top = `${buttonTop + buttonHeight}px`;
             hoverZoneEl.style.left = `${navigationLeft}px`;
         }

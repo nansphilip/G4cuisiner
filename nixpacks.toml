@@ -3,5 +3,5 @@
 [phases.setup]
 commands = [
     "pnpx prisma generate",
-    "pnpx prisma migrate deploy"
+    "pnpx prisma migrate dev --name init",
 ]
