@@ -1,3 +1,10 @@
 "use server";
 
-// Shared types for the User database
+export interface UserFixtures {
+    id: string,
+    name: string,
+    email: string,
+    emailVerified: boolean,
+    image: string | null,
+    role: "USER" | "MODO" | "ADMIN"
+}

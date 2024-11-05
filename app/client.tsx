@@ -1,17 +1,15 @@
 "use client";
 
-import { BetterSessionServer } from "@lib/auth";
 import { useSession } from "@lib/client";
 import Button from "@comps/client/button";
+import Loader from "@comps/server/loader";
 
-type HomeClientProps = {
-    serverSession: BetterSessionServer;
-};
+export default function HomeClient() {
+    const { data: session, isPending, isRefetching } = useSession();
 
-export default function HomeClient(props: HomeClientProps) {
-    const { serverSession } = props;
-    const { data: sessionClient } = useSession();
-    const session = sessionClient ?? serverSession;
+    if (isPending || isRefetching) {
+        return <Loader />;
+    }
 
     return session ? (
         <>

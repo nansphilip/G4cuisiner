@@ -9,3 +9,9 @@ export type FruitType = {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface FruitFixtures {
+    name: string,
+    description: string,
+    image: string,
+}

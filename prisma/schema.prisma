@@ -1,148 +1,173 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String  @id @unique @default(uuid())
-  name          String
-  email         String  @unique
-  emailVerified Boolean
-  image         String?
-  role          Role    @default(USER)
+    id            String  @id @unique
+    name          String
+    email         String  @unique
+    emailVerified Boolean
+    image         String?
+    role          Role    @default(USER)
 
-  Session  Session[]
-  Account  Account[]
-  Recipe   Recipe[]
-  Favorite Recipe[]  @relation(name: "UserToRecipe")
+    // One to Many
+    Session Session[]
+    Account Account[]
+    Recipe Recipe[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    // Many to Many
+    Favorite Recipe[] @relation(name: "UserToRecipe")
 
-  @@map("user")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("user")
 }
 
 enum Role {
-  USER
-  MODO
-  ADMIN
+    USER
+    MODO
+    ADMIN
 }
 
 model Session {
-  id        String   @id @unique @default(uuid())
-  expiresAt DateTime
-  ipAddress String?
-  userAgent String?
+    id        String   @id @unique
+    expiresAt DateTime
+    ipAddress String?
+    userAgent String?
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    // Many to One
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("session")
+    @@map("session")
 }
 
 model Account {
-  id         String @id @unique @default(uuid())
-  accountId  String
-  providerId String
+    id         String @id @unique
+    accountId  String
+    providerId String
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    // Many to One
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  accessToken  String?
-  refreshToken String?
-  idToken      String?
-  expiresAt    DateTime?
-  password     String?
+    accessToken  String?
+    refreshToken String?
+    idToken      String?
+    expiresAt    DateTime?
+    password     String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("account")
-}
-
-model Recipe {
-  id          String  @id @unique @default(uuid())
-  title       String  @unique
-  slug        String  @unique
-  description String
-  image       String?
-
-  numberOfServing Int?
-  preparationTime Int? // in minutes
-  difficultyLevel Difficulty @default(MEDIUM)
-
-  favoriteUsers User[]       @relation(name: "UserToRecipe")
-  ingredient    Ingredient[] @relation(name: "IngredientToRecipe")
-  lunchType     LunchType[]  @relation(name: "LunchTypeToRecipe")
-  lunchStep     LunchStep[]  @relation(name: "LunchStepToRecipe")
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("recipe")
-}
-
-enum Difficulty {
-  EASY
-  MEDIUM
-  HARD
+    @@map("account")
 }
 
 model Ingredient {
-  id          String  @id @unique @default(uuid())
-  name        String  @unique
-  description String
-  image       String?
+    id          String  @id @unique @default(uuid())
+    name        String  @unique
+    description String
+    image       String?
 
-  recipeIdList Recipe[] @relation(name: "IngredientToRecipe")
+    // One to Many
+    recipes RecipeIngredient[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("ingredient")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
-model LunchType {
-  id     Int      @id @default(autoincrement())
-  name   String   @unique
-  recipe Recipe[] @relation(name: "LunchTypeToRecipe")
+model Recipe {
+    id          String  @id @unique @default(uuid())
+    title       String  @unique
+    slug        String  @unique
+    description String
+    image       String?
 
-  @@map("LunchType")
+    numberOfServing Int? // in person
+    preparationTime Int? // in minutes
+
+    difficultyLevel Difficulty @default(MEDIUM)
+    lunchType       LunchType
+    lunchStep       LunchStep
+
+    // Many to One
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    // One to Many
+    ingredients RecipeIngredient[]
+
+    // Many to Many
+    favoriteUsers User[] @relation(name: "UserToRecipe")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
-model LunchStep {
-  id     Int      @id @default(autoincrement())
-  name   String   @unique
-  recipe Recipe[] @relation(name: "LunchStepToRecipe")
+enum Difficulty {
+    EASY
+    MEDIUM
+    HARD
+}
 
-  @@map("LunchStep")
+enum LunchType {
+    BREAKFAST
+    LUNCH
+    BRUNCH
+    DINNER
+    SNACK
+}
+
+enum LunchStep {
+    APPETIZER
+    STARTER
+    MAIN
+    DESSERT
+}
+
+
+model RecipeIngredient {
+    @@id([recipeId, ingredientId])
+    quantity Float
+    unit Unit
+
+    // Many to One
+    recipeId     String
+    recipe       Recipe     @relation(fields: [recipeId], references: [id])
+
+    // Many to One
+    ingredientId String
+    ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum Unit {
+    GRAM
+    KILOGRAM
+    LITER
+    CENTILITER
+    MILLILITER
+    PIECE
 }
 
 // Example
 model Fruit {
-  id          String @id @unique @default(uuid())
-  name        String @unique
-  description String
-  image       String
+    id          String @id @unique @default(uuid())
+    name        String @unique
+    description String
+    image       String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("fruit")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
