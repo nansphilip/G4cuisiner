@@ -18,9 +18,7 @@ import {
  * @returns {Promise<RecipeType>} - The created recipe.
  * @throws {Error} - If the recipe already exists or if there is an error during creation.
  */
-export const CreateRecipe = async (
-    props: CreateRecipeType
-): Promise<RecipeType> => {
+export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
         const { title, description, image, userId, preparationTime } = props;
 
@@ -34,7 +32,11 @@ export const CreateRecipe = async (
         const recipe = await Prisma.recipe.create({
             data: {
                 title,
-                slug: title.replace(/\s/g, "-").toLowerCase(),
+                slug: title
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/\s+/g, "-"),
                 description,
                 image,
                 userId,
@@ -44,9 +46,7 @@ export const CreateRecipe = async (
         console.log("Created recipe -> ", recipe);
         return recipe;
     } catch (error) {
-        throw new Error(
-            "Unable to create recipe -> " + (error as Error).message
-        );
+        throw new Error("Unable to create recipe -> " + (error as Error).message);
     }
 };
 
@@ -57,9 +57,7 @@ export const CreateRecipe = async (
  * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
  * @throws {Error} - If there is an error during selection.
  */
-export const SelectRecipeById = async (
-    props: IdRecipeType
-): Promise<RecipeType | null> => {
+export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType | null> => {
     try {
         const { id } = props;
         const recipe = await Prisma.recipe.findUnique({
@@ -73,9 +71,7 @@ export const SelectRecipeById = async (
         }
         return recipe;
     } catch (error) {
-        throw new Error(
-            "Unable to select recipe -> " + (error as Error).message
-        );
+        throw new Error("Unable to select recipe -> " + (error as Error).message);
     }
 };
 
@@ -86,9 +82,7 @@ export const SelectRecipeById = async (
  * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
  * @throws {Error} - If there is an error during selection.
  */
-export const SelectRecipeByTitle = async (
-    props: TitleRecipeType
-): Promise<RecipeType | null> => {
+export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<RecipeType | null> => {
     try {
         const { title } = props;
         const recipe = await Prisma.recipe.findUnique({
@@ -102,9 +96,7 @@ export const SelectRecipeByTitle = async (
         }
         return recipe;
     } catch (error) {
-        throw new Error(
-            "Unable to select recipe -> " + (error as Error).message
-        );
+        throw new Error("Unable to select recipe -> " + (error as Error).message);
     }
 };
 
@@ -115,9 +107,7 @@ export const SelectRecipeByTitle = async (
  * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
  * @throws {Error} - If there is an error during selection.
  */
-export const SelectRecipeBySlug = async (
-    props: SlugRecipeType
-): Promise<RecipeType | null> => {
+export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeType | null> => {
     try {
         const { slug } = props;
         const recipe = await Prisma.recipe.findUnique({
@@ -131,15 +121,11 @@ export const SelectRecipeBySlug = async (
         }
         return recipe;
     } catch (error) {
-        throw new Error(
-            "Unable to select recipe -> " + (error as Error).message
-        );
+        throw new Error("Unable to select recipe -> " + (error as Error).message);
     }
 };
 
-export const SelectEveryRecipeSlugs = async (): Promise<
-    TitleAndSlugRecipeType[]
-> => {
+export const SelectEveryRecipeSlugs = async (): Promise<TitleAndSlugRecipeType[]> => {
     try {
         const recipeList = await Prisma.recipe.findMany({
             select: {
@@ -153,9 +139,7 @@ export const SelectEveryRecipeSlugs = async (): Promise<
         }
         return recipeList;
     } catch (error) {
-        throw new Error(
-            "Unable to select many recipe slugs -> " + (error as Error).message
-        );
+        throw new Error("Unable to select many recipe slugs -> " + (error as Error).message);
     }
 };
 
@@ -168,9 +152,7 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
         }
         return recipeList;
     } catch (error) {
-        throw new Error(
-            "Unable to select many recipes -> " + (error as Error).message
-        );
+        throw new Error("Unable to select many recipes -> " + (error as Error).message);
     }
 };
 
@@ -181,9 +163,7 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
  * @returns {Promise<RecipeType>} - The updated recipe.
  * @throws {Error} - If the recipe does not exist or if there is an error during update.
  */
-export const UpdateRecipeById = async (
-    props: UpdateRecipeType
-): Promise<RecipeType> => {
+export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {
     try {
         const { id, title, description, image, userId } = props;
 
@@ -205,7 +185,11 @@ export const UpdateRecipeById = async (
             },
             data: {
                 title,
-                slug: title.replace(/\s/g, "-").toLowerCase(),
+                slug: title
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/\s+/g, "-"),
                 description,
                 image,
                 userId,
@@ -214,9 +198,7 @@ export const UpdateRecipeById = async (
         console.log("Updated recipe -> ", recipe);
         return recipe;
     } catch (error) {
-        throw new Error(
-            "Unable to update recipe -> " + (error as Error).message
-        );
+        throw new Error("Unable to update recipe -> " + (error as Error).message);
     }
 };
 
@@ -227,9 +209,7 @@ export const UpdateRecipeById = async (
  * @returns {Promise<RecipeType>} - The deleted recipe.
  * @throws {Error} - If the recipe does not exist or if there is an error during deletion.
  */
-export const DeleteRecipe = async (
-    props: IdRecipeType
-): Promise<RecipeType> => {
+export const DeleteRecipe = async (props: IdRecipeType): Promise<RecipeType> => {
     try {
         const { id } = props;
         const existingRecipe = await SelectRecipeById({ id });
@@ -244,9 +224,7 @@ export const DeleteRecipe = async (
         console.log("Deleted recipe -> ", recipe, existingRecipe);
         return existingRecipe;
     } catch (error) {
-        throw new Error(
-            "Unable to delete recipe -> " + (error as Error).message
-        );
+        throw new Error("Unable to delete recipe -> " + (error as Error).message);
     }
 };
 
@@ -257,9 +235,7 @@ export const DeleteRecipe = async (
  * @returns {Promise<RecipeType[]>} - The list of deleted recipes.
  * @throws {Error} - If any of the recipes do not exist or if there is an error during deletion.
  */
-export const DeleteManyRecipe = async (
-    props: IdRecipeType[]
-): Promise<RecipeType[]> => {
+export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeType[]> => {
     try {
         const existingRecipeList: RecipeType[] = [];
         props.map(async ({ id }) => {
@@ -279,9 +255,7 @@ export const DeleteManyRecipe = async (
         console.log("Deleted recipe list -> ", recipeList, existingRecipeList);
         return existingRecipeList;
     } catch (error) {
-        throw new Error(
-            "Unable to delete many recipes -> " + (error as Error).message
-        );
+        throw new Error("Unable to delete many recipes -> " + (error as Error).message);
     }
 };
 
@@ -298,9 +272,7 @@ export const LunchTypeList = async () => {
         }
         return lunchTypeListed;
     } catch (error) {
-        throw new Error(
-            "Unable to select any type lunch -> " + (error as Error).message
-        );
+        throw new Error("Unable to select any type lunch -> " + (error as Error).message);
     }
 };
 
@@ -317,9 +289,7 @@ export const LunchStepList = async () => {
         }
         return lunchStepListed;
     } catch (error) {
-        throw new Error(
-            "Unable to select any step's lunch -> " + (error as Error).message
-        );
+        throw new Error("Unable to select any step's lunch -> " + (error as Error).message);
     }
 };
 
@@ -336,8 +306,6 @@ export const IngredientList = async () => {
         }
         return ingredientListed;
     } catch (error) {
-        throw new Error(
-            "Unable to select any ingredients -> " + (error as Error).message
-        );
+        throw new Error("Unable to select any ingredients -> " + (error as Error).message);
     }
 };

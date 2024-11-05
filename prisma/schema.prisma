@@ -5,144 +5,144 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String  @id @unique @default(uuid())
-  name          String
-  email         String  @unique
-  emailVerified Boolean
-  image         String?
-  role          Role    @default(USER)
+    id            String  @id @unique @default(uuid())
+    name          String
+    email         String  @unique
+    emailVerified Boolean
+    image         String?
+    role          Role    @default(USER)
 
-  Session  Session[]
-  Account  Account[]
-  Recipe   Recipe[]
-  Favorite Recipe[]  @relation(name: "UserToRecipe")
+    Session  Session[]
+    Account  Account[]
+    Recipe   Recipe[]
+    Favorite Recipe[]  @relation(name: "UserToRecipe")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("user")
+    @@map("user")
 }
 
 enum Role {
-  USER
-  MODO
-  ADMIN
+    USER
+    MODO
+    ADMIN
 }
 
 model Session {
-  id        String   @id @unique @default(uuid())
-  expiresAt DateTime
-  ipAddress String?
-  userAgent String?
+    id        String   @id @unique @default(uuid())
+    expiresAt DateTime
+    ipAddress String?
+    userAgent String?
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("session")
+    @@map("session")
 }
 
 model Account {
-  id         String @id @unique @default(uuid())
-  accountId  String
-  providerId String
+    id         String @id @unique @default(uuid())
+    accountId  String
+    providerId String
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  accessToken  String?
-  refreshToken String?
-  idToken      String?
-  expiresAt    DateTime?
-  password     String?
+    accessToken  String?
+    refreshToken String?
+    idToken      String?
+    expiresAt    DateTime?
+    password     String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("account")
+    @@map("account")
 }
 
 model Recipe {
-  id          String  @id @unique @default(uuid())
-  title       String  @unique
-  slug        String  @unique
-  description String
-  image       String?
+    id          String  @id @unique @default(uuid())
+    title       String  @unique
+    slug        String  @unique
+    description String
+    image       String?
 
-  numberOfServing Int?
-  preparationTime Int? // in minutes
-  difficultyLevel Difficulty @default(MEDIUM)
+    numberOfServing Int?
+    preparationTime Int? // in minutes
 
-  favoriteUsers User[]       @relation(name: "UserToRecipe")
-  ingredient    Ingredient[] @relation(name: "IngredientToRecipe")
-  lunchType     LunchType[]  @relation(name: "LunchTypeToRecipe")
-  lunchStep     LunchStep[]  @relation(name: "LunchStepToRecipe")
+    difficultyLevel Difficulty @default(MEDIUM)
+    lunchType       LunchType
+    lunchStep       LunchStep
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+    favoriteUsers User[]       @relation(name: "UserToRecipe")
+    ingredient    Ingredient[] @relation(name: "IngredientToRecipe")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
 
-  @@map("recipe")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("recipe")
 }
 
 enum Difficulty {
-  EASY
-  MEDIUM
-  HARD
+    EASY
+    MEDIUM
+    HARD
+}
+
+enum LunchType {
+    BREAKFAST
+    LUNCH
+    BRUNCH
+    DINNER
+    SNACK
+}
+
+enum LunchStep {
+    APPETIZER
+    STARTER
+    MAIN
+    DESSERT
 }
 
 model Ingredient {
-  id          String  @id @unique @default(uuid())
-  name        String  @unique
-  description String
-  image       String?
+    id          String  @id @unique @default(uuid())
+    name        String  @unique
+    description String
+    image       String?
 
-  recipeIdList Recipe[] @relation(name: "IngredientToRecipe")
+    recipeIdList Recipe[] @relation(name: "IngredientToRecipe")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("ingredient")
-}
-
-model LunchType {
-  id     Int      @id @default(autoincrement())
-  name   String   @unique
-  recipe Recipe[] @relation(name: "LunchTypeToRecipe")
-
-  @@map("LunchType")
-}
-
-model LunchStep {
-  id     Int      @id @default(autoincrement())
-  name   String   @unique
-  recipe Recipe[] @relation(name: "LunchStepToRecipe")
-
-  @@map("LunchStep")
+    @@map("ingredient")
 }
 
 // Example
 model Fruit {
-  id          String @id @unique @default(uuid())
-  name        String @unique
-  description String
-  image       String
+    id          String @id @unique @default(uuid())
+    name        String @unique
+    description String
+    image       String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  @@map("fruit")
+    @@map("fruit")
 }
