@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -14,17 +8,20 @@ datasource db {
 }
 
 model User {
-    id            String  @id @unique @default(uuid())
+    id            String  @id @unique
     name          String
     email         String  @unique
     emailVerified Boolean
     image         String?
     role          Role    @default(USER)
 
-    Session  Session[]
-    Account  Account[]
-    Recipe   Recipe[]
-    Favorite Recipe[]  @relation(name: "UserToRecipe")
+    // One to Many
+    Session Session[]
+    Account Account[]
+    Recipe Recipe[]
+
+    // Many to Many
+    Favorite Recipe[] @relation(name: "UserToRecipe")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -39,11 +36,12 @@ enum Role {
 }
 
 model Session {
-    id        String   @id @unique @default(uuid())
+    id        String   @id @unique
     expiresAt DateTime
     ipAddress String?
     userAgent String?
 
+    // Many to One
     userId String
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -54,10 +52,11 @@ model Session {
 }
 
 model Account {
-    id         String @id @unique @default(uuid())
+    id         String @id @unique
     accountId  String
     providerId String
 
+    // Many to One
     userId String
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -73,6 +72,19 @@ model Account {
     @@map("account")
 }
 
+model Ingredient {
+    id          String  @id @unique @default(uuid())
+    name        String  @unique
+    description String
+    image       String?
+
+    // One to Many
+    recipes RecipeIngredient[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 model Recipe {
     id          String  @id @unique @default(uuid())
     title       String  @unique
@@ -80,23 +92,25 @@ model Recipe {
     description String
     image       String?
 
-    numberOfServing Int?
+    numberOfServing Int? // in person
     preparationTime Int? // in minutes
 
     difficultyLevel Difficulty @default(MEDIUM)
     lunchType       LunchType
     lunchStep       LunchStep
 
-    favoriteUsers User[]       @relation(name: "UserToRecipe")
-    ingredient    Ingredient[] @relation(name: "IngredientToRecipe")
-
+    // Many to One
     userId String
     user   User   @relation(fields: [userId], references: [id])
 
+    // One to Many
+    ingredients RecipeIngredient[]
+
+    // Many to Many
+    favoriteUsers User[] @relation(name: "UserToRecipe")
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@map("recipe")
 }
 
 enum Difficulty {
@@ -120,18 +134,31 @@ enum LunchStep {
     DESSERT
 }
 
-model Ingredient {
-    id          String  @id @unique @default(uuid())
-    name        String  @unique
-    description String
-    image       String?
 
-    recipeIdList Recipe[] @relation(name: "IngredientToRecipe")
+model RecipeIngredient {
+    @@id([recipeId, ingredientId])
+    quantity Float
+    unit Unit
+
+    // Many to One
+    recipeId     String
+    recipe       Recipe     @relation(fields: [recipeId], references: [id])
+
+    // Many to One
+    ingredientId String
+    ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
 
-    @@map("ingredient")
+enum Unit {
+    GRAM
+    KILOGRAM
+    LITER
+    CENTILITER
+    MILLILITER
+    PIECE
 }
 
 // Example
@@ -143,6 +170,4 @@ model Fruit {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@map("fruit")
 }

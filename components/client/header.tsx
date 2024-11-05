@@ -115,12 +115,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                     duration="duration-200"
                 >
                     {linkList.map((linkOrGroup, index) => (
-                        <HeaderDisplay
-                            key={index}
-                            index={index}
-                            linkOrGroup={linkOrGroup}
-                            session={session}
-                        />
+                        <HeaderDisplay key={index} index={index} linkOrGroup={linkOrGroup} session={session} />
                     ))}
                 </SlidingHover>
             </nav>
@@ -151,18 +146,10 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const offset = 8;
 
             // Get popup elements
-            const buttonEl = document.querySelector(
-                `#popup-btn-${index}`
-            ) as HTMLElement;
-            const navigationEl = document.querySelector(
-                `#popup-nav-${index}`
-            ) as HTMLElement;
-            const backgroundEl = document.querySelector(
-                `#popup-bg-${index}`
-            ) as HTMLElement;
-            const hoverZoneEl = document.querySelector(
-                `#popup-hov-${index}`
-            ) as HTMLElement;
+            const buttonEl = document.querySelector(`#popup-btn-${index}`) as HTMLElement;
+            const navigationEl = document.querySelector(`#popup-nav-${index}`) as HTMLElement;
+            const backgroundEl = document.querySelector(`#popup-bg-${index}`) as HTMLElement;
+            const hoverZoneEl = document.querySelector(`#popup-hov-${index}`) as HTMLElement;
 
             // Check if elements exist to prevent a rendering error
             if (!buttonEl || !navigationEl || !backgroundEl || !hoverZoneEl) {
@@ -170,15 +157,9 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             }
 
             // Get the largest link element width
-            const subButtonLinkList = Array.from(
-                navigationEl.querySelectorAll("a")
-            ) as HTMLElement[];
-            const subButtonWidthList = subButtonLinkList.map(
-                (element) => element.scrollWidth
-            );
-            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) =>
-                Math.max(a, b)
-            );
+            const subButtonLinkList = Array.from(navigationEl.querySelectorAll("a")) as HTMLElement[];
+            const subButtonWidthList = subButtonLinkList.map((element) => element.scrollWidth);
+            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b));
 
             // Get button dimensions and position
             const buttonRect = buttonEl.getBoundingClientRect();
@@ -188,8 +169,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const buttonLeft = buttonRect.left;
 
             // Get the largest width between the largest link and the button
-            const subButtonIsLarger =
-                largestSubButtonWidth > buttonWidth ? "auto" : null;
+            const subButtonIsLarger = largestSubButtonWidth > buttonWidth ? "auto" : null;
 
             // Set navigation dimensions and position
             navigationEl.style.top = `${buttonTop + buttonHeight + offset}px`;
@@ -245,19 +225,13 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                     ring="none"
                     className={combo(
                         "relative z-30 flex gap-1 text-nowrap py-1",
-                        group.filter((link) => pathname === link.href).length >
-                            0 && "font-bold"
+                        group.filter((link) => pathname === link.href).length > 0 && "font-bold"
                     )}
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}
                 >
                     <span>{label}</span>
-                    <ChevronDown
-                        className={combo(
-                            "transition-transform duration-300",
-                            isOpen && "-rotate-180"
-                        )}
-                    />
+                    <ChevronDown className={combo("transition-transform duration-300", isOpen && "-rotate-180")} />
                 </Button>
                 {/* Navigation popup */}
                 <div
@@ -270,11 +244,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                     )}
                 >
                     {group.map((groupLink, index) => (
-                        <HeaderLink
-                            key={index}
-                            link={groupLink}
-                            session={session}
-                        />
+                        <HeaderLink key={index} link={groupLink} session={session} />
                     ))}
                 </div>
                 {/* Background popup */}
@@ -288,10 +258,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                 {/* Hover zone */}
                 <div
                     id={`popup-hov-${index}`}
-                    className={combo(
-                        "absolute z-30",
-                        !isOpen && "pointer-events-none"
-                    )}
+                    className={combo("absolute z-30", !isOpen && "pointer-events-none")}
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}
                 ></div>
@@ -332,10 +299,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
             roundedSize="md"
             ring="none"
             href={href}
-            className={combo(
-                "relative z-30 text-nowrap py-1",
-                pathname === href && "font-bold"
-            )}
+            className={combo("relative z-30 text-nowrap py-1", pathname === href && "font-bold")}
         >
             {label}
         </Button>

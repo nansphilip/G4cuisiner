@@ -20,7 +20,17 @@ import {
  */
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
-        const { title, description, image, userId, preparationTime } = props;
+        const {
+            title,
+            description,
+            image,
+            numberOfServing,
+            preparationTime,
+            difficultyLevel,
+            lunchType,
+            lunchStep,
+            userId,
+        } = props;
 
         // Check if recipe already exists
         const existingRecipe = await SelectRecipeByTitle({ title });
@@ -28,19 +38,33 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
             throw new Error("Recipe already exists");
         }
 
+        // Create slug
+        const slug = title
+            .toLowerCase()
+            .replace(/œ/g, "oe")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "-");
+
+        // Check if slug already exists
+        const existingSlug = await SelectRecipeBySlug({ slug });
+        if (existingSlug) {
+            throw new Error("Slug already exists");
+        }
+
         // Create recipe
         const recipe = await Prisma.recipe.create({
             data: {
                 title,
-                slug: title
-                    .toLowerCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .replace(/\s+/g, "-"),
+                slug,
                 description,
                 image,
-                userId,
+                numberOfServing,
                 preparationTime,
+                difficultyLevel,
+                lunchType,
+                lunchStep,
+                userId,
             },
         });
         console.log("Created recipe -> ", recipe);
@@ -179,17 +203,27 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
             throw new Error("New title already exists");
         }
 
+        // Create slug
+        const slug = title
+            .toLowerCase()
+            .replace(/œ/g, "oe")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "-");
+
+        // Check if slug already exists
+        const existingSlug = await SelectRecipeBySlug({ slug });
+        if (existingSlug) {
+            throw new Error("Slug already exists");
+        }
+
         const recipe = await Prisma.recipe.update({
             where: {
                 id,
             },
             data: {
                 title,
-                slug: title
-                    .toLowerCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .replace(/\s+/g, "-"),
+                slug,
                 description,
                 image,
                 userId,
@@ -256,56 +290,5 @@ export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeTyp
         return existingRecipeList;
     } catch (error) {
         throw new Error("Unable to delete many recipes -> " + (error as Error).message);
-    }
-};
-
-export const LunchTypeList = async () => {
-    try {
-        const lunchTypeListed = await Prisma.lunchType.findMany({
-            select: {
-                id: true,
-                name: true,
-            },
-        });
-        if (!lunchTypeListed) {
-            throw new Error("No type found");
-        }
-        return lunchTypeListed;
-    } catch (error) {
-        throw new Error("Unable to select any type lunch -> " + (error as Error).message);
-    }
-};
-
-export const LunchStepList = async () => {
-    try {
-        const lunchStepListed = await Prisma.lunchStep.findMany({
-            select: {
-                id: true,
-                name: true,
-            },
-        });
-        if (!lunchStepListed) {
-            throw new Error("No type found");
-        }
-        return lunchStepListed;
-    } catch (error) {
-        throw new Error("Unable to select any step's lunch -> " + (error as Error).message);
-    }
-};
-
-export const IngredientList = async () => {
-    try {
-        const ingredientListed = await Prisma.ingredient.findMany({
-            select: {
-                id: true,
-                name: true,
-            },
-        });
-        if (!ingredientListed) {
-            throw new Error("No type found");
-        }
-        return ingredientListed;
-    } catch (error) {
-        throw new Error("Unable to select any ingredients -> " + (error as Error).message);
     }
 };

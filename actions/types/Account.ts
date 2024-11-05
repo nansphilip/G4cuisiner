@@ -1,3 +1,9 @@
 "use server";
 
-// Shared types for the Account database
+export interface AccountFixtures {
+    id: string,
+    accountId: string,
+    providerId: string,
+    userId: string,
+    password: string | null
+}

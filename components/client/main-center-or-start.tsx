@@ -1,6 +1,7 @@
 "use client";
 
 import { combo } from "@lib/combo";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type MainCenterOrStartClientProps = {
@@ -13,6 +14,8 @@ type MainCenterOrStartClientProps = {
 export default function MainCenterOrStartClient(props: MainCenterOrStartClientProps) {
     const { children } = props;
     
+    const pathname = usePathname();
+
     const [isMainScrollable, setIsMainScrollable] = useState(false);
 
     const CheckMainScrollState = () => {
@@ -28,14 +31,22 @@ export default function MainCenterOrStartClient(props: MainCenterOrStartClientPr
     };
 
     useEffect(() => {
+        CheckMainScrollState();
+    }, [pathname]);
+
+    useEffect(() => {
         window.addEventListener("load", CheckMainScrollState);
         window.addEventListener("resize", CheckMainScrollState);
-        // window.addEventListener("mousemove", CheckMainScrollState); // Todo : find a better solution ?
+        window.addEventListener("scroll", CheckMainScrollState); // Todo : find a better solution ?
+        window.addEventListener("mousemove", CheckMainScrollState); // Todo : find a better solution ?
+        window.addEventListener("touchstart", CheckMainScrollState); // Todo : find a better solution ?
         
         return () => {
-            window.removeEventListener("load", CheckMainScrollState);
+            document.addEventListener("load", CheckMainScrollState);
             window.removeEventListener("resize", CheckMainScrollState);
-            // window.removeEventListener("mousemove", CheckMainScrollState);
+            window.removeEventListener("scroll", CheckMainScrollState);
+            window.removeEventListener("mousemove", CheckMainScrollState);
+            window.removeEventListener("touchstart", CheckMainScrollState);
         };
     }, []);
 
