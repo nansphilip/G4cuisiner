@@ -1,21 +1,33 @@
 import Image from "next/image";
-import {IngredientType} from "@actions/types/Ingredient";
-import {RecipeIngredients} from "@actions/types/Recipe_ingredients";
 
+export type IngredientType = {
+    id: string;
+    name: string;
+    image: string;
+};
+export type RecipeIngredients = {
+    slugRecipe: string;
+    ingredientId: string;
+    ingredientQuantity: string;
+};
 
 export type IngredientListProps = {
     ingredients?: IngredientType[] | null; // Liste d'ingrédients
+    recipe_ingredients?: RecipeIngredients[] | null;
 };
 
-
-export default function IngredientList({ingredients}: IngredientListProps) {
-
-    const missingIngredients: (IngredientType & RecipeIngredients)[] = [
-        { id: "0", name: "Choix 1", image: "/placeholder-image.png", ingredientQuantity: "..." },
-        { id: "1", name: "Choix 2", image: "/placeholder-image.png", ingredientQuantity: "..." },
-        { id: "3", name: "Choix 3", image: "/placeholder-image.png", ingredientQuantity: "..." }
+export default function IngredientList({ingredients, recipe_ingredients}: IngredientListProps) {
+    const missingIngredients: (IngredientType & { ingredientQuantity : string })[] = [
+        { id: "0", name: "Choix 1", image: "/placeholder-image.png", ingredienQuantity: "..." },
+        { id: "1", name: "Choix 2", image: "/placeholder-image.png", ingredienQuantity: "..." },
+        { id: "3", name: "Choix 3", image: "/placeholder-image.png", ingredienQuantity: "..." }
     ];
-    const ingredientsRecipe = ingredients || missingIngredients;
+
+    const ingredientsRecipe = ingredients && ingredients.length > 0 ? ingredients.map(ingredient => ({
+            ...ingredient,
+            ingredientQuantity: recipe_ingredients?.find(r => r.ingredientId === ingredient.id)?.ingredientQuantity || "..."
+        }))
+        : missingIngredients;
 
     return (
 
