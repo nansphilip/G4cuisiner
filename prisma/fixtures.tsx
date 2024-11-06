@@ -1,5 +1,13 @@
 import Prisma from "@lib/prisma";
-import { accountData, fruitData, ingredientData, recipeData, recipeIngredientData, userData } from "./data";
+import {
+    accountData,
+    fruitData,
+    ingredientData,
+    recipeData,
+    recipeIngredientData,
+    userData,
+    userFavoriteData,
+} from "./data";
 
 const main = async () => {
     for (const { id, name, email, emailVerified, image, role } of userData) {
@@ -60,6 +68,13 @@ const main = async () => {
         });
     }
 
+    for (const { userId, Favorite } of userFavoriteData) {
+        await Prisma.user.update({
+            where: { id: userId },
+            data: { Favorite: { connect: Favorite.map((id) => ({ id })) } },
+        });
+    }
+    
     for (const { name, description, image } of fruitData) {
         await Prisma.fruit.create({
             data: { name, description, image },

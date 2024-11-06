@@ -1,22 +1,24 @@
 import Image from "next/image";
 
 export type RecipeProps = {
-    index: number;
-    recipeName: string;
-    recipeImageUrl: string;
+    title: string;
+    image: string | null;
 };
 
 export default function RecipeCard(props: RecipeProps) {
-    const {index, recipeName, recipeImageUrl} = props;
+    const { title, image } = props;
+
+    if (!image) {
+        return null;
+    }
 
     return (
-        <div key={index} className="flex flex-col overflow-hidden rounded-lg border shadow transition-transform duration-150 hover:scale-105">
-            <Image className="aspect-[5/4] object-cover"
-                   src={recipeImageUrl}
-                   height={200}
-                   width={250}
-                   alt={recipeName}/>
-
-        </div>
+        <Image
+            className="aspect-[5/4] rounded-lg object-cover shadow-md"
+            src={image}
+            height={200}
+            width={250}
+            alt={title}
+        />
     );
-};
+}

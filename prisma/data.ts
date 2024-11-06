@@ -2,8 +2,8 @@ import { UserFixtures } from "@actions/types/User";
 import { RecipeFixtures } from "@actions/types/Recipe";
 import { IngredientFixtures } from "@actions/types/Ingredient";
 import { AccountFixtures } from "@actions/types/Account";
-import { RecipeIngredientFixtures } from "@actions/types/RecipeIngredient";
 import { FruitFixtures } from "@actions/types/Fruit";
+import { RecipeIngredientFixtures } from "@actions/types/RecipeIngredient";
 
 export const userData: UserFixtures[] = [
     {
@@ -29,7 +29,7 @@ export const userData: UserFixtures[] = [
         emailVerified: true,
         image: null,
         role: "ADMIN",
-    }
+    },
 ];
 
 export const accountData: AccountFixtures[] = [
@@ -56,7 +56,7 @@ export const accountData: AccountFixtures[] = [
         userId: "IVJshIzteyubCt_Q136BW",
         password:
             "572a76ee988aa5655d9365074f38bb4d:8d68bcf63ab0ab080794b4d2a4d66316c120913c81193d1a87be02f832aa0dc3cae646c87726953b78138ebac4a01014c13b2be6b85416e1341877d8f3c07844",
-    }
+    },
 ];
 
 export const ingredientData: IngredientFixtures[] = [
@@ -359,7 +359,7 @@ export const ingredientData: IngredientFixtures[] = [
         name: "Grand Marnier",
         description: "Liqueur à l'orange.",
         image: null,
-    }
+    },
 ];
 
 export const recipeData: RecipeFixtures[] = [
@@ -367,7 +367,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Quiche Lorraine",
         description: "Une délicieuse quiche à base de lardons et de crème fraîche.",
-        image: null,
+        image: "/recipes/quiche-lorraine.webp",
         numberOfServing: 6,
         preparationTime: 60,
         difficultyLevel: "MEDIUM",
@@ -379,7 +379,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "e08e79f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Soupe à l'oignon",
         description: "Une soupe traditionnelle française aux oignons caramélisés.",
-        image: null,
+        image: "/recipes/soupe-a-l'oignon.webp",
         numberOfServing: 4,
         preparationTime: 45,
         difficultyLevel: "EASY",
@@ -391,7 +391,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "f08f79f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Crêpes Suzette",
         description: "Des crêpes fines servies avec une sauce au beurre et à l'orange.",
-        image: null,
+        image: "/recipes/crepes-suzette.webp",
         numberOfServing: 4,
         preparationTime: 30,
         difficultyLevel: "MEDIUM",
@@ -403,7 +403,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "g09079f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Salade Niçoise",
         description: "Une salade fraîche avec du thon, des œufs et des légumes croquants.",
-        image: null,
+        image: "/recipes/salade-nicoise.webp",
         numberOfServing: 2,
         preparationTime: 20,
         difficultyLevel: "EASY",
@@ -415,7 +415,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "h09179f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Bœuf Bourguignon",
         description: "Un ragoût de bœuf mijoté au vin rouge et aux champignons.",
-        image: null,
+        image: "/recipes/boeuf-bourguignon.webp",
         numberOfServing: 6,
         preparationTime: 180,
         difficultyLevel: "HARD",
@@ -427,7 +427,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "i09279f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Tarte Tatin",
         description: "Une tarte aux pommes caramélisées à l'envers.",
-        image: null,
+        image: "/recipes/tarte-tatin.webp",
         numberOfServing: 8,
         preparationTime: 90,
         difficultyLevel: "MEDIUM",
@@ -439,7 +439,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "j09379f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Croque-Monsieur",
         description: "Un sandwich chaud au jambon et au fromage gratiné.",
-        image: null,
+        image: "/recipes/croque-monsieur.webp",
         numberOfServing: 1,
         preparationTime: 15,
         difficultyLevel: "EASY",
@@ -451,7 +451,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "k09479f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Ratatouille",
         description: "Un mélange de légumes mijotés, typique du sud de la France.",
-        image: null,
+        image: "/recipes/ratatouille.webp",
         numberOfServing: 4,
         preparationTime: 60,
         difficultyLevel: "MEDIUM",
@@ -463,7 +463,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "l09579f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Madeleines",
         description: "De petits gâteaux moelleux en forme de coquillage.",
-        image: null,
+        image: "/recipes/madeleines.webp",
         numberOfServing: 12,
         preparationTime: 25,
         difficultyLevel: "EASY",
@@ -475,7 +475,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "m09679f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Coq au Vin",
         description: "Un plat traditionnel de poulet mijoté au vin rouge.",
-        image: null,
+        image: "/recipes/coq-au-vin.webp",
         numberOfServing: 6,
         preparationTime: 150,
         difficultyLevel: "HARD",
@@ -487,7 +487,7 @@ export const recipeData: RecipeFixtures[] = [
         id: "n09779f6-9b9e-11ef-ad19-d8bbc1515316",
         title: "Soufflé au Fromage",
         description: "Un soufflé léger et aérien au fromage.",
-        image: null,
+        image: "/recipes/souffle-au-fromage.webp",
         numberOfServing: 4,
         preparationTime: 50,
         difficultyLevel: "MEDIUM",
@@ -989,6 +989,38 @@ export const recipeIngredientData: RecipeIngredientFixtures[] = [
         unit: "GRAM",
         recipeId: "n09779f6-9b9e-11ef-ad19-d8bbc1515316",
         ingredientId: "au08w79f6-9b9e-11ef-ad19-d8bbc1515316", // Muscade
+    },
+];
+
+export const userFavoriteData: {
+    userId: string;
+    Favorite: string[];
+}[] = [
+    {
+        userId: "IVJshIzteyubCt_Q136BW",
+        Favorite: [
+            "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
+            "f08f79f6-9b9e-11ef-ad19-d8bbc1515316",
+            "i09279f6-9b9e-11ef-ad19-d8bbc1515316",
+            "l09579f6-9b9e-11ef-ad19-d8bbc1515316",
+        ],
+    },
+    {
+        userId: "toBHB_pGnW7-W7aGHLEIv",
+        Favorite: [
+            "e08e79f6-9b9e-11ef-ad19-d8bbc1515316",
+            "g09079f6-9b9e-11ef-ad19-d8bbc1515316",
+            "j09379f6-9b9e-11ef-ad19-d8bbc1515316",
+            "m09679f6-9b9e-11ef-ad19-d8bbc1515316",
+        ],
+    },
+    {
+        userId: "2aCaYxGoux1pC3UxaCR-v",
+        Favorite: [
+            "h09179f6-9b9e-11ef-ad19-d8bbc1515316",
+            "k09479f6-9b9e-11ef-ad19-d8bbc1515316",
+            "n09779f6-9b9e-11ef-ad19-d8bbc1515316",
+        ],
     },
 ];
 

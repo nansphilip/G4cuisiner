@@ -1,5 +1,9 @@
 "use server";
 
+export interface IdUserType {
+    id: string;
+}
+
 export interface UserFixtures {
     id: string,
     name: string,

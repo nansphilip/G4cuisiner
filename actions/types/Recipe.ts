@@ -33,6 +33,16 @@ export interface RecipeType extends IdRecipeType, CreateRecipeType {
     updatedAt: Date;
 }
 
+export interface RecipeIngredientsType extends SlugRecipeType, RecipeType {
+    ingredients: {
+        name: string;
+        description: string;
+        image: string | null;
+        quantity: number;
+        unit: string;
+    }[];
+}
+
 export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}
 
 export interface RecipeFixtures {
