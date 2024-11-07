@@ -15,14 +15,14 @@ export interface SlugRecipeType {
 export interface CreateRecipeType extends TitleRecipeType, SlugRecipeType {
     description: string;
     image: string | null;
-    
+
     numberOfServing: number | null;
     preparationTime: number | null;
-    
+
     difficultyLevel: "EASY" | "MEDIUM" | "HARD"; // default medium
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
-    
+
     userId: string;
 }
 
@@ -33,14 +33,18 @@ export interface RecipeType extends IdRecipeType, CreateRecipeType {
     updatedAt: Date;
 }
 
-export interface RecipeIngredientsType extends SlugRecipeType, RecipeType {
-    ingredients: {
-        name: string;
-        description: string;
-        image: string | null;
-        quantity: number;
-        unit: string;
-    }[];
+export interface IngredientType {
+    name: string;
+    description: string;
+    image: string | null;
+    quantity: number;
+    unit: string;
+}
+
+export interface CompleteRecipeType extends SlugRecipeType, RecipeType {
+    ingredientList: IngredientType[];
+    favorite: boolean | null;
+    rating: number | null;
 }
 
 export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}

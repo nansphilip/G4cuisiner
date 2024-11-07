@@ -9,7 +9,7 @@ import {
     SlugRecipeType,
     TitleAndSlugRecipeType,
     UpdateRecipeType,
-    RecipeIngredientsType,
+    CompleteRecipeType,
 } from "@actions/types/Recipe";
 
 /**
@@ -125,7 +125,7 @@ export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<Recip
  * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
  * @throws {Error} - If there is an error during selection.
  */
-export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeIngredientsType | null> => {
+export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<CompleteRecipeType | null> => {
     try {
         const { slug } = props;
         const recipe = await Prisma.recipe.findUnique({
@@ -133,7 +133,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeI
                 slug,
             },
             include: {
-                ingredients: {
+                RecipeIngredient: {
                     select: {
                         ingredient: {
                             select: {
@@ -146,6 +146,12 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeI
                         unit: true,
                     },
                 },
+                RecipeUser: {
+                    select: {
+                        favorite: true,
+                        rating: true,
+                    },
+                },
             },
         });
         if (!recipe) {
@@ -153,11 +159,13 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeI
         }
         const recipeFormatted = {
             ...recipe,
-            ingredients: recipe.ingredients.map((ingredient) => ({
-                ...ingredient.ingredient,
-                quantity: ingredient.quantity,
-                unit: ingredient.unit,
+            ingredientList: recipe.RecipeIngredient.map((RI) => ({
+                ...RI.ingredient,
+                quantity: RI.quantity,
+                unit: RI.unit,
             })),
+            favorite : recipe.RecipeUser[0].favorite,
+            rating : recipe.RecipeUser[0].rating,
         };
         return recipeFormatted;
     } catch (error) {

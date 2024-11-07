@@ -20,8 +20,8 @@ model User {
     Account Account[]
     Recipe Recipe[]
 
-    // Many to Many
-    Favorite Recipe[] @relation(name: "UserToRecipe")
+    // Many to Many (explicit)
+    RecipeUser RecipeUser[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -78,8 +78,8 @@ model Ingredient {
     description String
     image       String?
 
-    // One to Many
-    recipes RecipeIngredient[]
+    // Many to Many (explicit)
+    RecipeIngredient RecipeIngredient[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -103,11 +103,9 @@ model Recipe {
     userId String
     user   User   @relation(fields: [userId], references: [id])
 
-    // One to Many
-    ingredients RecipeIngredient[]
-
-    // Many to Many
-    favoriteUsers User[] @relation(name: "UserToRecipe")
+    // Many to Many (explicit)
+    RecipeIngredient RecipeIngredient[]
+    RecipeUser RecipeUser[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -134,6 +132,20 @@ enum LunchStep {
     DESSERT
 }
 
+model RecipeUser {
+    @@id([recipeId, userId])
+    favorite Boolean?
+    rating Int? // from 0 to 5
+
+    recipeId String
+    recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
 
 model RecipeIngredient {
     @@id([recipeId, ingredientId])

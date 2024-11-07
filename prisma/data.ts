@@ -4,6 +4,7 @@ import { IngredientFixtures } from "@actions/types/Ingredient";
 import { AccountFixtures } from "@actions/types/Account";
 import { FruitFixtures } from "@actions/types/Fruit";
 import { RecipeIngredientFixtures } from "@actions/types/RecipeIngredient";
+import { RecipeUserFixtures } from "@actions/types/RecipeUser";
 
 export const userData: UserFixtures[] = [
     {
@@ -88,25 +89,25 @@ export const ingredientData: IngredientFixtures[] = [
         id: "e08w79f6-9b9e-11ef-ad19-d8bbc1515316",
         name: "Farine",
         description: "Farine de blé pour la pâtisserie et la cuisine.",
-        image: null,
+        image: "/ingredients/farine.webp",
     },
     {
         id: "f08w79f6-9b9e-11ef-ad19-d8bbc1515316",
         name: "Beurre",
         description: "Produit laitier utilisé comme matière grasse.",
-        image: null,
+        image: "/ingredients/beurre.webp",
     },
     {
         id: "g08w79f6-9b9e-11ef-ad19-d8bbc1515316",
         name: "Lait",
         description: "Lait de vache pour la cuisine.",
-        image: null,
+        image: "/ingredients/lait.webp",
     },
     {
         id: "h08w79f6-9b9e-11ef-ad19-d8bbc1515316",
         name: "Sucre",
         description: "Substance douce utilisée pour sucrer les plats.",
-        image: null,
+        image: "/ingredients/sucre.webp",
     },
     {
         id: "i08w79f6-9b9e-11ef-ad19-d8bbc1515316",
@@ -992,35 +993,72 @@ export const recipeIngredientData: RecipeIngredientFixtures[] = [
     },
 ];
 
-export const userFavoriteData: {
-    userId: string;
-    Favorite: string[];
-}[] = [
+export const userFavoriteData: RecipeUserFixtures[] = [
     {
+        favorite: true,
+        rating: 5,
         userId: "IVJshIzteyubCt_Q136BW",
-        Favorite: [
-            "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
-            "f08f79f6-9b9e-11ef-ad19-d8bbc1515316",
-            "i09279f6-9b9e-11ef-ad19-d8bbc1515316",
-            "l09579f6-9b9e-11ef-ad19-d8bbc1515316",
-        ],
+        recipeId: "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
+        favorite: true,
+        rating: 5,
+        userId: "IVJshIzteyubCt_Q136BW",
+        recipeId: "f08f79f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
+        userId: "IVJshIzteyubCt_Q136BW",
+        recipeId: "i09279f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
+        userId: "IVJshIzteyubCt_Q136BW",
+        recipeId: "l09579f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
         userId: "toBHB_pGnW7-W7aGHLEIv",
-        Favorite: [
-            "e08e79f6-9b9e-11ef-ad19-d8bbc1515316",
-            "g09079f6-9b9e-11ef-ad19-d8bbc1515316",
-            "j09379f6-9b9e-11ef-ad19-d8bbc1515316",
-            "m09679f6-9b9e-11ef-ad19-d8bbc1515316",
-        ],
+        recipeId: "e08e79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
+        favorite: true,
+        rating: 5,
+        userId: "toBHB_pGnW7-W7aGHLEIv",
+        recipeId: "g09079f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
+        userId: "toBHB_pGnW7-W7aGHLEIv",
+        recipeId: "j09379f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
+        userId: "toBHB_pGnW7-W7aGHLEIv",
+        recipeId: "m09679f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
         userId: "2aCaYxGoux1pC3UxaCR-v",
-        Favorite: [
-            "h09179f6-9b9e-11ef-ad19-d8bbc1515316",
-            "k09479f6-9b9e-11ef-ad19-d8bbc1515316",
-            "n09779f6-9b9e-11ef-ad19-d8bbc1515316",
-        ],
+        recipeId: "h09179f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
+        userId: "2aCaYxGoux1pC3UxaCR-v",
+        recipeId: "k09479f6-9b9e-11ef-ad19-d8bbc1515316",
+    },
+    {
+        favorite: true,
+        rating: 5,
+        userId: "2aCaYxGoux1pC3UxaCR-v",
+        recipeId: "n09779f6-9b9e-11ef-ad19-d8bbc1515316",
     },
 ];
 

@@ -68,13 +68,17 @@ const main = async () => {
         });
     }
 
-    for (const { userId, Favorite } of userFavoriteData) {
+    for (const { favorite, rating, recipeId, userId } of userFavoriteData) {
         await Prisma.user.update({
             where: { id: userId },
-            data: { Favorite: { connect: Favorite.map((id) => ({ id })) } },
+            data: {
+                RecipeUser: {
+                    create: { favorite, rating, recipeId },
+                }
+            },
         });
     }
-    
+
     for (const { name, description, image } of fruitData) {
         await Prisma.fruit.create({
             data: { name, description, image },

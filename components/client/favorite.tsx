@@ -1,27 +1,23 @@
 "use client";
 
 import { AddFavorite, RemoveFavorite } from "@actions/database/Favorite";
-import { FavoriteType } from "@actions/types/Favorite";
+import { combo } from "@lib/combo";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type FavoriteProps = {
+    favorite: boolean | null;
     recipeId: string;
     sessionUserId: string | undefined;
-    favoritesUserList: FavoriteType[] | null;
 };
 
 export default function FavoriteCLient(props: FavoriteProps) {
-    const { recipeId, sessionUserId, favoritesUserList } = props;
+    const { favorite, recipeId, sessionUserId } = props;
 
     const router = useRouter();
 
-    const isRecipeInFavorite = favoritesUserList
-        ? favoritesUserList.some((favorite) => favorite.id === recipeId)
-        : false;
-
-    const [isFavorite, setIsFavorite] = useState<boolean>(isRecipeInFavorite);
+    const [isFavorite, setIsFavorite] = useState<boolean>(favorite ?? false);
 
     const toggleFavorite = async () => {
         if (sessionUserId === undefined) {
@@ -48,11 +44,14 @@ export default function FavoriteCLient(props: FavoriteProps) {
             aria-label="Ajouter aux favoris"
             className="group flex items-center rounded-full bg-gray-100 p-2 transition-all duration-150 hover:bg-gray-200"
         >
-            {isFavorite ? (
-                <Heart className="size-8 fill-red-400 stroke-red-400 transition-all duration-150 group-hover:fill-red-500 group-hover:stroke-red-500" />
-            ) : (
-                <Heart className="size-8 stroke-gray-600 transition-all duration-150 group-hover:stroke-gray-800" />
-            )}
+            <Heart
+                className={combo(
+                    "size-6 transition-all duration-150",
+                    isFavorite
+                        ? "fill-red-400 stroke-red-400  group-hover:fill-red-500 group-hover:stroke-red-500"
+                        : "stroke-gray-600  group-hover:stroke-gray-800"
+                )}
+            />
         </button>
     );
 }

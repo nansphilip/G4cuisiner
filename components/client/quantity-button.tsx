@@ -3,36 +3,39 @@
 import React, { useState } from "react";
 
 interface QuantityButtonProps {
-    initialQuantity?: number; // Valeur initiale de la quantité
-    onChange: (quantity: number) => void; // Fonction pour notifier le changement
+    ingredient: {
+        name: string;
+        description: string;
+        image: string | null;
+        quantity: number;
+        unit: string;
+    };
 }
 
-const QuantityButton: React.FC<QuantityButtonProps> = ({ initialQuantity = 1, onChange }) => {
-    const [quantity, setQuantity] = useState<number>(initialQuantity);
+export default function QuantityButtonClient(props: QuantityButtonProps) {
+    const { ingredient } = props;
 
-    const increment = () => {
-        const newQuantity = quantity + 1;
-        setQuantity(newQuantity);
-        onChange(newQuantity); // Notifiez le parent du changement
-    };
+    const [quantity, setQuantity] = useState(ingredient.quantity);
 
-    const decrement = () => {
-        if (quantity > 1) { // Empêche de descendre en dessous de 1
-            const newQuantity = quantity - 1;
-            setQuantity(newQuantity);
-            onChange(newQuantity); // Notifiez le parent du changement
-        }
-    };
+    const increase = () => setQuantity(quantity + 1);
+    const decrease = () => setQuantity(quantity - 1);
 
     return (
-        <div>
-        <div className="flex items-center">
-            <button onClick={decrement} aria-label="Réduire la quantité" className="w-8 h-8 rounded-full bg-gray-200 text-xl font-bold hover:bg-gray-300 flex items-center justify-center">−</button>
-            <span className="mx-4 text-lg font-bold">{quantity}</span>
-            <button onClick={increment} aria-label="Augmenter la quantité" className="w-8 h-8 rounded-full bg-gray-200 text-xl font-bold hover:bg-gray-300 flex items-center justify-center">+</button>
-        </div>
+        <div className="flex flex-row gap-4">
+            <span>
+                {quantity} {ingredient.unit.toLocaleLowerCase()}
+            </span>
+            <span className="flex flex-row gap-2">
+                <button onClick={decrease} className="flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300">
+                    −
+                </button>
+                <button
+                    onClick={increase}
+                    className="flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
+                >
+                    +
+                </button>
+            </span>
         </div>
     );
-};
-
-export default QuantityButton;
+}
