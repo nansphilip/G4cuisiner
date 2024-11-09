@@ -41,10 +41,9 @@ export interface IngredientType {
     unit: string;
 }
 
-export interface CompleteRecipeType extends SlugRecipeType, RecipeType {
+export interface CompleteRecipeType extends RecipeType {
     ingredientList: IngredientType[];
-    favorite: boolean | null;
-    rating: number | null;
+    ratingAverage: number;
 }
 
 export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}

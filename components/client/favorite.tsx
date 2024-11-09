@@ -1,40 +1,38 @@
 "use client";
 
-import { AddFavorite, RemoveFavorite } from "@actions/database/Favorite";
+import { AddFavorite, RemoveFavorite } from "@actions/database/RecipeUser";
+import { RecipeUserType } from "@actions/types/RecipeUser";
 import { combo } from "@lib/combo";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type FavoriteProps = {
-    favorite: boolean | null;
-    recipeId: string;
-    sessionUserId: string | undefined;
+    userRecipe: RecipeUserType | null;
 };
 
 export default function FavoriteCLient(props: FavoriteProps) {
-    const { favorite, recipeId, sessionUserId } = props;
+    const { userRecipe } = props;
+
+    const [isFavorite, setIsFavorite] = useState<boolean>(userRecipe?.favorite ?? false);
 
     const router = useRouter();
 
-    const [isFavorite, setIsFavorite] = useState<boolean>(favorite ?? false);
-
     const toggleFavorite = async () => {
-        if (sessionUserId === undefined) {
+        if (!userRecipe) {
             router.push("/login");
             return <></>;
         }
 
-        try {
-            if (isFavorite) {
-                await RemoveFavorite({ userId: sessionUserId, recipeId });
-                setIsFavorite(false);
-            } else {
-                await AddFavorite({ userId: sessionUserId, recipeId });
-                setIsFavorite(true);
-            }
-        } catch (error) {
-            console.error("Error toggling favorite:", error);
+        const { userId, recipeId } = userRecipe;
+        const inputRecipeUser = { userId, recipeId };
+
+        if (isFavorite) {
+            await RemoveFavorite(inputRecipeUser);
+            setIsFavorite(false);
+        } else {
+            await AddFavorite(inputRecipeUser);
+            setIsFavorite(true);
         }
     };
 

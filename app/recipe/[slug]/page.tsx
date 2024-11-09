@@ -8,6 +8,7 @@ import RecipeImageListClient from "@comps/server/recipe-image-list";
 import QuantityButtonClient from "@comps/client/quantity-button";
 import IngredientListClient from "@comps/server/recipe-ingredient-image";
 import RateRecipeClient from "@comps/client/rate-a-recipe";
+import { GetFavorite } from "@actions/database/RecipeUser";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -50,12 +51,13 @@ export default async function RecipePage(props: RecipePageProps) {
         // createdAt,
         // updatedAt,
         ingredientList,
-        favorite,
-        rating,
+        ratingAverage
     } = recipe;
 
     // Get current user session
     const session = await getSession();
+
+    const userRecipe = session && await GetFavorite({recipeId, userId: session.user.id});
 
     // Set the image url list
     const imageUrlList = image ? [image, "/recipes/crepes.webp"] : [];
@@ -84,9 +86,9 @@ export default async function RecipePage(props: RecipePageProps) {
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex w-full flex-row items-center justify-start gap-4">
                         <h1 className="text-4xl font-bold">{title}</h1>
-                        <FavoriteCLient favorite={favorite} sessionUserId={session?.user.id} recipeId={recipeId} />
+                        <FavoriteCLient userRecipe={userRecipe} />
                     </div>
-                    <RatingClient rating={rating} />
+                    <RatingClient rating={ratingAverage} />
                 </div>
                 <p>{description}</p>
             </section>

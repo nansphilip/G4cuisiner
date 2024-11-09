@@ -993,42 +993,43 @@ export const recipeIngredientData: RecipeIngredientFixtures[] = [
     },
 ];
 
+// Add only fav or only rating
 export const userFavoriteData: RecipeUserFixtures[] = [
     {
         favorite: true,
-        rating: 5,
+        rating: 1,
         userId: "IVJshIzteyubCt_Q136BW",
         recipeId: "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
-        favorite: true,
+        favorite: false,
         rating: 5,
         userId: "IVJshIzteyubCt_Q136BW",
         recipeId: "f08f79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
         favorite: true,
-        rating: 5,
+        rating: 2,
         userId: "IVJshIzteyubCt_Q136BW",
         recipeId: "i09279f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
-        favorite: true,
-        rating: 5,
+        favorite: false,
+        rating: 2,
         userId: "IVJshIzteyubCt_Q136BW",
         recipeId: "l09579f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
         favorite: true,
-        rating: 5,
+        rating: 3,
         userId: "toBHB_pGnW7-W7aGHLEIv",
         recipeId: "e08e79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
-        favorite: true,
-        rating: 5,
+        favorite: false,
+        rating: 2,
         userId: "toBHB_pGnW7-W7aGHLEIv",
-        recipeId: "g09079f6-9b9e-11ef-ad19-d8bbc1515316",
+        recipeId: "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
         favorite: true,
@@ -1038,27 +1039,27 @@ export const userFavoriteData: RecipeUserFixtures[] = [
     },
     {
         favorite: true,
-        rating: 5,
+        rating: 4,
         userId: "toBHB_pGnW7-W7aGHLEIv",
         recipeId: "m09679f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
         favorite: true,
-        rating: 5,
+        rating: 2,
         userId: "2aCaYxGoux1pC3UxaCR-v",
         recipeId: "h09179f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
-        favorite: true,
-        rating: 5,
+        favorite: false,
+        rating: 3,
         userId: "2aCaYxGoux1pC3UxaCR-v",
         recipeId: "k09479f6-9b9e-11ef-ad19-d8bbc1515316",
     },
     {
         favorite: true,
-        rating: 5,
+        rating: 4,
         userId: "2aCaYxGoux1pC3UxaCR-v",
-        recipeId: "n09779f6-9b9e-11ef-ad19-d8bbc1515316",
+        recipeId: "d08d79f6-9b9e-11ef-ad19-d8bbc1515316",
     },
 ];
 

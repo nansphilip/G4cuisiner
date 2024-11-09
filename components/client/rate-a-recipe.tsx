@@ -11,6 +11,7 @@ interface RateRecipeClientProps {
 export default function RateRecipeClient(props: RateRecipeClientProps) {
     const { recipeId } = props;
 
+
     const [rating, setRating] = useState<number>(0); // 0 à 5 inclus
     const [hoverIndex, setHoverIndex] = useState<number>(0);
 

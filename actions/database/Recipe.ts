@@ -12,13 +12,6 @@ import {
     CompleteRecipeType,
 } from "@actions/types/Recipe";
 
-/**
- * Creates a new recipe.
- *
- * @param {CreateRecipeType} props - The properties of the recipe to create.
- * @returns {Promise<RecipeType>} - The created recipe.
- * @throws {Error} - If the recipe already exists or if there is an error during creation.
- */
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
         const {
@@ -70,13 +63,6 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
     }
 };
 
-/**
- * Selects a recipe by its ID.
- *
- * @param {IdRecipeType} props - The ID of the recipe to select.
- * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
- * @throws {Error} - If there is an error during selection.
- */
 export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType | null> => {
     try {
         const { id } = props;
@@ -94,13 +80,6 @@ export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType 
     }
 };
 
-/**
- * Selects a recipe by its title.
- *
- * @param {TitleRecipeType} props - The title of the recipe to select.
- * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
- * @throws {Error} - If there is an error during selection.
- */
 export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<RecipeType | null> => {
     try {
         const { title } = props;
@@ -118,13 +97,6 @@ export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<Recip
     }
 };
 
-/**
- * Selects a recipe by its slug.
- *
- * @param {SlugRecipeType} props - The slug of the recipe to select.
- * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
- * @throws {Error} - If there is an error during selection.
- */
 export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<CompleteRecipeType | null> => {
     try {
         const { slug } = props;
@@ -148,8 +120,9 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                 },
                 RecipeUser: {
                     select: {
-                        favorite: true,
                         rating: true,
+                        favorite: true,
+                        userId: true,
                     },
                 },
             },
@@ -157,15 +130,31 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
         if (!recipe) {
             return null;
         }
+
+        const notNullRatingList = recipe.RecipeUser.map((RU) => RU.rating).filter((rating) => rating !== null);
+        const ratingAverage =
+            Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
+
         const recipeFormatted = {
-            ...recipe,
+            id: recipe.id,
+            title: recipe.title,
+            slug: recipe.slug,
+            description: recipe.description,
+            image: recipe.image,
+            numberOfServing: recipe.numberOfServing,
+            preparationTime: recipe.preparationTime,
+            difficultyLevel: recipe.difficultyLevel,
+            lunchType: recipe.lunchType,
+            lunchStep: recipe.lunchStep,
+            userId: recipe.userId,
+            createdAt: recipe.createdAt,
+            updatedAt: recipe.updatedAt,
             ingredientList: recipe.RecipeIngredient.map((RI) => ({
                 ...RI.ingredient,
                 quantity: RI.quantity,
                 unit: RI.unit,
             })),
-            favorite : recipe.RecipeUser[0].favorite,
-            rating : recipe.RecipeUser[0].rating,
+            ratingAverage,
         };
         return recipeFormatted;
     } catch (error) {
@@ -202,13 +191,6 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
     }
 };
 
-/**
- * Updates a recipe by its ID.
- *
- * @param {RecipeType} props - The properties of the recipe to update.
- * @returns {Promise<RecipeType>} - The updated recipe.
- * @throws {Error} - If the recipe does not exist or if there is an error during update.
- */
 export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {
     try {
         const { id, title, description, image, userId } = props;
@@ -253,13 +235,6 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
     }
 };
 
-/**
- * Deletes a recipe by its ID.
- *
- * @param {IdRecipeType} props - The ID of the recipe to delete.
- * @returns {Promise<RecipeType>} - The deleted recipe.
- * @throws {Error} - If the recipe does not exist or if there is an error during deletion.
- */
 export const DeleteRecipe = async (props: IdRecipeType): Promise<RecipeType> => {
     try {
         const { id } = props;
@@ -279,13 +254,6 @@ export const DeleteRecipe = async (props: IdRecipeType): Promise<RecipeType> => 
     }
 };
 
-/**
- * Deletes multiple recipes by their IDs.
- *
- * @param {IdRecipeType[]} props - The list of IDs of the recipes to delete.
- * @returns {Promise<RecipeType[]>} - The list of deleted recipes.
- * @throws {Error} - If any of the recipes do not exist or if there is an error during deletion.
- */
 export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeType[]> => {
     try {
         const existingRecipeList: RecipeType[] = [];
