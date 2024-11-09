@@ -2,28 +2,30 @@ import { combo } from "@lib/combo";
 import Image from "next/image";
 
 export type RecipeProps = {
-    title: string;
-    imageUrlList: string[];
+    imageList: {
+        url: string;
+        alt: string;
+    }[];
     className?: string;
 };
 
 export default function RecipeImageListClient(props: RecipeProps) {
-    const { title, imageUrlList, className } = props;
+    const { imageList, className } = props;
 
-    if (imageUrlList.length === 0) {
+    if (imageList.length === 0) {
         return null;
     }
 
     return (
         <div className={combo("flex flex-row gap-3 overflow-auto", className)}>
-            {imageUrlList.map((imageUrl, index) => (
+            {imageList.map(({url, alt}, index) => (
                 <Image
                     key={index}
                     className={"aspect-[5/4] rounded-lg object-cover shadow-md"}
-                    src={imageUrl}
+                    src={url}
                     height={200}
                     width={250}
-                    alt={title}
+                    alt={alt}
                 />
             ))}
         </div>

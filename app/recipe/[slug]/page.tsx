@@ -8,7 +8,8 @@ import RecipeImageListClient from "@comps/server/recipe-image-list";
 import QuantityButtonClient from "@comps/client/quantity-button";
 import IngredientListClient from "@comps/server/recipe-ingredient-image";
 import RateRecipeClient from "@comps/client/rate-a-recipe";
-import { GetFavorite } from "@actions/database/RecipeUser";
+import { GetRecipeUser } from "@actions/database/RecipeUser";
+import Button from "@comps/client/button";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -41,7 +42,6 @@ export default async function RecipePage(props: RecipePageProps) {
         title,
         // slug: recipeSlug,
         description,
-        image,
         numberOfServing,
         preparationTime,
         difficultyLevel,
@@ -51,28 +51,29 @@ export default async function RecipePage(props: RecipePageProps) {
         // createdAt,
         // updatedAt,
         ingredientList,
-        ratingAverage
+        reviewList,
+        ratingAverage,
+        imageList,
     } = recipe;
 
     // Get current user session
     const session = await getSession();
 
-    const userRecipe = session && await GetFavorite({recipeId, userId: session.user.id});
-
-    // Set the image url list
-    const imageUrlList = image ? [image, "/recipes/crepes.webp"] : [];
+    const userRecipe = session && (await GetRecipeUser({ recipeId, userId: session.user.id }));
 
     // Format data
     const difficultyLevelFormatted =
         (difficultyLevel === "EASY" && "Facile") ||
         (difficultyLevel === "MEDIUM" && "Moyen") ||
         (difficultyLevel === "HARD" && "Difficile");
+
     const lunchTypeFormatted =
         (lunchType === "BREAKFAST" && "Petit déjeuner") ||
         (lunchType === "BRUNCH" && "Brunch") ||
         (lunchType === "DINNER" && "Dîner") ||
         (lunchType === "LUNCH" && "Déjeuner") ||
         (lunchType === "SNACK" && "Goûter");
+
     const lunchStepFormatted =
         (lunchStep === "APPETIZER" && "Apéritif") ||
         (lunchStep === "STARTER" && "Entrée") ||
@@ -92,7 +93,7 @@ export default async function RecipePage(props: RecipePageProps) {
                 </div>
                 <p>{description}</p>
             </section>
-            <RecipeImageListClient title={title} imageUrlList={imageUrlList} />
+            <RecipeImageListClient imageList={imageList} />
             <section className="space-y-1">
                 <h2 className="text-2xl font-bold">Information</h2>
                 <div>
@@ -127,9 +128,54 @@ export default async function RecipePage(props: RecipePageProps) {
                     </div>
                 ))}
             </section>
-            <div>
-                <RateRecipeClient recipeId={recipeId} />
+            <hr />
+            <div className="flex flex-row items-center justify-center">
+                <RateRecipeClient userRecipe={userRecipe} />
             </div>
+            <AddReviewClient />
+            <hr />
+            <section>
+                <h2 className="text-2xl font-bold">Commentaires</h2>
+                <ReviewList reviewList={reviewList} />
+            </section>
         </div>
     );
 }
+
+
+const AddReviewClient = () => {
+    return (
+        <>
+            <h3>Rédiger un commentaire</h3>
+            <form action="">
+                <input type="text" />
+                <Button type="submit">Envoyer</Button>
+            </form>
+        </>
+    );
+};
+
+type ReviewListProps = {
+    reviewList: {
+        userId: string;
+        name: string;
+        rating: number | null;
+        favorite: boolean;
+        review: string | null
+    }[];
+};
+
+const ReviewList = (props: ReviewListProps) => {
+    const { reviewList } = props;
+
+    return (
+        <>
+        {reviewList.map((review, index) => (
+            <>
+            <h3>Rédiger un commentaire</h3>
+            <form action=""></form>
+            </>
+        ))}
+        </>
+    );
+};

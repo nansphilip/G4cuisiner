@@ -1,6 +1,6 @@
 "use client";
 
-import { AddFavorite, RemoveFavorite } from "@actions/database/RecipeUser";
+import { UpdateRecipeUser } from "@actions/database/RecipeUser";
 import { RecipeUserType } from "@actions/types/RecipeUser";
 import { combo } from "@lib/combo";
 import { Heart } from "lucide-react";
@@ -20,20 +20,18 @@ export default function FavoriteCLient(props: FavoriteProps) {
 
     const toggleFavorite = async () => {
         if (!userRecipe) {
-            router.push("/login");
-            return <></>;
+            return router.push("/login");
         }
 
-        const { userId, recipeId } = userRecipe;
-        const inputRecipeUser = { userId, recipeId };
-
-        if (isFavorite) {
-            await RemoveFavorite(inputRecipeUser);
-            setIsFavorite(false);
-        } else {
-            await AddFavorite(inputRecipeUser);
-            setIsFavorite(true);
-        }
+        // Update database
+        await UpdateRecipeUser({
+            userId: userRecipe.userId,
+            recipeId: userRecipe.recipeId,
+            favorite: !isFavorite
+        });
+        
+        // Update state
+        setIsFavorite(!isFavorite);
     };
 
     return (

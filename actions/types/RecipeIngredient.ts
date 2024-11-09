@@ -5,4 +5,5 @@ export interface RecipeIngredientFixtures {
     unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE"
     recipeId: string;
     ingredientId: string;
+    image: string | null;
 }

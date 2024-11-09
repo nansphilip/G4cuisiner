@@ -4,11 +4,11 @@ import React, { useState } from "react";
 
 interface QuantityButtonProps {
     ingredient: {
-        name: string;
-        description: string;
-        image: string | null;
         quantity: number;
-        unit: string;
+        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
+        recipeId: string;
+        ingredientId: string;
+        image: string | null;
     };
 }
 
@@ -26,7 +26,10 @@ export default function QuantityButtonClient(props: QuantityButtonProps) {
                 {quantity} {ingredient.unit.toLocaleLowerCase()}
             </span>
             <span className="flex flex-row gap-2">
-                <button onClick={decrease} className="flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300">
+                <button
+                    onClick={decrease}
+                    className="flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
+                >
                     −
                 </button>
                 <button

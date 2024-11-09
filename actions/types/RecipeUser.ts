@@ -10,8 +10,9 @@ export interface InputRecipeUserType {
 }
 
 export interface RecipeUserType {
-    favorite: boolean | null;
+    favorite: boolean;
     rating: number | null;
+    review: string | null;
     recipeId: string;
     userId: string;
 
@@ -20,8 +21,9 @@ export interface RecipeUserType {
 }
 
 export interface RecipeUserFixtures {
-    favorite: boolean | null;
+    favorite: boolean;
     rating: number | null;
+    review: string | null;
     recipeId: string;
     userId: string;
 }

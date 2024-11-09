@@ -12,18 +12,19 @@ import {
     CompleteRecipeType,
 } from "@actions/types/Recipe";
 
+
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
         const {
             title,
             description,
-            image,
             numberOfServing,
             preparationTime,
             difficultyLevel,
             lunchType,
             lunchStep,
             userId,
+            imageList,
         } = props;
         // Check if recipe already exists
         const existingRecipe = await SelectRecipeByTitle({ title });
@@ -48,13 +49,18 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
                 title,
                 slug,
                 description,
-                image,
                 numberOfServing,
                 preparationTime,
                 difficultyLevel,
                 lunchType,
                 lunchStep,
                 userId,
+                RecipeImage: {
+                    create: imageList.map(({ url, alt }) => ({
+                        url,
+                        alt,
+                    })),
+                },
             },
         });
         return recipe;
@@ -111,7 +117,6 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                             select: {
                                 name: true,
                                 description: true,
-                                image: true,
                             },
                         },
                         quantity: true,
@@ -122,8 +127,20 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                     select: {
                         rating: true,
                         favorite: true,
+                        review: true,
                         userId: true,
+                        user: {
+                            select: {
+                                name: true,
+                            },
+                        }
                     },
+                },
+                RecipeImage: {
+                    select: {
+                        url: true,
+                        alt: true,
+                    }
                 },
             },
         });
@@ -140,7 +157,6 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             title: recipe.title,
             slug: recipe.slug,
             description: recipe.description,
-            image: recipe.image,
             numberOfServing: recipe.numberOfServing,
             preparationTime: recipe.preparationTime,
             difficultyLevel: recipe.difficultyLevel,
@@ -149,6 +165,14 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             userId: recipe.userId,
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
+            reviewList: recipe.RecipeUser.map((RU) => ({
+                userId: RU.userId,
+                name: RU.user.name,
+                rating: RU.rating,
+                favorite: RU.favorite,
+                review: RU.review,
+            })),
+            imageList: recipe.RecipeImage,
             ingredientList: recipe.RecipeIngredient.map((RI) => ({
                 ...RI.ingredient,
                 quantity: RI.quantity,
@@ -193,7 +217,7 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
 
 export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {
     try {
-        const { id, title, description, image, userId } = props;
+        const { id, title, description, imageList, userId } = props;
         // Check if recipe exists
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
@@ -225,8 +249,13 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
                 title,
                 slug,
                 description,
-                image,
                 userId,
+                RecipeImage: {
+                    create: imageList.map(({ url, alt }) => ({
+                        url,
+                        alt,
+                    })),
+                },
             },
         });
         return recipe;

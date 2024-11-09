@@ -18,7 +18,7 @@ model User {
     // One to Many
     Session Session[]
     Account Account[]
-    Recipe Recipe[]
+    Recipe  Recipe[]
 
     // Many to Many (explicit)
     RecipeUser RecipeUser[]
@@ -86,11 +86,10 @@ model Ingredient {
 }
 
 model Recipe {
-    id          String  @id @unique @default(uuid())
-    title       String  @unique
-    slug        String  @unique
+    id          String @id @unique @default(uuid())
+    title       String @unique
+    slug        String @unique
     description String
-    image       String?
 
     numberOfServing Int? // in person
     preparationTime Int? // in minutes
@@ -99,13 +98,16 @@ model Recipe {
     lunchType       LunchType
     lunchStep       LunchStep
 
+    // One to Many
+    RecipeImage RecipeImage[]
+
     // Many to One
     userId String
     user   User   @relation(fields: [userId], references: [id])
 
     // Many to Many (explicit)
     RecipeIngredient RecipeIngredient[]
-    RecipeUser RecipeUser[]
+    RecipeUser       RecipeUser[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -132,10 +134,22 @@ enum LunchStep {
     DESSERT
 }
 
+model RecipeImage {
+    url String @unique
+    alt String
+
+    // Many to One
+    recipeId String
+    recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 model RecipeUser {
-    @@id([recipeId, userId])
-    favorite Boolean?
-    rating Int? // from 0 to 5
+    favorite Boolean @default(false)
+    rating   Int?
+    review   String? @db.LongText
 
     recipeId String
     recipe   Recipe @relation(fields: [recipeId], references: [id])
@@ -145,16 +159,17 @@ model RecipeUser {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@id([recipeId, userId])
 }
 
 model RecipeIngredient {
-    @@id([recipeId, ingredientId])
     quantity Float
-    unit Unit
+    unit     Unit
 
     // Many to One
-    recipeId     String
-    recipe       Recipe     @relation(fields: [recipeId], references: [id])
+    recipeId String
+    recipe   Recipe @relation(fields: [recipeId], references: [id])
 
     // Many to One
     ingredientId String
@@ -162,6 +177,8 @@ model RecipeIngredient {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@id([recipeId, ingredientId])
 }
 
 enum Unit {

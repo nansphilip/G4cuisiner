@@ -1,5 +1,7 @@
 "use server";
 
+import { IngredientType } from "./Ingredient";
+
 export interface IdRecipeType {
     id: string;
 }
@@ -12,9 +14,15 @@ export interface SlugRecipeType {
     slug: string;
 }
 
-export interface CreateRecipeType extends TitleRecipeType, SlugRecipeType {
+export interface ImageRecipeType {
+    imageList: {
+        url: string;
+        alt: string;
+    }[];
+}
+
+export interface CommonType extends TitleRecipeType, SlugRecipeType {
     description: string;
-    image: string | null;
 
     numberOfServing: number | null;
     preparationTime: number | null;
@@ -26,24 +34,25 @@ export interface CreateRecipeType extends TitleRecipeType, SlugRecipeType {
     userId: string;
 }
 
+export interface CreateRecipeType extends CommonType, ImageRecipeType {}
+
 export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
 
-export interface RecipeType extends IdRecipeType, CreateRecipeType {
+export interface RecipeType extends IdRecipeType, CommonType {
     createdAt: Date;
     updatedAt: Date;
 }
 
-export interface IngredientType {
-    name: string;
-    description: string;
-    image: string | null;
-    quantity: number;
-    unit: string;
-}
-
-export interface CompleteRecipeType extends RecipeType {
+export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
     ingredientList: IngredientType[];
     ratingAverage: number;
+    reviewList: {
+        userId: string;
+        name: string;
+        rating: number | null;
+        favorite: boolean;
+        review: string | null;
+    }[];
 }
 
 export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}
@@ -52,11 +61,14 @@ export interface RecipeFixtures {
     id: string;
     title: string;
     description: string;
-    image: string | null;
     numberOfServing: number | null;
     preparationTime: number | null;
     difficultyLevel: "EASY" | "MEDIUM" | "HARD";
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
     userId: string;
+    imageList: {
+        url: string;
+        alt: string;
+    }[];
 }

@@ -6,7 +6,7 @@ import {
     recipeData,
     recipeIngredientData,
     userData,
-    userFavoriteData,
+    recipeUserData,
 } from "./data";
 
 const main = async () => {
@@ -32,13 +32,13 @@ const main = async () => {
         id,
         title,
         description,
-        image,
         numberOfServing,
         preparationTime,
         difficultyLevel,
         lunchType,
         lunchStep,
         userId,
+        imageList,
     } of recipeData) {
         await Prisma.recipe.create({
             data: {
@@ -51,13 +51,18 @@ const main = async () => {
                     .replace(/[\u0300-\u036f]/g, "")
                     .replace(/\s+/g, "-"),
                 description,
-                image,
                 numberOfServing,
                 preparationTime,
                 difficultyLevel,
                 lunchStep,
                 lunchType,
                 userId,
+                RecipeImage: {
+                    create: imageList.map(({ url, alt }) => ({
+                        url,
+                        alt,
+                    })),
+                },
             },
         });
     }
@@ -68,13 +73,20 @@ const main = async () => {
         });
     }
 
-    for (const { favorite, rating, recipeId, userId } of userFavoriteData) {
-        await Prisma.user.update({
-            where: { id: userId },
+    for (const { favorite, rating, review, recipeId, userId } of recipeUserData) {
+        await Prisma.recipe.update({
+            where: {
+                id: recipeId,
+            },
             data: {
                 RecipeUser: {
-                    create: { favorite, rating, recipeId },
-                }
+                    create: {
+                        favorite,
+                        rating,
+                        review,
+                        userId,
+                    },
+                },
             },
         });
     }
