@@ -12,6 +12,8 @@ export interface SlugRecipeType {
     slug: string;
 }
 
+export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}
+
 export interface ImageRecipeType {
     imageList: {
         url: string;
@@ -43,6 +45,7 @@ export interface RecipeType extends IdRecipeType, CommonType {
 
 export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
     ratingAverage: number;
+    totalFavoriteAmount: number;
     ingredientList: {
         ingredientId: string;
         recipeId: string;
@@ -54,17 +57,17 @@ export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
     reviewList: {
         userId: string;
         name: string;
+        review: string;
         rating: number | null;
-        favorite: boolean;
-        review: string | null;
+        thumbsPositive: number;
+        thumbsNegative: number;
     }[];
 }
-
-export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}
 
 export interface RecipeFixtures {
     id: string;
     title: string;
+    // slug is generated from title
     description: string;
     numberOfServing: number | null;
     preparationTime: number | null;
@@ -72,8 +75,32 @@ export interface RecipeFixtures {
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
     userId: string;
-    imageList: {
+
+    Image: {
         url: string;
         alt: string;
+    }[];
+
+    Favorite: {
+        favorite: boolean;
+        userId: string;
+    }[];
+
+    Review: {
+        review: string;
+        userId: string;
+        thumbsPositive: string[]; // userId
+        thumbsNegative: string[]; // userId
+    }[];
+
+    Rating: {
+        rating: number;
+        userId: string;
+    }[];
+
+    Quantity: {
+        quantity: number;
+        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
+        ingredientId: string;
     }[];
 }

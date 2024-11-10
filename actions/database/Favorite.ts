@@ -30,7 +30,7 @@ export interface UpdateRecipeUserProps extends InputRecipeUserType {
 
 export const UpdateRecipeUser = async (props: UpdateRecipeUserProps) => {
     try {
-        const { userId, recipeId, favorite, rating, review = null } = props;
+        const { userId, recipeId, favorite, rating = null } = props;
 
         // Check if already in favorite
         const recipeUser = await GetRecipeUser({ userId, recipeId });
@@ -45,7 +45,6 @@ export const UpdateRecipeUser = async (props: UpdateRecipeUserProps) => {
                 data: {
                     favorite: favorite ?? recipeUser.favorite,
                     rating: newRating,
-                    review: review ?? recipeUser.review,
                 },
                 where: {
                     recipeId_userId: {
@@ -59,7 +58,6 @@ export const UpdateRecipeUser = async (props: UpdateRecipeUserProps) => {
                 data: {
                     favorite,
                     rating,
-                    review,
                     userId,
                     recipeId,
                 },

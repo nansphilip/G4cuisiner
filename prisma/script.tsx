@@ -1,46 +1,48 @@
 import Prisma from "@lib/prisma";
-import {
-    accountData,
-    fruitData,
-    ingredientData,
-    recipeData,
-    recipeIngredientData,
-    userData,
-    recipeUserData,
-} from "./data";
+import { accountData, fruitData, ingredientData, recipeData, userData } from "./data";
 
 export const fixtures = async () => {
     try {
+        // User table
         for (const { id, name, email, emailVerified, image, role } of userData) {
             await Prisma.user.create({
                 data: { id, name, email, emailVerified, image, role },
             });
         }
 
+        // Account table
         for (const { id, accountId, providerId, userId, password } of accountData) {
             await Prisma.account.create({
                 data: { id, accountId, providerId, userId, password },
             });
         }
 
+        // Ingredient table
         for (const { id, name, description, image } of ingredientData) {
             await Prisma.ingredient.create({
                 data: { id, name, description, image },
             });
         }
 
-        for (const {
-            id,
-            title,
-            description,
-            numberOfServing,
-            preparationTime,
-            difficultyLevel,
-            lunchType,
-            lunchStep,
-            userId,
-            imageList,
-        } of recipeData) {
+        // Recipe table
+        for (const recipe of recipeData) {
+            const {
+                id,
+                title,
+                description,
+                numberOfServing,
+                preparationTime,
+                difficultyLevel,
+                lunchStep,
+                lunchType,
+                userId,
+                Image,
+                Favorite,
+                Review,
+                Rating,
+                Quantity,
+            } = recipe;
+
             await Prisma.recipe.create({
                 data: {
                     id,
@@ -48,6 +50,9 @@ export const fixtures = async () => {
                     slug: title
                         .toLowerCase()
                         .replace(/œ/g, "oe")
+                        .replace(/æ/g, "ae")
+                        .replace(/ç/g, "c")
+                        .replace(/'/g, "-")
                         .normalize("NFD")
                         .replace(/[\u0300-\u036f]/g, "")
                         .replace(/\s+/g, "-"),
@@ -58,40 +63,53 @@ export const fixtures = async () => {
                     lunchStep,
                     lunchType,
                     userId,
-                    RecipeImage: {
-                        create: imageList.map(({ url, alt }) => ({
+
+                    Image: {
+                        create: Image.map(({ url, alt }) => ({
                             url,
                             alt,
+                        })),
+                    },
+
+                    Favorite: {
+                        create: Favorite.map(({ favorite, userId }) => ({
+                            favorite,
+                            userId,
+                        })),
+                    },
+
+                    Review: {
+                        create: Review.map(({ review, userId, thumbsPositive, thumbsNegative }) => ({
+                            review,
+                            userId,
+                            thumbsPositive: {
+                                connect: thumbsPositive.map((thumb) => ({ id: thumb })),
+                            },
+                            thumbsNegative: {
+                                connect: thumbsNegative.map((thumb) => ({ id: thumb })),
+                            },
+                        })),
+                    },
+
+                    Rating: {
+                        create: Rating.map(({ rating, userId }) => ({
+                            rating,
+                            userId,
+                        })),
+                    },
+
+                    Quantity: {
+                        create: Quantity.map(({ quantity, unit, ingredientId }) => ({
+                            quantity,
+                            unit,
+                            ingredientId,
                         })),
                     },
                 },
             });
         }
 
-        for (const { quantity, unit, recipeId, ingredientId } of recipeIngredientData) {
-            await Prisma.recipeIngredient.create({
-                data: { quantity, unit, recipeId, ingredientId },
-            });
-        }
-
-        for (const { favorite, rating, review, recipeId, userId } of recipeUserData) {
-            await Prisma.recipe.update({
-                where: {
-                    id: recipeId,
-                },
-                data: {
-                    RecipeUser: {
-                        create: {
-                            favorite,
-                            rating,
-                            review,
-                            userId,
-                        },
-                    },
-                },
-            });
-        }
-
+        // Fruit table
         for (const { name, description, image } of fruitData) {
             await Prisma.fruit.create({
                 data: { name, description, image },
@@ -107,15 +125,17 @@ export const fixtures = async () => {
 
 export const reset = async () => {
     try {
-        await Prisma.recipeIngredient.deleteMany({});
-        await Prisma.recipeUser.deleteMany({});
-        await Prisma.recipeImage.deleteMany({});
+        await Prisma.fruit.deleteMany({});
+        await Prisma.quantity.deleteMany({});
+        await Prisma.rating.deleteMany({});
+        await Prisma.review.deleteMany({});
+        await Prisma.favorite.deleteMany({});
+        await Prisma.image.deleteMany({});
         await Prisma.session.deleteMany({});
         await Prisma.account.deleteMany({});
         await Prisma.recipe.deleteMany({});
         await Prisma.ingredient.deleteMany({});
         await Prisma.user.deleteMany({});
-        await Prisma.fruit.deleteMany({});
 
         return true;
     } catch (error) {

@@ -21,7 +21,13 @@ model User {
     Recipe  Recipe[]
 
     // Many to Many (explicit)
-    RecipeUser RecipeUser[]
+    Review   Review[]
+    Favorite Favorite[]
+    Rating   Rating[]
+
+    // Many to Many (implicit)
+    ReviewThumbsUp   Review[] @relation("ThumbsPositive")
+    ReviewThumbsDown Review[] @relation("ThumbsNegative")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -79,7 +85,7 @@ model Ingredient {
     image       String?
 
     // Many to Many (explicit)
-    RecipeIngredient RecipeIngredient[]
+    Quantity Quantity[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -99,15 +105,19 @@ model Recipe {
     lunchStep       LunchStep
 
     // One to Many
-    RecipeImage RecipeImage[]
+    Image Image[]
 
     // Many to One
     userId String
-    user   User   @relation(fields: [userId], references: [id])
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to Many (implicit)
+    Review   Review[]
+    Favorite Favorite[]
+    Rating   Rating[]
 
     // Many to Many (explicit)
-    RecipeIngredient RecipeIngredient[]
-    RecipeUser       RecipeUser[]
+    Quantity Quantity[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -134,7 +144,7 @@ enum LunchStep {
     DESSERT
 }
 
-model RecipeImage {
+model Image {
     url String @unique
     alt String
 
@@ -146,24 +156,66 @@ model RecipeImage {
     updatedAt DateTime @updatedAt
 }
 
-model RecipeUser {
-    favorite Boolean @default(false)
-    rating   Int?
-    review   String? @db.LongText
+model Favorite {
+    id       String  @id @unique @default(uuid())
+    favorite Boolean
 
-    recipeId String
-    recipe   Recipe @relation(fields: [recipeId], references: [id])
-
+    // Many to One
     userId String
-    user   User   @relation(fields: [userId], references: [id])
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to One
+    recipeId String
+    Recipe   Recipe @relation(fields: [recipeId], references: [id])
+    
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    
+    @@unique([userId, recipeId])
+}
+
+model Review {
+    id     String @id @unique @default(uuid())
+    review String @db.LongText
+
+    // Many to One
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to One
+    recipeId String
+    Recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    // Many to Many (implicit)
+    thumbsPositive User[] @relation("ThumbsPositive")
+    thumbsNegative User[] @relation("ThumbsNegative")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@id([recipeId, userId])
+    @@unique([userId, recipeId])
 }
 
-model RecipeIngredient {
+model Rating {
+    id     String @id @unique @default(uuid())
+    rating Int
+
+    // Many to One
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to One
+    recipeId String
+    Recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, recipeId])
+}
+
+model Quantity {
+    id       String @id @unique @default(uuid())
     quantity Float
     unit     Unit
 
@@ -178,7 +230,7 @@ model RecipeIngredient {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@id([recipeId, ingredientId])
+    @@unique([recipeId, ingredientId])
 }
 
 enum Unit {

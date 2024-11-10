@@ -7,11 +7,11 @@ import RecipeImageListClient from "@comps/server/recipe-image-list";
 import QuantityButtonClient from "@comps/client/quantity-button";
 import IngredientListClient from "@comps/server/recipe-ingredient-image";
 import RatingClient from "@comps/client/rating";
-import { GetRecipeUser } from "@actions/database/RecipeUser";
+import { GetRecipeUser } from "@actions/database/Favorite";
 import Button from "@comps/client/button";
 import Rating from "@comps/server/rating";
-import Favorite from "@comps/server/favorite";
 import RecipeInfo from "@comps/server/recipe-info";
+import { combo } from "@lib/combo";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -39,7 +39,16 @@ export default async function RecipePage(props: RecipePageProps) {
         throw new Error("Recipe not found");
     }
 
-    const { title, description, numberOfServing, ingredientList, reviewList, ratingAverage, imageList } = recipe;
+    const {
+        title,
+        description,
+        numberOfServing,
+        ingredientList,
+        reviewList,
+        ratingAverage,
+        totalFavoriteAmount,
+        imageList,
+    } = recipe;
 
     // Get current user session
     const session = await getSession();
@@ -53,6 +62,7 @@ export default async function RecipePage(props: RecipePageProps) {
                     <div className="flex w-full flex-row items-center justify-start gap-4">
                         <h1 className="text-4xl font-bold">{title}</h1>
                         <FavoriteCLient userRecipe={userRecipe} classSvg="size-10" />
+                        <p>Total favorite : {totalFavoriteAmount}</p>
                     </div>
                     <Rating rating={ratingAverage} classSvg="size-10" />
                 </div>
@@ -80,13 +90,13 @@ export default async function RecipePage(props: RecipePageProps) {
             </section>
             <hr />
             <section>
-                <h2 className="text-2xl font-bold">Mon avis</h2>
-                <p>Noter la recette</p>
+                <h2 className="text-2xl font-bold">Noter</h2>
                 <RatingClient userRecipe={userRecipe} classDiv="justify-center" classSvg="size-12" />
+                <h2 className="text-2xl font-bold">Commenter</h2>
                 <AddReviewClient />
             </section>
             <hr />
-            <section>
+            <section className="space-y-2">
                 <h2 className="text-2xl font-bold">Commentaires</h2>
                 <ReviewList reviewList={reviewList} />
             </section>
@@ -116,24 +126,28 @@ type ReviewListProps = {
         userId: string;
         name: string;
         rating: number | null;
-        favorite: boolean;
-        review: string | null;
+        review: string;
+        thumbsPositive: number;
+        thumbsNegative: number;
     }[];
+    classDiv?: string;
+    classCom?: string;
 };
 
 const ReviewList = (props: ReviewListProps) => {
-    const { reviewList } = props;
+    const { reviewList, classDiv, classCom } = props;
 
     return (
-        <>
-            {reviewList.map(({ name, review, favorite, rating, userId }) => (
-                <div key={userId}>
-                    <h3>{name}</h3>
+        <div className={combo("space-y-2", classDiv)}>
+            {reviewList.map(({ name, review, rating, userId }) => (
+                <div key={userId} className={combo("border rounded-md p-2", classCom)}>
+                    <div className="flex flex-row items-center justify-between">
+                        <h3 className="font-bold">{name}</h3>
+                        <Rating rating={rating} />
+                    </div>
                     <p>{review}</p>
-                    <Rating rating={rating} />
-                    <Favorite favorite={favorite} />
                 </div>
             ))}
-        </>
+        </div>
     );
 };

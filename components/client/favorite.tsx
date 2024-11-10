@@ -1,6 +1,6 @@
 "use client";
 
-import { UpdateRecipeUser } from "@actions/database/RecipeUser";
+import { UpdateRecipeUser } from "@actions/database/Favorite";
 import { RecipeUserType } from "@actions/types/RecipeUser";
 import { combo } from "@lib/combo";
 import { Heart } from "lucide-react";

@@ -128,11 +128,22 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                     select: {
                         rating: true,
                         favorite: true,
-                        review: true,
+                    },
+                },
+                Review: {
+                    select: {
                         userId: true,
-                        user: {
+                        review: true,
+                        thumbsPositive: true,
+                        thumbsNegative: true,
+                        User: {
                             select: {
                                 name: true,
+                                RecipeUser: {
+                                    select: {
+                                        rating: true,
+                                    },
+                                }
                             },
                         },
                     },
@@ -149,9 +160,13 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             return null;
         }
 
+        // Calculate average rating
         const notNullRatingList = recipe.RecipeUser.map((RU) => RU.rating).filter((rating) => rating !== null);
         const ratingAverage =
             Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
+
+        // Calculate total favorite amount
+        const totalFavoriteAmount = recipe.RecipeUser.filter((RU) => RU.favorite).length;
 
         const recipeFormatted = {
             id: recipe.id,
@@ -167,13 +182,15 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
             ratingAverage,
+            totalFavoriteAmount,
             imageList: recipe.RecipeImage,
-            reviewList: recipe.RecipeUser.map((RU) => ({
-                userId: RU.userId,
-                name: RU.user.name,
-                rating: RU.rating,
-                favorite: RU.favorite,
-                review: RU.review,
+            reviewList: recipe.Review.map((review) => ({
+                userId: review.userId,
+                name: review.User.name,
+                rating: review.User.RecipeUser[0].rating, // check if correct
+                review: review.review,
+                thumbsPositive: review.thumbsPositive.length,
+                thumbsNegative: review.thumbsNegative.length,
             })),
             ingredientList: recipe.RecipeIngredient.map((RI) => ({
                 ingredientId: RI.ingredientId,
