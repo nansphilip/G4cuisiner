@@ -1,68 +1,81 @@
 "use server";
 
-import { InputRecipeUserType, RecipeUserType } from "@actions/types/RecipeUser";
+import { InputFavoriteType, FavoriteType, CreateUpdateFavoriteType } from "@actions/types/Favorite";
 import Prisma from "@lib/prisma";
 
-export const GetRecipeUser = async (props: InputRecipeUserType): Promise<RecipeUserType | null> => {
+export const CreateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
+    try {
+        const { userId, recipeId, favorite } = props;
+
+        // Check if favorite already exists
+        const existingFavorite = await GetFavorite({ userId, recipeId });
+
+        // If favorite already exists, update it
+        if (existingFavorite) {
+            return UpdateFavorite(props);
+        }
+
+        // Create favorite
+        const updatedFavorite = await Prisma.favorite.create({
+            data: {
+                favorite,
+                userId,
+                recipeId,
+            },
+        });
+
+        return updatedFavorite;
+    } catch (error) {
+        throw new Error("Unable to update recipe -> " + (error as Error).message);
+    }
+};
+
+export const GetFavorite = async (props: InputFavoriteType): Promise<FavoriteType | null> => {
     const { userId, recipeId } = props;
 
-    const recipeUser = await Prisma.recipeUser.findUnique({
+    // Get favorite
+    const favorite = await Prisma.favorite.findUnique({
         where: {
-            recipeId_userId: {
+            userId_recipeId: {
                 userId,
                 recipeId,
             },
         },
     });
 
-    if (!recipeUser) {
+    if (!favorite) {
         return null;
     }
 
-    return recipeUser;
+    return favorite;
 };
 
-export interface UpdateRecipeUserProps extends InputRecipeUserType {
-    favorite?: boolean;
-    rating?: number | null;
-    review?: string | null;
-}
-
-export const UpdateRecipeUser = async (props: UpdateRecipeUserProps) => {
+export const UpdateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
     try {
-        const { userId, recipeId, favorite, rating = null } = props;
+        const { userId, recipeId, favorite } = props;
 
-        // Check if already in favorite
-        const recipeUser = await GetRecipeUser({ userId, recipeId });
+        // Check if favorite already exists
+        const existingFavorite = await GetFavorite({ userId, recipeId });
 
-        let newRating;
-        if (rating === undefined) newRating = recipeUser?.rating;
-        else if (rating === null) newRating = null;
-        else newRating = rating;
+        // If favorite does not exist, create it
+        if (!existingFavorite) {
+            return CreateFavorite(props);
+        }
 
-        if (recipeUser) {
-            return await Prisma.recipeUser.update({
-                data: {
-                    favorite: favorite ?? recipeUser.favorite,
-                    rating: newRating,
-                },
-                where: {
-                    recipeId_userId: {
-                        userId,
-                        recipeId,
-                    },
-                },
-            });
-        } else {
-            return await Prisma.recipeUser.create({
-                data: {
-                    favorite,
-                    rating,
+        // Update favorite
+        const updatedFavorite = await Prisma.favorite.update({
+            data: {
+                favorite,
+            },
+            where: {
+                userId_recipeId: {
                     userId,
                     recipeId,
                 },
-            });
-        }
+            },
+        });
+
+        return updatedFavorite;
     } catch (error) {
         throw new Error("Unable to update recipe -> " + (error as Error).message);
     }

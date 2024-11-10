@@ -7,7 +7,7 @@ interface QuantityButtonProps {
     ingredient: {
         quantity: number;
         unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
-        recipeId: string;
+        // recipeId: string;
         ingredientId: string;
         name: string;
         description: string;
@@ -17,6 +17,15 @@ interface QuantityButtonProps {
 export default function QuantityButtonClient(props: QuantityButtonProps) {
     const { ingredient } = props;
 
+    const {unit} = ingredient;
+    const unitFormatted =
+        (unit === "GRAM" && "g") ||
+        (unit === "KILOGRAM" && "kg") ||
+        (unit === "LITER" && "L") ||
+        (unit === "CENTILITER" && "cL") ||
+        (unit === "MILLILITER" && "mL") ||
+        (unit === "PIECE" && "unité(s)");
+
     const [quantity, setQuantity] = useState(ingredient.quantity);
 
     const increase = () => setQuantity(quantity + 1);
@@ -25,7 +34,7 @@ export default function QuantityButtonClient(props: QuantityButtonProps) {
     return (
         <div className="flex flex-row gap-4">
             <span>
-                {quantity} {ingredient.unit.toLocaleLowerCase()}
+                {quantity} {unitFormatted}
             </span>
             <span className="flex h-fit flex-row gap-2">
                 <button

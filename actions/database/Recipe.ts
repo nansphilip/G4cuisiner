@@ -24,19 +24,25 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
             lunchStep,
             userId,
             imageList,
+            ingredientList,
         } = props;
         // Check if recipe already exists
         const existingRecipe = await SelectRecipeByTitle({ title });
         if (existingRecipe) {
             throw new Error("Recipe already exists");
         }
+
         // Create slug
         const slug = title
             .toLowerCase()
             .replace(/œ/g, "oe")
+            .replace(/æ/g, "ae")
+            .replace(/ç/g, "c")
+            .replace(/'/g, "-")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, "-");
+
         // Check if slug already exists
         const existingSlug = await SelectRecipeBySlug({ slug });
         if (existingSlug) {
@@ -54,10 +60,17 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
                 lunchType,
                 lunchStep,
                 userId,
-                RecipeImage: {
+                Image: {
                     create: imageList.map(({ url, alt }) => ({
                         url,
                         alt,
+                    })),
+                },
+                Quantity: {
+                    create: ingredientList.map(({ quantity, unit, ingredientId }) => ({
+                        quantity,
+                        unit,
+                        ingredientId,
                     })),
                 },
             },
@@ -110,23 +123,14 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                 slug,
             },
             include: {
-                RecipeIngredient: {
+                Image: {
                     select: {
-                        ingredient: {
-                            select: {
-                                name: true,
-                                description: true,
-                            },
-                        },
-                        quantity: true,
-                        unit: true,
-                        recipeId: true,
-                        ingredientId: true,
+                        url: true,
+                        alt: true,
                     },
                 },
-                RecipeUser: {
+                Favorite: {
                     select: {
-                        rating: true,
                         favorite: true,
                     },
                 },
@@ -134,24 +138,52 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                     select: {
                         userId: true,
                         review: true,
-                        thumbsPositive: true,
-                        thumbsNegative: true,
                         User: {
                             select: {
+                                id: true,
                                 name: true,
-                                RecipeUser: {
+                                Rating: {
                                     select: {
                                         rating: true,
                                     },
-                                }
+                                    where: {
+                                        Recipe: {
+                                            slug,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        thumbsPositive: {
+                            select: {
+                                id: true,
+                            },
+                        },
+                        thumbsNegative: {
+                            select: {
+                                id: true,
                             },
                         },
                     },
                 },
-                RecipeImage: {
+                Rating: {
                     select: {
-                        url: true,
-                        alt: true,
+                        rating: true,
+                    },
+                },
+                Quantity: {
+                    select: {
+                        quantity: true,
+                        unit: true,
+                        ingredientId: true,
+                        ingredient: {
+                            select: {
+                                id: true,
+                                name: true,
+                                description: true,
+                                image: true,
+                            },
+                        },
                     },
                 },
             },
@@ -161,12 +193,12 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
         }
 
         // Calculate average rating
-        const notNullRatingList = recipe.RecipeUser.map((RU) => RU.rating).filter((rating) => rating !== null);
+        const notNullRatingList = recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null);
         const ratingAverage =
             Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
 
         // Calculate total favorite amount
-        const totalFavoriteAmount = recipe.RecipeUser.filter((RU) => RU.favorite).length;
+        const totalFavoriteAmount = recipe.Favorite.filter(({ favorite }) => favorite).length;
 
         const recipeFormatted = {
             id: recipe.id,
@@ -179,26 +211,31 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             lunchType: recipe.lunchType,
             lunchStep: recipe.lunchStep,
             userId: recipe.userId,
+
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
+
             ratingAverage,
             totalFavoriteAmount,
-            imageList: recipe.RecipeImage,
-            reviewList: recipe.Review.map((review) => ({
-                userId: review.userId,
-                name: review.User.name,
-                rating: review.User.RecipeUser[0].rating, // check if correct
-                review: review.review,
-                thumbsPositive: review.thumbsPositive.length,
-                thumbsNegative: review.thumbsNegative.length,
+
+            imageList: recipe.Image,
+
+            reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative }) => ({
+                userId: userId,
+                name: User.name,
+                rating: User.Rating[0].rating, // TODO : check if correct
+                review: review,
+                thumbsPositive: thumbsPositive.length,
+                thumbsNegative: thumbsNegative.length,
             })),
-            ingredientList: recipe.RecipeIngredient.map((RI) => ({
-                ingredientId: RI.ingredientId,
-                recipeId: RI.recipeId,
-                name: RI.ingredient.name,
-                description: RI.ingredient.description,
-                quantity: RI.quantity,
-                unit: RI.unit,
+
+            ingredientList: recipe.Quantity.map(({ ingredientId, ingredient, quantity, unit }) => ({
+                ingredientId: ingredientId,
+                name: ingredient.name,
+                description: ingredient.description,
+                image: ingredient.image,
+                quantity: quantity,
+                unit: unit,
             })),
         };
         return recipeFormatted;
@@ -238,7 +275,7 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
 
 export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {
     try {
-        const { id, title, description, imageList, userId } = props;
+        const { id, title, description, imageList, ingredientList, userId } = props;
         // Check if recipe exists
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
@@ -249,13 +286,18 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
         if (isNewTitleAlreadyExists && isNewTitleAlreadyExists.id !== id) {
             throw new Error("New title already exists");
         }
+
         // Create slug
         const slug = title
             .toLowerCase()
             .replace(/œ/g, "oe")
+            .replace(/æ/g, "ae")
+            .replace(/ç/g, "c")
+            .replace(/'/g, "-")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, "-");
+
         // Check if slug already exists
         const existingSlug = await SelectRecipeBySlug({ slug });
         if (existingSlug) {
@@ -271,10 +313,17 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
                 slug,
                 description,
                 userId,
-                RecipeImage: {
+                Image: {
                     create: imageList.map(({ url, alt }) => ({
                         url,
                         alt,
+                    })),
+                },
+                Quantity: {
+                    create: ingredientList.map(({ quantity, unit, ingredientId }) => ({
+                        quantity,
+                        unit,
+                        ingredientId,
                     })),
                 },
             },

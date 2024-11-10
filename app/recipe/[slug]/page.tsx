@@ -4,14 +4,14 @@ import type { Metadata } from "next";
 import { getSession } from "@lib/auth";
 import FavoriteCLient from "@comps/client/favorite";
 import RecipeImageListClient from "@comps/server/recipe-image-list";
-import QuantityButtonClient from "@comps/client/quantity-button";
-import IngredientListClient from "@comps/server/recipe-ingredient-image";
 import RatingClient from "@comps/client/rating";
-import { GetRecipeUser } from "@actions/database/Favorite";
+import { GetFavorite } from "@actions/database/Favorite";
 import Button from "@comps/client/button";
 import Rating from "@comps/server/rating";
 import RecipeInfo from "@comps/server/recipe-info";
 import { combo } from "@lib/combo";
+import { GetRating } from "@actions/database/Rating";
+import IngredientDisplayClient from "@comps/client/ingredient-display";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -39,21 +39,13 @@ export default async function RecipePage(props: RecipePageProps) {
         throw new Error("Recipe not found");
     }
 
-    const {
-        title,
-        description,
-        numberOfServing,
-        ingredientList,
-        reviewList,
-        ratingAverage,
-        totalFavoriteAmount,
-        imageList,
-    } = recipe;
+    const { title, description, reviewList, ratingAverage, totalFavoriteAmount, imageList } = recipe;
 
     // Get current user session
     const session = await getSession();
 
-    const userRecipe = session && (await GetRecipeUser({ recipeId: recipe.id, userId: session.user.id }));
+    const userFavorite = session && (await GetFavorite({ recipeId: recipe.id, userId: session.user.id }));
+    const userRating = session && (await GetRating({ recipeId: recipe.id, userId: session.user.id }));
 
     return (
         <div className="mt-2 w-full space-y-5">
@@ -61,14 +53,14 @@ export default async function RecipePage(props: RecipePageProps) {
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex w-full flex-row items-center justify-start gap-4">
                         <h1 className="text-4xl font-bold">{title}</h1>
-                        <FavoriteCLient userRecipe={userRecipe} classSvg="size-10" />
+                        <FavoriteCLient userFavorite={userFavorite} classSvg="size-10" />
                         <p>Total favorite : {totalFavoriteAmount}</p>
                     </div>
                     <Rating rating={ratingAverage} classSvg="size-10" />
                 </div>
                 <p>{description}</p>
-                <RecipeImageListClient imageList={imageList} />
             </section>
+            <RecipeImageListClient imageList={imageList} />
             <hr />
             <section className="space-y-1">
                 <h2 className="text-2xl font-bold">Information</h2>
@@ -77,21 +69,17 @@ export default async function RecipePage(props: RecipePageProps) {
             <hr />
             <section className="space-y-1">
                 <h2 className="text-2xl font-bold">Ingredients</h2>
-                <p>
-                    <span>Personnes : </span>
-                    <span className="font-bold">{numberOfServing}</span>
-                </p>
-                {ingredientList.map((ingredient, index) => (
-                    <div key={index} className="flex flex-row items-center justify-between">
-                        <IngredientListClient ingredient={ingredient} />
-                        <QuantityButtonClient ingredient={ingredient} />
-                    </div>
-                ))}
+                <IngredientDisplayClient recipe={recipe} />
+            </section>
+            <hr />
+            <section>
+                <h3>Instructions</h3>
+                <p>Insert markdown</p>
             </section>
             <hr />
             <section>
                 <h2 className="text-2xl font-bold">Noter</h2>
-                <RatingClient userRecipe={userRecipe} classDiv="justify-center" classSvg="size-12" />
+                <RatingClient userRating={userRating} classDiv="justify-center" classSvg="size-12" />
                 <h2 className="text-2xl font-bold">Commenter</h2>
                 <AddReviewClient />
             </section>

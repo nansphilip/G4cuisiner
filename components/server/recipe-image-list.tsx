@@ -17,11 +17,11 @@ export default function RecipeImageListClient(props: RecipeProps) {
     }
 
     return (
-        <div className={combo("flex flex-row gap-3 overflow-auto", className)}>
+        <div className={combo("flex flex-row gap-3 overflow-x-auto", className)}>
             {imageList.map(({url, alt}, index) => (
                 <Image
                     key={index}
-                    className={"aspect-[5/4] rounded-lg object-cover shadow-md"}
+                    className={"aspect-[5/4] rounded-lg object-cover"}
                     src={url}
                     height={200}
                     width={250}

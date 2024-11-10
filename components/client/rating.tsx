@@ -1,28 +1,28 @@
 "use client";
 
-import { UpdateRecipeUser } from "@actions/database/Favorite";
-import { RecipeUserType } from "@actions/types/RecipeUser";
+import { DeleteRating, UpdateRating } from "@actions/database/Rating";
+import { RatingType } from "@actions/types/Rating";
 import { combo } from "@lib/combo";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type RatingClientProps = {
-    userRecipe: RecipeUserType | null;
+    userRating: RatingType | null;
     classDiv?: string;
     classSvg?: string;
 };
 
 export default function RatingClient(props: RatingClientProps) {
-    const { userRecipe, classDiv, classSvg } = props;
+    const { userRating, classDiv, classSvg } = props;
 
-    const [rating, setRating] = useState<number>(userRecipe?.rating ?? 0);
+    const [rating, setRating] = useState<number>(userRating?.rating ?? 0);
     const [hoverIndex, setHoverIndex] = useState<number>(0);
 
     const router = useRouter();
 
     const handleRating = async (star: number) => {
-        if (!userRecipe) {
+        if (!userRating) {
             return router.push("/login");
         }
 
@@ -30,12 +30,20 @@ export default function RatingClient(props: RatingClientProps) {
 
         const newRating = rating !== star;
 
-        // Update database
-        await UpdateRecipeUser({
-            recipeId: userRecipe.recipeId,
-            userId: userRecipe.userId,
-            rating: newRating ? star : null,
-        });
+        if (newRating) {
+            // Update database
+            await UpdateRating({
+                recipeId: userRating.recipeId,
+                userId: userRating.userId,
+                rating: star,
+            });
+        } else {
+            // Delete database
+            await DeleteRating({
+                recipeId: userRating.recipeId,
+                userId: userRating.userId,
+            });
+        }
 
         // Update state
         setRating(newRating ? star : 0);

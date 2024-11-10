@@ -21,6 +21,14 @@ export interface ImageRecipeType {
     }[];
 }
 
+export interface IngredientRecipeType {
+    ingredientList: {
+        quantity: number;
+        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
+        ingredientId: string;
+    }[];
+}
+
 export interface CommonType extends TitleRecipeType, SlugRecipeType {
     description: string;
 
@@ -34,7 +42,7 @@ export interface CommonType extends TitleRecipeType, SlugRecipeType {
     userId: string;
 }
 
-export interface CreateRecipeType extends CommonType, ImageRecipeType {}
+export interface CreateRecipeType extends CommonType, ImageRecipeType, IngredientRecipeType {}
 
 export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
 
@@ -48,9 +56,10 @@ export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
     totalFavoriteAmount: number;
     ingredientList: {
         ingredientId: string;
-        recipeId: string;
+        // recipeId: string;
         name: string;
         description: string;
+        image: string | null;
         quantity: number;
         unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
     }[];
