@@ -12,7 +12,6 @@ import {
     CompleteRecipeType,
 } from "@actions/types/Recipe";
 
-
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
         const {
@@ -121,6 +120,8 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                         },
                         quantity: true,
                         unit: true,
+                        recipeId: true,
+                        ingredientId: true,
                     },
                 },
                 RecipeUser: {
@@ -133,14 +134,14 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                             select: {
                                 name: true,
                             },
-                        }
+                        },
                     },
                 },
                 RecipeImage: {
                     select: {
                         url: true,
                         alt: true,
-                    }
+                    },
                 },
             },
         });
@@ -165,6 +166,8 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             userId: recipe.userId,
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
+            ratingAverage,
+            imageList: recipe.RecipeImage,
             reviewList: recipe.RecipeUser.map((RU) => ({
                 userId: RU.userId,
                 name: RU.user.name,
@@ -172,13 +175,14 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                 favorite: RU.favorite,
                 review: RU.review,
             })),
-            imageList: recipe.RecipeImage,
             ingredientList: recipe.RecipeIngredient.map((RI) => ({
-                ...RI.ingredient,
+                ingredientId: RI.ingredientId,
+                recipeId: RI.recipeId,
+                name: RI.ingredient.name,
+                description: RI.ingredient.description,
                 quantity: RI.quantity,
                 unit: RI.unit,
             })),
-            ratingAverage,
         };
         return recipeFormatted;
     } catch (error) {

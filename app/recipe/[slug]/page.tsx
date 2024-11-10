@@ -3,13 +3,15 @@ import { SelectEveryRecipeSlugs, SelectRecipeBySlug } from "@actions/database/Re
 import type { Metadata } from "next";
 import { getSession } from "@lib/auth";
 import FavoriteCLient from "@comps/client/favorite";
-import RatingClient from "@comps/client/recipe-rate";
 import RecipeImageListClient from "@comps/server/recipe-image-list";
 import QuantityButtonClient from "@comps/client/quantity-button";
 import IngredientListClient from "@comps/server/recipe-ingredient-image";
-import RateRecipeClient from "@comps/client/rate-a-recipe";
+import RatingClient from "@comps/client/rating";
 import { GetRecipeUser } from "@actions/database/RecipeUser";
 import Button from "@comps/client/button";
+import Rating from "@comps/server/rating";
+import Favorite from "@comps/server/favorite";
+import RecipeInfo from "@comps/server/recipe-info";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -37,90 +39,38 @@ export default async function RecipePage(props: RecipePageProps) {
         throw new Error("Recipe not found");
     }
 
-    const {
-        id: recipeId,
-        title,
-        // slug: recipeSlug,
-        description,
-        numberOfServing,
-        preparationTime,
-        difficultyLevel,
-        lunchType,
-        lunchStep,
-        // userId: recipeUserId,
-        // createdAt,
-        // updatedAt,
-        ingredientList,
-        reviewList,
-        ratingAverage,
-        imageList,
-    } = recipe;
+    const { title, description, numberOfServing, ingredientList, reviewList, ratingAverage, imageList } = recipe;
 
     // Get current user session
     const session = await getSession();
 
-    const userRecipe = session && (await GetRecipeUser({ recipeId, userId: session.user.id }));
+    const userRecipe = session && (await GetRecipeUser({ recipeId: recipe.id, userId: session.user.id }));
 
-    // Format data
-    const difficultyLevelFormatted =
-        (difficultyLevel === "EASY" && "Facile") ||
-        (difficultyLevel === "MEDIUM" && "Moyen") ||
-        (difficultyLevel === "HARD" && "Difficile");
-
-    const lunchTypeFormatted =
-        (lunchType === "BREAKFAST" && "Petit déjeuner") ||
-        (lunchType === "BRUNCH" && "Brunch") ||
-        (lunchType === "DINNER" && "Dîner") ||
-        (lunchType === "LUNCH" && "Déjeuner") ||
-        (lunchType === "SNACK" && "Goûter");
-
-    const lunchStepFormatted =
-        (lunchStep === "APPETIZER" && "Apéritif") ||
-        (lunchStep === "STARTER" && "Entrée") ||
-        (lunchStep === "MAIN" && "Plat principal") ||
-        (lunchStep === "DESSERT" && "Dessert");
-
-    // Passez les données à votre composant client
     return (
         <div className="mt-2 w-full space-y-5">
             <section className="space-y-1">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex w-full flex-row items-center justify-start gap-4">
                         <h1 className="text-4xl font-bold">{title}</h1>
-                        <FavoriteCLient userRecipe={userRecipe} />
+                        <FavoriteCLient userRecipe={userRecipe} classSvg="size-10" />
                     </div>
-                    <RatingClient rating={ratingAverage} />
+                    <Rating rating={ratingAverage} classSvg="size-10" />
                 </div>
                 <p>{description}</p>
+                <RecipeImageListClient imageList={imageList} />
             </section>
-            <RecipeImageListClient imageList={imageList} />
+            <hr />
             <section className="space-y-1">
                 <h2 className="text-2xl font-bold">Information</h2>
-                <div>
-                    <p>
-                        <span>Préparation : </span>
-                        <span className="font-bold">{preparationTime} min</span>
-                    </p>
-                    <p>
-                        <span>Difficulté : </span>
-                        <span className="font-bold">{difficultyLevelFormatted}</span>
-                    </p>
-                    <p>
-                        <span>Personnes : </span>
-                        <span className="font-bold">{numberOfServing}</span>
-                    </p>
-                    <p>
-                        <span>Type de repas : </span>
-                        <span className="font-bold">{lunchTypeFormatted}</span>
-                    </p>
-                    <p>
-                        <span>Etape de repas : </span>
-                        <span className="font-bold">{lunchStepFormatted}</span>
-                    </p>
-                </div>
+                <RecipeInfo recipe={recipe} />
             </section>
+            <hr />
             <section className="space-y-1">
                 <h2 className="text-2xl font-bold">Ingredients</h2>
+                <p>
+                    <span>Personnes : </span>
+                    <span className="font-bold">{numberOfServing}</span>
+                </p>
                 {ingredientList.map((ingredient, index) => (
                     <div key={index} className="flex flex-row items-center justify-between">
                         <IngredientListClient ingredient={ingredient} />
@@ -129,10 +79,12 @@ export default async function RecipePage(props: RecipePageProps) {
                 ))}
             </section>
             <hr />
-            <div className="flex flex-row items-center justify-center">
-                <RateRecipeClient userRecipe={userRecipe} />
-            </div>
-            <AddReviewClient />
+            <section>
+                <h2 className="text-2xl font-bold">Mon avis</h2>
+                <p>Noter la recette</p>
+                <RatingClient userRecipe={userRecipe} classDiv="justify-center" classSvg="size-12" />
+                <AddReviewClient />
+            </section>
             <hr />
             <section>
                 <h2 className="text-2xl font-bold">Commentaires</h2>
@@ -142,16 +94,20 @@ export default async function RecipePage(props: RecipePageProps) {
     );
 }
 
-
 const AddReviewClient = () => {
     return (
-        <>
-            <h3>Rédiger un commentaire</h3>
-            <form action="">
-                <input type="text" />
-                <Button type="submit">Envoyer</Button>
-            </form>
-        </>
+        <form action="">
+            <label className="flex w-full flex-col gap-1">
+                Écrire un commentaire
+                <input
+                    className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
+                    name="review"
+                    type="text"
+                    required
+                />
+            </label>
+            <Button type="submit">Envoyer</Button>
+        </form>
     );
 };
 
@@ -161,7 +117,7 @@ type ReviewListProps = {
         name: string;
         rating: number | null;
         favorite: boolean;
-        review: string | null
+        review: string | null;
     }[];
 };
 
@@ -170,12 +126,14 @@ const ReviewList = (props: ReviewListProps) => {
 
     return (
         <>
-        {reviewList.map((review, index) => (
-            <>
-            <h3>Rédiger un commentaire</h3>
-            <form action=""></form>
-            </>
-        ))}
+            {reviewList.map(({ name, review, favorite, rating, userId }) => (
+                <div key={userId}>
+                    <h3>{name}</h3>
+                    <p>{review}</p>
+                    <Rating rating={rating} />
+                    <Favorite favorite={favorite} />
+                </div>
+            ))}
         </>
     );
 };

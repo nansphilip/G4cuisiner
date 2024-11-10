@@ -1,7 +1,5 @@
 "use server";
 
-import { IngredientType } from "./Ingredient";
-
 export interface IdRecipeType {
     id: string;
 }
@@ -44,8 +42,15 @@ export interface RecipeType extends IdRecipeType, CommonType {
 }
 
 export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
-    ingredientList: IngredientType[];
     ratingAverage: number;
+    ingredientList: {
+        ingredientId: string;
+        recipeId: string;
+        name: string;
+        description: string;
+        quantity: number;
+        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
+    }[];
     reviewList: {
         userId: string;
         name: string;

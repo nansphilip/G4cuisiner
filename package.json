@@ -7,7 +7,9 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "fixtures": "tsx prisma/fixtures.tsx"
+        "fixtures": "tsx prisma/fixtures.tsx",
+        "reset": "tsx prisma/reset.tsx",
+        "reload": "tsx prisma/reload.tsx"
     },
     "dependencies": {
         "@nextui-org/autocomplete": "^2.1.7",
@@ -15,6 +17,7 @@
         "@nextui-org/slider": "^2.2.17",
         "@nextui-org/system": "^2.2.6",
         "@nextui-org/theme": "^2.2.11",
+        "@nextui-org/tooltip": "^2.0.41",
         "@prisma/client": "^5.22.0",
         "better-auth": "0.5.2-beta.17",
         "clsx": "^2.1.1",

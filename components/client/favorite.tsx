@@ -9,10 +9,12 @@ import React, { useState } from "react";
 
 type FavoriteProps = {
     userRecipe: RecipeUserType | null;
+    classDiv?: string;
+    classSvg?: string;
 };
 
 export default function FavoriteCLient(props: FavoriteProps) {
-    const { userRecipe } = props;
+    const { userRecipe, classDiv, classSvg } = props;
 
     const [isFavorite, setIsFavorite] = useState<boolean>(userRecipe?.favorite ?? false);
 
@@ -27,9 +29,9 @@ export default function FavoriteCLient(props: FavoriteProps) {
         await UpdateRecipeUser({
             userId: userRecipe.userId,
             recipeId: userRecipe.recipeId,
-            favorite: !isFavorite
+            favorite: !isFavorite,
         });
-        
+
         // Update state
         setIsFavorite(!isFavorite);
     };
@@ -38,14 +40,15 @@ export default function FavoriteCLient(props: FavoriteProps) {
         <button
             onClick={toggleFavorite}
             aria-label="Ajouter aux favoris"
-            className="group flex items-center rounded-full bg-gray-100 p-2 transition-all duration-150 hover:bg-gray-200"
+            className={combo("flex size-fit items-center justify-center", classDiv)}
         >
             <Heart
                 className={combo(
-                    "size-6 transition-all duration-150",
+                    "size-5 stroke-[1.5px] transition-all duration-150",
+                    classSvg,
                     isFavorite
-                        ? "fill-red-400 stroke-red-400  group-hover:fill-red-500 group-hover:stroke-red-500"
-                        : "stroke-gray-600  group-hover:stroke-gray-800"
+                        ? "fill-red-400 stroke-red-400  hover:fill-red-500 hover:stroke-red-500"
+                        : "stroke-gray-600 hover:stroke-gray-700 fill-white hover:fill-gray-100"
                 )}
             />
         </button>

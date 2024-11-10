@@ -6,7 +6,7 @@ import Prisma from "@lib/prisma";
 export const GetRecipeUser = async (props: InputRecipeUserType): Promise<RecipeUserType | null> => {
     const { userId, recipeId } = props;
 
-    const favorite = await Prisma.recipeUser.findUnique({
+    const recipeUser = await Prisma.recipeUser.findUnique({
         where: {
             recipeId_userId: {
                 userId,
@@ -15,11 +15,11 @@ export const GetRecipeUser = async (props: InputRecipeUserType): Promise<RecipeU
         },
     });
 
-    if (!favorite) {
+    if (!recipeUser) {
         return null;
     }
 
-    return favorite;
+    return recipeUser;
 };
 
 export interface UpdateRecipeUserProps extends InputRecipeUserType {
@@ -30,16 +30,21 @@ export interface UpdateRecipeUserProps extends InputRecipeUserType {
 
 export const UpdateRecipeUser = async (props: UpdateRecipeUserProps) => {
     try {
-        const { userId, recipeId, favorite, rating = null, review = null } = props;
+        const { userId, recipeId, favorite, rating, review = null } = props;
 
         // Check if already in favorite
         const recipeUser = await GetRecipeUser({ userId, recipeId });
+
+        let newRating;
+        if (rating === undefined) newRating = recipeUser?.rating;
+        else if (rating === null) newRating = null;
+        else newRating = rating;
 
         if (recipeUser) {
             return await Prisma.recipeUser.update({
                 data: {
                     favorite: favorite ?? recipeUser.favorite,
-                    rating: rating ?? recipeUser.rating,
+                    rating: newRating,
                     review: review ?? recipeUser.review,
                 },
                 where: {

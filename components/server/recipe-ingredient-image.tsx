@@ -1,4 +1,3 @@
-import { IngredientType } from "@actions/types/Recipe";
 import Image from "next/image";
 
 export type IngredientListProps = {

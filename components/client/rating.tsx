@@ -7,57 +7,61 @@ import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-type RateRecipeClientProps = {
+type RatingClientProps = {
     userRecipe: RecipeUserType | null;
+    classDiv?: string;
+    classSvg?: string;
 };
 
-export default function RateRecipeClient(props: RateRecipeClientProps) {
-    const { userRecipe } = props;
+export default function RatingClient(props: RatingClientProps) {
+    const { userRecipe, classDiv, classSvg } = props;
 
     const [rating, setRating] = useState<number>(userRecipe?.rating ?? 0);
     const [hoverIndex, setHoverIndex] = useState<number>(0);
 
     const router = useRouter();
 
-    const handleRating = async (index: number) => {
+    const handleRating = async (star: number) => {
         if (!userRecipe) {
             return router.push("/login");
         }
 
-        // If rating is different from current, set it to the new rating, else set it to 0
-        const newRating = rating !== index + 1;
+        console.log("Last rating: ", rating, "New rating: ", star);
+
+        const newRating = rating !== star;
 
         // Update database
         await UpdateRecipeUser({
             recipeId: userRecipe.recipeId,
             userId: userRecipe.userId,
-            rating: newRating ? index + 1 : null,
+            rating: newRating ? star : null,
         });
 
         // Update state
-        setRating(newRating ? index + 1 : 0);
+        setRating(newRating ? star : 0);
         setHoverIndex(newRating ? hoverIndex : 0);
     };
 
+    const stars = [1, 2, 3, 4, 5];
+
     return (
-        <div className="flex items-center">
-            {[...Array(5)].map((_, index) => (
+        <div className={combo("flex items-center", classDiv)}>
+            {stars.map((star) => (
                 <button
-                    key={index}
+                    key={star}
                     type="button"
-                    onClick={() => handleRating(index)}
-                    onMouseEnter={() => setHoverIndex(index + 1)}
+                    onClick={() => handleRating(star)}
+                    onMouseEnter={() => setHoverIndex(star)}
                     onMouseLeave={() => setHoverIndex(0)}
                 >
                     <Star
                         className={combo(
-                            "size-12 drop-shadow-[1px_1px_2px_rgba(0,0,0,0.2)]",
-                            // rating state
-                            index + 1 <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-400 fill-white",
-                            // hover
-                            index + 1 <= hoverIndex &&
+                            "size-5 stroke-[1.5px] transition-all duration-150",
+                            classSvg,
+                            star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-400 fill-white",
+                            star <= hoverIndex &&
                                 "fill-yellow-500 text-yellow-500 active:text-yellow-700 active:fill-yellow-700",
-                            index >= hoverIndex && hoverIndex !== 0 && "text-gray-400 fill-white"
+                            star > hoverIndex && hoverIndex !== 0 && "text-gray-400 fill-white"
                         )}
                     />
                 </button>

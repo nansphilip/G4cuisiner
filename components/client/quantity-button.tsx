@@ -1,5 +1,6 @@
 "use client";
 
+import { Minus, Plus } from "lucide-react";
 import React, { useState } from "react";
 
 interface QuantityButtonProps {
@@ -8,7 +9,8 @@ interface QuantityButtonProps {
         unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
         recipeId: string;
         ingredientId: string;
-        image: string | null;
+        name: string;
+        description: string;
     };
 }
 
@@ -25,18 +27,18 @@ export default function QuantityButtonClient(props: QuantityButtonProps) {
             <span>
                 {quantity} {ingredient.unit.toLocaleLowerCase()}
             </span>
-            <span className="flex flex-row gap-2">
+            <span className="flex h-fit flex-row gap-2">
                 <button
                     onClick={decrease}
-                    className="flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
+                    className="group flex size-5 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
                 >
-                    −
+                    <Minus className="size-fit stroke-gray-700 group-hover:stroke-black" />
                 </button>
                 <button
                     onClick={increase}
-                    className="flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
+                    className="group flex size-5 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
                 >
-                    +
+                    <Plus className="size-fit stroke-gray-700 group-hover:stroke-black" />
                 </button>
             </span>
         </div>
