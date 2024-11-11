@@ -194,12 +194,13 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
         }
 
         // Calculate average rating
-        const notNullRatingList = recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null);
+        const notNullRatingList = recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null); // TODO : check if correct
         const ratingAverage =
             Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
 
         // Calculate total favorite amount
         const totalFavoriteAmount = recipe.Favorite.filter(({ favorite }) => favorite).length;
+        const totalRatingAmount = recipe.Rating.length;
 
         const recipeFormatted = {
             id: recipe.id,
@@ -218,13 +219,14 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
 
             ratingAverage,
             totalFavoriteAmount,
+            totalRatingAmount,
 
             imageList: recipe.Image,
 
             reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative,createdAt }) => ({
                 userId: userId,
                 name: User.name,
-                rating: User.Rating[0].rating, // TODO : check if correct
+                rating: User.Rating?.[0]?.rating, // TODO : check if correct
                 review: review,
                 thumbsPositive: thumbsPositive.length,
                 thumbsNegative: thumbsNegative.length,

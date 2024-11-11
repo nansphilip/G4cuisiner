@@ -54,6 +54,7 @@ export interface RecipeType extends IdRecipeType, CommonType {
 export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
     ratingAverage: number;
     totalFavoriteAmount: number;
+    totalRatingAmount: number;
     ingredientList: {
         ingredientId: string;
         // recipeId: string;

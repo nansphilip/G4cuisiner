@@ -8,13 +8,15 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type RatingClientProps = {
+    userId: string | undefined;
+    recipeId: string;
     userRating: RatingType | null;
     classDiv?: string;
     classSvg?: string;
 };
 
 export default function RatingClient(props: RatingClientProps) {
-    const { userRating, classDiv, classSvg } = props;
+    const { userId, recipeId, userRating, classDiv, classSvg } = props;
 
     const [rating, setRating] = useState<number>(userRating?.rating ?? 0);
     const [hoverIndex, setHoverIndex] = useState<number>(0);
@@ -22,27 +24,20 @@ export default function RatingClient(props: RatingClientProps) {
     const router = useRouter();
 
     const handleRating = async (star: number) => {
-        if (!userRating) {
+        // Check if user is logged in
+        if (!userId) {
             return router.push("/login");
         }
 
-        console.log("Last rating: ", rating, "New rating: ", star);
-
+        // Check if rating is new
         const newRating = rating !== star;
 
         if (newRating) {
             // Update database
-            await UpdateRating({
-                recipeId: userRating.recipeId,
-                userId: userRating.userId,
-                rating: star,
-            });
+            await UpdateRating({ recipeId, userId, rating: star });
         } else {
             // Delete database
-            await DeleteRating({
-                recipeId: userRating.recipeId,
-                userId: userRating.userId,
-            });
+            await DeleteRating({ recipeId, userId });
         }
 
         // Update state

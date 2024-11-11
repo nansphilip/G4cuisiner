@@ -3,7 +3,7 @@ import { SelectEveryRecipeSlugs, SelectRecipeBySlug } from "@actions/database/Re
 import type { Metadata } from "next";
 import { getSession } from "@lib/auth";
 import FavoriteCLient from "@comps/client/favorite";
-import RecipeImageListClient from "@comps/server/recipe-image-list";
+import RecipeImageListClient from "@comps/client/recipe-image-list";
 import RatingClient from "@comps/client/rating";
 import { GetFavorite } from "@actions/database/Favorite";
 import Rating from "@comps/server/rating";
@@ -40,7 +40,16 @@ export default async function RecipePage(props: RecipePageProps) {
         throw new Error("Recipe not found");
     }
 
-    const { id: recipeId, title, description, reviewList, ratingAverage, totalFavoriteAmount, imageList } = recipe;
+    const {
+        id: recipeId,
+        title,
+        description,
+        reviewList,
+        ratingAverage,
+        totalRatingAmount,
+        totalFavoriteAmount,
+        imageList,
+    } = recipe;
 
     // Get current user session
     const session = await getSession();
@@ -50,16 +59,23 @@ export default async function RecipePage(props: RecipePageProps) {
 
     return (
         <div className="mt-2 w-full space-y-5">
-            <section className="space-y-1">
-                <div className="flex flex-row items-center justify-between">
-                    <div className="flex w-full flex-row items-center justify-start gap-4">
-                        <h1 className="text-4xl font-bold">{title}</h1>
-                        <FavoriteCLient userFavorite={userFavorite} classSvg="size-10" />
-                        <p>Total favorite : {totalFavoriteAmount}</p>
+            <section>
+                <div className="flex flex-row items-start justify-between">
+                    <div>
+                        <div className="flex w-full flex-row items-center justify-start gap-6">
+                            <h1 className="text-4xl font-bold">{title}</h1>
+                            <FavoriteCLient
+                                userFavorite={userFavorite}
+                                userId={session?.user.id}
+                                recipeId={recipeId}
+                                totalFavoriteAmount={totalFavoriteAmount}
+                                classSvg="size-10"
+                            />
+                        </div>
+                        <p>{description}</p>
                     </div>
-                    <Rating rating={ratingAverage} classSvg="size-10" />
+                    <Rating rating={ratingAverage} totalRatingAmount={totalRatingAmount} classSvg="size-11" />
                 </div>
-                <p>{description}</p>
             </section>
             <RecipeImageListClient imageList={imageList} />
             <hr />
@@ -81,7 +97,13 @@ export default async function RecipePage(props: RecipePageProps) {
             <section className="space-y-1">
                 <h2 className="text-2xl font-bold">Mon avis</h2>
                 <p>Noter la recette</p>
-                <RatingClient userRating={userRating} classDiv="justify-center" classSvg="size-12" />
+                <RatingClient
+                    userId={session?.user.id}
+                    recipeId={recipeId}
+                    userRating={userRating}
+                    classDiv="justify-center"
+                    classSvg="size-12"
+                />
                 <AddReviewClient userId={session?.user.id} recipeId={recipeId} />
             </section>
             <hr />
@@ -127,7 +149,7 @@ const ReviewList = (props: ReviewListProps) => {
                         <div className="flex flex-row items-center justify-between">
                             <div className="flex flex-row gap-3">
                                 <h3 className="font-bold">{name}</h3>
-                                <Rating rating={rating} />
+                                <Rating counter={false} rating={rating} />
                                 <div className="flex flex-row gap-2">
                                     <span>{formattedTime}</span>
                                     <span className="font-bold">•</span>
@@ -140,16 +162,10 @@ const ReviewList = (props: ReviewListProps) => {
                                         <ThumbsUp className="size-4" />
                                         <span>{thumbsPositive}</span>
                                     </div>
-                                    <span className="font-bold">•</span>
-                                    <span className="text-sm">J&apos;aime</span>
                                 </button>
                                 <button className="flex w-fit flex-row items-center justify-center gap-2 rounded-full border-1.5 px-3 py-0.5 text-gray-500 transition-all duration-150 hover:border-gray-500 hover:text-gray-700">
-                                    <div className="flex flex-row items-center justify-center gap-2">
-                                        <ThumbsDown className="size-4" />
-                                        <span>{thumbsNegative}</span>
-                                    </div>
-                                    <span className="font-bold">•</span>
-                                    <span className="text-sm">J&apos;aime pas</span>
+                                    <ThumbsDown className="size-4" />
+                                    <span>{thumbsNegative}</span>
                                 </button>
                             </div>
                         </div>

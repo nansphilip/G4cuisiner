@@ -14,11 +14,11 @@ export default function IngredientDisplayClient(props: IngredientDisplayClientPr
     const { recipe } = props;
     const { numberOfServing, ingredientList } = recipe;
 
-    const imageTemplate = "/ingredients/template.webp";
-
+    const imageTemplate = "/template.webp";
     const [imageLoadList, setImageLoadList] = useState<string[]>(
         ingredientList.map((ingredient) => ingredient.image ?? imageTemplate)
     );
+
     const [servingCount, setServingCount] = useState<number>(numberOfServing);
     const increase = () => setServingCount(servingCount + 1);
     const decrease = () => setServingCount(servingCount - 1);
@@ -34,19 +34,19 @@ export default function IngredientDisplayClient(props: IngredientDisplayClientPr
 
     return (
         <div className="space-y-2">
-            <div className="flex flex-row gap-3">
+            <div className="flex flex-row items-center gap-3">
                 <span>Choisir le nombre de personnes : </span>
-                <span className="flex h-fit flex-row items-center gap-2">
+                <span className="flex h-fit flex-row items-center gap-3">
                     <button
                         onClick={decrease}
-                        className="group flex size-4 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
+                        className="group flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
                     >
                         <Minus className="size-fit stroke-gray-700 group-hover:stroke-black" />
                     </button>
-                    <span className="font-bold">{servingCount}</span>
+                    <span className="text-lg font-bold">{servingCount}</span>
                     <button
                         onClick={increase}
-                        className="group flex size-4 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
+                        className="group flex size-6 items-center justify-center rounded-full bg-gray-200 font-bold hover:bg-gray-300"
                     >
                         <Plus className="size-fit stroke-gray-700 group-hover:stroke-black" />
                     </button>
@@ -54,8 +54,8 @@ export default function IngredientDisplayClient(props: IngredientDisplayClientPr
             </div>
             <div className="flex flex-row gap-2 overflow-auto">
                 {ingredientList.map(({ name, description, image, quantity, unit }, index) => (
-                    <Tooltip key={index} showArrow={true} content={description}>
-                        <div className="flex w-32 flex-col items-center justify-between gap-2 rounded border px-3 py-2">
+                    <Tooltip key={index} content={description}>
+                        <div className="flex min-w-32 max-w-32 flex-col items-center justify-between gap-2 rounded border px-3 py-2">
                             <div className="text-wrap text-center font-bold">{name}</div>
                             <div className="size-20">
                                 {image && (

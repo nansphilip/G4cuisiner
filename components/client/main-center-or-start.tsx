@@ -53,7 +53,7 @@ export default function MainCenterOrStartClient(props: MainCenterOrStartClientPr
     return (
         <main
             className={combo(
-                "flex w-full flex-1 flex-col items-center gap-2 overflow-auto px-4 pb-4",
+                "flex w-full flex-1 flex-col items-center gap-2 overflow-auto px-4 py-4 max-w-[1440px]",
                 isMainScrollable ? "justify-start" : "justify-center"
             )}
         >
