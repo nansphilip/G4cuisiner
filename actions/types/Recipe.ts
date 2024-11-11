@@ -32,8 +32,8 @@ export interface IngredientRecipeType {
 export interface CommonType extends TitleRecipeType, SlugRecipeType {
     description: string;
 
-    numberOfServing: number | null;
-    preparationTime: number | null;
+    numberOfServing: number;
+    preparationTime: number;
 
     difficultyLevel: "EASY" | "MEDIUM" | "HARD"; // default medium
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
@@ -70,6 +70,7 @@ export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
         rating: number | null;
         thumbsPositive: number;
         thumbsNegative: number;
+        createdAt: Date;
     }[];
 }
 

@@ -97,8 +97,8 @@ model Recipe {
     slug        String @unique
     description String
 
-    numberOfServing Int? // in person
-    preparationTime Int? // in minutes
+    numberOfServing Int // in person
+    preparationTime Int // in minutes
 
     difficultyLevel Difficulty @default(MEDIUM)
     lunchType       LunchType
@@ -167,10 +167,10 @@ model Favorite {
     // Many to One
     recipeId String
     Recipe   Recipe @relation(fields: [recipeId], references: [id])
-    
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    
+
     @@unique([userId, recipeId])
 }
 
@@ -192,8 +192,6 @@ model Review {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@unique([userId, recipeId])
 }
 
 model Rating {

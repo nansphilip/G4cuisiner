@@ -6,12 +6,13 @@ import FavoriteCLient from "@comps/client/favorite";
 import RecipeImageListClient from "@comps/server/recipe-image-list";
 import RatingClient from "@comps/client/rating";
 import { GetFavorite } from "@actions/database/Favorite";
-import Button from "@comps/client/button";
 import Rating from "@comps/server/rating";
 import RecipeInfo from "@comps/server/recipe-info";
 import { combo } from "@lib/combo";
 import { GetRating } from "@actions/database/Rating";
 import IngredientDisplayClient from "@comps/client/ingredient-display";
+import AddReviewClient from "@comps/client/add-review";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -39,7 +40,7 @@ export default async function RecipePage(props: RecipePageProps) {
         throw new Error("Recipe not found");
     }
 
-    const { title, description, reviewList, ratingAverage, totalFavoriteAmount, imageList } = recipe;
+    const { id: recipeId, title, description, reviewList, ratingAverage, totalFavoriteAmount, imageList } = recipe;
 
     // Get current user session
     const session = await getSession();
@@ -77,11 +78,11 @@ export default async function RecipePage(props: RecipePageProps) {
                 <p>Insert markdown</p>
             </section>
             <hr />
-            <section>
-                <h2 className="text-2xl font-bold">Noter</h2>
+            <section className="space-y-1">
+                <h2 className="text-2xl font-bold">Mon avis</h2>
+                <p>Noter la recette</p>
                 <RatingClient userRating={userRating} classDiv="justify-center" classSvg="size-12" />
-                <h2 className="text-2xl font-bold">Commenter</h2>
-                <AddReviewClient />
+                <AddReviewClient userId={session?.user.id} recipeId={recipeId} />
             </section>
             <hr />
             <section className="space-y-2">
@@ -92,23 +93,6 @@ export default async function RecipePage(props: RecipePageProps) {
     );
 }
 
-const AddReviewClient = () => {
-    return (
-        <form action="">
-            <label className="flex w-full flex-col gap-1">
-                Écrire un commentaire
-                <input
-                    className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
-                    name="review"
-                    type="text"
-                    required
-                />
-            </label>
-            <Button type="submit">Envoyer</Button>
-        </form>
-    );
-};
-
 type ReviewListProps = {
     reviewList: {
         userId: string;
@@ -117,6 +101,7 @@ type ReviewListProps = {
         review: string;
         thumbsPositive: number;
         thumbsNegative: number;
+        createdAt: Date;
     }[];
     classDiv?: string;
     classCom?: string;
@@ -127,15 +112,51 @@ const ReviewList = (props: ReviewListProps) => {
 
     return (
         <div className={combo("space-y-2", classDiv)}>
-            {reviewList.map(({ name, review, rating, userId }) => (
-                <div key={userId} className={combo("border rounded-md p-2", classCom)}>
-                    <div className="flex flex-row items-center justify-between">
-                        <h3 className="font-bold">{name}</h3>
-                        <Rating rating={rating} />
+            {reviewList.map(({ name, review, rating, userId, thumbsPositive, thumbsNegative, createdAt }) => {
+                const formattedDate = new Date(createdAt).toLocaleDateString("fr-FR", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                });
+                const formattedTime = new Date(createdAt).toLocaleTimeString("fr-FR", {
+                    hour: "numeric",
+                    minute: "numeric",
+                });
+                return (
+                    <div key={userId} className={combo("border rounded-md py-2 px-4", classCom)}>
+                        <div className="flex flex-row items-center justify-between">
+                            <div className="flex flex-row gap-3">
+                                <h3 className="font-bold">{name}</h3>
+                                <Rating rating={rating} />
+                                <div className="flex flex-row gap-2">
+                                    <span>{formattedTime}</span>
+                                    <span className="font-bold">•</span>
+                                    <span>{formattedDate}</span>
+                                </div>
+                            </div>
+                            <div className="flex flex-row gap-2">
+                                <button className="flex w-fit flex-row items-center justify-center gap-2 rounded-full border-1.5 px-3 py-0.5 text-gray-500 transition-all duration-150 hover:border-blue-500 hover:text-blue-700">
+                                    <div className="flex flex-row items-center justify-center gap-2">
+                                        <ThumbsUp className="size-4" />
+                                        <span>{thumbsPositive}</span>
+                                    </div>
+                                    <span className="font-bold">•</span>
+                                    <span className="text-sm">J&apos;aime</span>
+                                </button>
+                                <button className="flex w-fit flex-row items-center justify-center gap-2 rounded-full border-1.5 px-3 py-0.5 text-gray-500 transition-all duration-150 hover:border-gray-500 hover:text-gray-700">
+                                    <div className="flex flex-row items-center justify-center gap-2">
+                                        <ThumbsDown className="size-4" />
+                                        <span>{thumbsNegative}</span>
+                                    </div>
+                                    <span className="font-bold">•</span>
+                                    <span className="text-sm">J&apos;aime pas</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p>{review}</p>
                     </div>
-                    <p>{review}</p>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };

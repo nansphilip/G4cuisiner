@@ -164,6 +164,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                                 id: true,
                             },
                         },
+                        createdAt: true,
                     },
                 },
                 Rating: {
@@ -220,13 +221,14 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
 
             imageList: recipe.Image,
 
-            reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative }) => ({
+            reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative,createdAt }) => ({
                 userId: userId,
                 name: User.name,
                 rating: User.Rating[0].rating, // TODO : check if correct
                 review: review,
                 thumbsPositive: thumbsPositive.length,
                 thumbsNegative: thumbsNegative.length,
+                createdAt: createdAt,
             })),
 
             ingredientList: recipe.Quantity.map(({ ingredientId, ingredient, quantity, unit }) => ({

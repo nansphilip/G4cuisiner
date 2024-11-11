@@ -64,7 +64,7 @@ export default function RatingClient(props: RatingClientProps) {
                 >
                     <Star
                         className={combo(
-                            "size-5 stroke-[1.5px] transition-all duration-150",
+                            "size-5 hover:scale-110 stroke-[1.5px] transition-all duration-150",
                             classSvg,
                             star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-400 fill-white",
                             star <= hoverIndex &&
