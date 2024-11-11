@@ -428,6 +428,7 @@ export const ingredientData: IngredientFixtures[] = [
     {
         id: "as08w79f6-9b9e-11ef-ad19-d8bbc1515316",
         name: "Vanille",
+
         description: "Arôme naturel pour les desserts.",
         image: "/ingredients/vanille.webp",
     },
