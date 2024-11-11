@@ -16,7 +16,7 @@ export default function MainCenterOrStartClient(props: MainCenterOrStartClientPr
     
     const pathname = usePathname();
 
-    const [isMainScrollable, setIsMainScrollable] = useState(false);
+    const [isMainScrollable, setIsMainScrollable] = useState(true);
 
     const CheckMainScrollState = () => {
         const headerEl = document.querySelector("header") as HTMLElement;

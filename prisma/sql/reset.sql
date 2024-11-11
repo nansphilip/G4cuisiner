@@ -1,5 +1,5 @@
 -- Deletes the database user
-DROP USER 'g4cuisiner-user' @'localhost';
+DROP USER 'g4cuisiner-user'@'localhost';
 
 -- Delete the database
 DROP DATABASE `g4cuisiner-db`;

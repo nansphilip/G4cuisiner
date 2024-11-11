@@ -1,39 +1,39 @@
 {
-  "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node", // Change to "node" for better compatibility with ts-node
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@actions/*": ["./actions/*"],
-      "@app/*": ["./app/*"],
-      "@comps/*": ["./components/*"],
-      "@lib/*": ["./lib/*"],
-      "@prisma/*": ["./prisma/*"],
-      "@public/*": ["./public/*"],
-      "@/*": ["./*"]
+    "compilerOptions": {
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "incremental": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "paths": {
+            "@actions/*": ["./actions/*"],
+            "@app/*": ["./app/*"],
+            "@comps/*": ["./components/*"],
+            "@lib/*": ["./lib/*"],
+            "@prisma/*": ["./prisma/*"],
+            "@public/*": ["./public/*"],
+            "@/*": ["./*"]
+        },
+        "target": "ES2017"
     },
-    "target": "ES2017"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "prisma/**/*.ts"
-  ], // Ensure prisma folder is included
-  "exclude": ["node_modules"]
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts"
+        // "prisma/**/*.ts"
+    ],
+    "exclude": ["node_modules"]
 }

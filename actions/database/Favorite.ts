@@ -1,69 +1,82 @@
 "use server";
 
+import { InputFavoriteType, FavoriteType, CreateUpdateFavoriteType } from "@actions/types/Favorite";
 import Prisma from "@lib/prisma";
 
-export async function fetchUserFavorites(userId: string) {
-    const userWithFavorites = await Prisma.user.findUnique({
-        where: { id: userId },
-        include: { Favorite: { include: { favoriteUsers: true } } }, // Incluez les utilisateurs favoris
-    });
+export const CreateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
+    try {
+        const { userId, recipeId, favorite } = props;
 
-    if (!userWithFavorites) {
-        throw new Error(`User with id ${userId} not found.`);
+        // Check if favorite already exists
+        const existingFavorite = await GetFavorite({ userId, recipeId });
+
+        // If favorite already exists, update it
+        if (existingFavorite) {
+            return UpdateFavorite(props);
+        }
+
+        // Create favorite
+        const updatedFavorite = await Prisma.favorite.create({
+            data: {
+                favorite,
+                userId,
+                recipeId,
+            },
+        });
+
+        return updatedFavorite;
+    } catch (error) {
+        throw new Error("Unable to update recipe -> " + (error as Error).message);
     }
+};
 
-    // Vérifiez si Favorite est défini et contient des recettes
-    if (!userWithFavorites.Favorite || userWithFavorites.Favorite.length === 0) {
-        return []; // Si pas de favoris, retourner un tableau vide
-    }
+export const GetFavorite = async (props: InputFavoriteType): Promise<FavoriteType | null> => {
+    const { userId, recipeId } = props;
 
-    return userWithFavorites.Favorite.map(favorite => ({
-        id: favorite.id,
-        title: favorite.title, // Accéder directement au titre de la recette
-        slug: favorite.slug,
-    }));
-}
-
-export async function addFavorite(userId: string, recipeSlug: string) {
-    const user = await Prisma.user.findUnique({
-        where: { id: userId },
-    });
-    const recipe = await Prisma.recipe.findUnique({
-        where: { slug: recipeSlug },
-    });
-
-    if (!user || !recipe) {
-        throw new Error('Utilisateur ou recette introuvable');
-    }
-
-    await Prisma.user.update({
-        where: { id: userId },
-        data: {
-            Favorite: {
-                connect: { id: recipe.id },
+    // Get favorite
+    const favorite = await Prisma.favorite.findUnique({
+        where: {
+            userId_recipeId: {
+                userId,
+                recipeId,
             },
         },
     });
-}
 
-export async function removeFavorite(userId: string, recipeSlug: string) {
-    const user = await Prisma.user.findUnique({
-        where: { id: userId },
-    });
-    const recipe = await Prisma.recipe.findUnique({
-        where: { slug: recipeSlug },
-    });
-
-    if (!user || !recipe) {
-        throw new Error('Utilisateur ou recette introuvable');
+    if (!favorite) {
+        return null;
     }
 
-    await Prisma.user.update({
-        where: { id: userId },
-        data: {
-            Favorite: {
-                disconnect: { id: recipe.id },
+    return favorite;
+};
+
+export const UpdateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
+    try {
+        const { userId, recipeId, favorite } = props;
+
+        // Check if favorite already exists
+        const existingFavorite = await GetFavorite({ userId, recipeId });
+
+        // If favorite does not exist, create it
+        if (!existingFavorite) {
+            return CreateFavorite(props);
+        }
+
+        // Update favorite
+        const updatedFavorite = await Prisma.favorite.update({
+            data: {
+                favorite,
             },
-        },
-    });
-}
+            where: {
+                userId_recipeId: {
+                    userId,
+                    recipeId,
+                },
+            },
+        });
+
+        return updatedFavorite;
+    } catch (error) {
+        throw new Error("Unable to update recipe -> " + (error as Error).message);
+    }
+};

@@ -1,51 +1,56 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { addFavorite, removeFavorite, fetchUserFavorites } from "@actions/database/Favorite";
+import { UpdateFavorite } from "@actions/database/Favorite";
+import { FavoriteType } from "@actions/types/Favorite";
+import { combo } from "@lib/combo";
+import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 type FavoriteProps = {
-    userId: string;
-    slugRecipe: string;
+    userFavorite: FavoriteType | null;
+    classDiv?: string;
+    classSvg?: string;
 };
 
-const Favorite: React.FC<FavoriteProps> = ({ userId, slugRecipe }) => {
-    const [isFavorite, setIsFavorite] = useState<boolean>(false);
+export default function FavoriteCLient(props: FavoriteProps) {
+    const { userFavorite, classDiv, classSvg } = props;
 
-    useEffect(() => {
-        const checkIfFavorite = async () => {
-            try {
-                const favorites = await fetchUserFavorites(userId);
-                setIsFavorite(favorites.some(fav => fav.slug === slugRecipe));
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        checkIfFavorite();
-    }, [userId, slugRecipe]);
+    const [isFavorite, setIsFavorite] = useState<boolean>(userFavorite?.favorite ?? false);
+
+    const router = useRouter();
 
     const toggleFavorite = async () => {
-        try {
-            if (isFavorite) {
-                await removeFavorite(userId, slugRecipe);
-            } else {
-                await addFavorite(userId, slugRecipe);
-            }
-            setIsFavorite(!isFavorite);
-        } catch (error) {
-            console.error("Error toggling favorite:", error);
+        if (!userFavorite) {
+            return router.push("/login");
         }
+
+        // Update database
+        await UpdateFavorite({
+            userId: userFavorite.userId,
+            recipeId: userFavorite.recipeId,
+            favorite: !isFavorite,
+        });
+
+        // Update state
+        setIsFavorite(!isFavorite);
     };
 
     return (
-        <button onClick={toggleFavorite} aria-label="Ajouter aux favoris" className="flex items-center">
-            {isFavorite ? (
-                <span role="img" aria-label="Étoile pleine" className="text-yellow-500">⭐</span>
-            ) : (
-                <span role="img" aria-label="Étoile vide" className="text-gray-400">☆</span>
-            )}
-            <span className="ml-2">{isFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}</span>
+        <button
+            onClick={toggleFavorite}
+            aria-label="Ajouter aux favoris"
+            className={combo("flex size-fit items-center justify-center", classDiv)}
+        >
+            <Heart
+                className={combo(
+                    "size-5 stroke-[1.5px] transition-all duration-150",
+                    classSvg,
+                    isFavorite
+                        ? "fill-red-400 stroke-red-400  hover:fill-red-500 hover:stroke-red-500"
+                        : "stroke-gray-600 hover:stroke-gray-700 fill-white hover:fill-gray-100"
+                )}
+            />
         </button>
     );
-};
-
-export default Favorite;
+}

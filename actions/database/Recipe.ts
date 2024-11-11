@@ -9,29 +9,23 @@ import {
     SlugRecipeType,
     TitleAndSlugRecipeType,
     UpdateRecipeType,
+    CompleteRecipeType,
 } from "@actions/types/Recipe";
 
-/**
- * Creates a new recipe.
- *
- * @param {CreateRecipeType} props - The properties of the recipe to create.
- * @returns {Promise<RecipeType>} - The created recipe.
- * @throws {Error} - If the recipe already exists or if there is an error during creation.
- */
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
         const {
             title,
             description,
-            image,
             numberOfServing,
             preparationTime,
             difficultyLevel,
             lunchType,
             lunchStep,
             userId,
+            imageList,
+            ingredientList,
         } = props;
-
         // Check if recipe already exists
         const existingRecipe = await SelectRecipeByTitle({ title });
         if (existingRecipe) {
@@ -42,6 +36,9 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
         const slug = title
             .toLowerCase()
             .replace(/œ/g, "oe")
+            .replace(/æ/g, "ae")
+            .replace(/ç/g, "c")
+            .replace(/'/g, "-")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, "-");
@@ -51,36 +48,39 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
         if (existingSlug) {
             throw new Error("Slug already exists");
         }
-
         // Create recipe
         const recipe = await Prisma.recipe.create({
             data: {
                 title,
                 slug,
                 description,
-                image,
                 numberOfServing,
                 preparationTime,
                 difficultyLevel,
                 lunchType,
                 lunchStep,
                 userId,
+                Image: {
+                    create: imageList.map(({ url, alt }) => ({
+                        url,
+                        alt,
+                    })),
+                },
+                Quantity: {
+                    create: ingredientList.map(({ quantity, unit, ingredientId }) => ({
+                        quantity,
+                        unit,
+                        ingredientId,
+                    })),
+                },
             },
         });
-        console.log("Created recipe -> ", recipe);
         return recipe;
     } catch (error) {
         throw new Error("Unable to create recipe -> " + (error as Error).message);
     }
 };
 
-/**
- * Selects a recipe by its ID.
- *
- * @param {IdRecipeType} props - The ID of the recipe to select.
- * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
- * @throws {Error} - If there is an error during selection.
- */
 export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType | null> => {
     try {
         const { id } = props;
@@ -89,7 +89,6 @@ export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType 
                 id,
             },
         });
-        // console.log("Selected recipe -> ", recipe);
         if (!recipe) {
             return null;
         }
@@ -99,13 +98,6 @@ export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType 
     }
 };
 
-/**
- * Selects a recipe by its title.
- *
- * @param {TitleRecipeType} props - The title of the recipe to select.
- * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
- * @throws {Error} - If there is an error during selection.
- */
 export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<RecipeType | null> => {
     try {
         const { title } = props;
@@ -114,7 +106,6 @@ export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<Recip
                 title,
             },
         });
-        // console.log("Selected recipe -> ", recipe);
         if (!recipe) {
             return null;
         }
@@ -124,26 +115,132 @@ export const SelectRecipeByTitle = async (props: TitleRecipeType): Promise<Recip
     }
 };
 
-/**
- * Selects a recipe by its slug.
- *
- * @param {SlugRecipeType} props - The slug of the recipe to select.
- * @returns {Promise<RecipeType | null>} - The selected recipe or null if not found.
- * @throws {Error} - If there is an error during selection.
- */
-export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<RecipeType | null> => {
+export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<CompleteRecipeType | null> => {
     try {
         const { slug } = props;
         const recipe = await Prisma.recipe.findUnique({
             where: {
                 slug,
             },
+            include: {
+                Image: {
+                    select: {
+                        url: true,
+                        alt: true,
+                    },
+                },
+                Favorite: {
+                    select: {
+                        favorite: true,
+                    },
+                },
+                Review: {
+                    select: {
+                        userId: true,
+                        review: true,
+                        User: {
+                            select: {
+                                id: true,
+                                name: true,
+                                Rating: {
+                                    select: {
+                                        rating: true,
+                                    },
+                                    where: {
+                                        Recipe: {
+                                            slug,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        thumbsPositive: {
+                            select: {
+                                id: true,
+                            },
+                        },
+                        thumbsNegative: {
+                            select: {
+                                id: true,
+                            },
+                        },
+                        createdAt: true,
+                    },
+                },
+                Rating: {
+                    select: {
+                        rating: true,
+                    },
+                },
+                Quantity: {
+                    select: {
+                        quantity: true,
+                        unit: true,
+                        ingredientId: true,
+                        ingredient: {
+                            select: {
+                                id: true,
+                                name: true,
+                                description: true,
+                                image: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
-        console.log("Selected recipe -> ", recipe);
         if (!recipe) {
             return null;
         }
-        return recipe;
+
+        // Calculate average rating
+        const notNullRatingList = recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null);
+        const ratingAverage =
+            Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
+
+        // Calculate total favorite amount
+        const totalFavoriteAmount = recipe.Favorite.filter(({ favorite }) => favorite).length;
+
+        const recipeFormatted = {
+            id: recipe.id,
+            title: recipe.title,
+            slug: recipe.slug,
+            description: recipe.description,
+            numberOfServing: recipe.numberOfServing,
+            preparationTime: recipe.preparationTime,
+            difficultyLevel: recipe.difficultyLevel,
+            lunchType: recipe.lunchType,
+            lunchStep: recipe.lunchStep,
+            userId: recipe.userId,
+
+            createdAt: recipe.createdAt,
+            updatedAt: recipe.updatedAt,
+
+            ratingAverage,
+            totalFavoriteAmount,
+
+            imageList: recipe.Image,
+
+            reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative,createdAt }) => ({
+                userId: userId,
+                name: User.name,
+                rating: User.Rating[0].rating, // TODO : check if correct
+                review: review,
+                thumbsPositive: thumbsPositive.length,
+                thumbsNegative: thumbsNegative.length,
+                createdAt: createdAt,
+            })),
+
+            ingredientList: recipe.Quantity.map(({ ingredientId, ingredient, quantity, unit }) => ({
+                ingredientId: ingredientId,
+                name: ingredient.name,
+                description: ingredient.description,
+                image: ingredient.image,
+                quantity: quantity,
+                unit: unit,
+            })),
+        };
+        return recipeFormatted;
     } catch (error) {
         throw new Error("Unable to select recipe -> " + (error as Error).message);
     }
@@ -157,7 +254,6 @@ export const SelectEveryRecipeSlugs = async (): Promise<TitleAndSlugRecipeType[]
                 slug: true,
             },
         });
-        // console.log("Selected every recipe slugs -> ", recipeList);
         if (!recipeList) {
             throw new Error("No recipe found");
         }
@@ -170,7 +266,6 @@ export const SelectEveryRecipeSlugs = async (): Promise<TitleAndSlugRecipeType[]
 export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
     try {
         const recipeList = await Prisma.recipe.findMany();
-        // console.log("Selected every recipes -> ", recipeList);
         if (!recipeList) {
             throw new Error("No recipe found");
         }
@@ -180,23 +275,14 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
     }
 };
 
-/**
- * Updates a recipe by its ID.
- *
- * @param {RecipeType} props - The properties of the recipe to update.
- * @returns {Promise<RecipeType>} - The updated recipe.
- * @throws {Error} - If the recipe does not exist or if there is an error during update.
- */
 export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {
     try {
-        const { id, title, description, image, userId } = props;
-
+        const { id, title, description, imageList, ingredientList, userId } = props;
         // Check if recipe exists
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
             throw new Error("Recipe does not exist");
         }
-
         // Check if new title is available
         const isNewTitleAlreadyExists = await SelectRecipeByTitle({ title });
         if (isNewTitleAlreadyExists && isNewTitleAlreadyExists.id !== id) {
@@ -207,6 +293,9 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
         const slug = title
             .toLowerCase()
             .replace(/œ/g, "oe")
+            .replace(/æ/g, "ae")
+            .replace(/ç/g, "c")
+            .replace(/'/g, "-")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, "-");
@@ -225,24 +314,28 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeT
                 title,
                 slug,
                 description,
-                image,
                 userId,
+                Image: {
+                    create: imageList.map(({ url, alt }) => ({
+                        url,
+                        alt,
+                    })),
+                },
+                Quantity: {
+                    create: ingredientList.map(({ quantity, unit, ingredientId }) => ({
+                        quantity,
+                        unit,
+                        ingredientId,
+                    })),
+                },
             },
         });
-        console.log("Updated recipe -> ", recipe);
         return recipe;
     } catch (error) {
         throw new Error("Unable to update recipe -> " + (error as Error).message);
     }
 };
 
-/**
- * Deletes a recipe by its ID.
- *
- * @param {IdRecipeType} props - The ID of the recipe to delete.
- * @returns {Promise<RecipeType>} - The deleted recipe.
- * @throws {Error} - If the recipe does not exist or if there is an error during deletion.
- */
 export const DeleteRecipe = async (props: IdRecipeType): Promise<RecipeType> => {
     try {
         const { id } = props;
@@ -262,13 +355,6 @@ export const DeleteRecipe = async (props: IdRecipeType): Promise<RecipeType> => 
     }
 };
 
-/**
- * Deletes multiple recipes by their IDs.
- *
- * @param {IdRecipeType[]} props - The list of IDs of the recipes to delete.
- * @returns {Promise<RecipeType[]>} - The list of deleted recipes.
- * @throws {Error} - If any of the recipes do not exist or if there is an error during deletion.
- */
 export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeType[]> => {
     try {
         const existingRecipeList: RecipeType[] = [];

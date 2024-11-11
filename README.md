@@ -62,6 +62,16 @@ G4cuisiner is G4 School student project.
   pnpm run fixtures
   ```
 
+- If needed you can reload or reset
+
+  ```bash
+  pnpm run reload
+  ```
+  
+  ```bash
+  pnpm run reset
+  ```
+
 - Run server project
 
   ```bash

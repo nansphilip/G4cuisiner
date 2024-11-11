@@ -19,7 +19,8 @@ type RecipePageProps = {
     }>;
 };
 
-export default async function RecipePage({ params }: RecipePageProps) {
+export default async function RecipePage(props: RecipePageProps) {
+    const { params } = props;
     const { slug } = await params;
 
     const recipe = await SelectRecipeBySlug({ slug: slug });

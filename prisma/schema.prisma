@@ -18,10 +18,16 @@ model User {
     // One to Many
     Session Session[]
     Account Account[]
-    Recipe Recipe[]
+    Recipe  Recipe[]
 
-    // Many to Many
-    Favorite Recipe[] @relation(name: "UserToRecipe")
+    // Many to Many (explicit)
+    Review   Review[]
+    Favorite Favorite[]
+    Rating   Rating[]
+
+    // Many to Many (implicit)
+    ReviewThumbsUp   Review[] @relation("ThumbsPositive")
+    ReviewThumbsDown Review[] @relation("ThumbsNegative")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -78,36 +84,40 @@ model Ingredient {
     description String
     image       String?
 
-    // One to Many
-    recipes RecipeIngredient[]
+    // Many to Many (explicit)
+    Quantity Quantity[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 model Recipe {
-    id          String  @id @unique @default(uuid())
-    title       String  @unique
-    slug        String  @unique
+    id          String @id @unique @default(uuid())
+    title       String @unique
+    slug        String @unique
     description String
-    image       String?
 
-    numberOfServing Int? // in person
-    preparationTime Int? // in minutes
+    numberOfServing Int // in person
+    preparationTime Int // in minutes
 
     difficultyLevel Difficulty @default(MEDIUM)
     lunchType       LunchType
     lunchStep       LunchStep
 
+    // One to Many
+    Image Image[]
+
     // Many to One
     userId String
-    user   User   @relation(fields: [userId], references: [id])
+    User   User   @relation(fields: [userId], references: [id])
 
-    // One to Many
-    ingredients RecipeIngredient[]
+    // Many to Many (implicit)
+    Review   Review[]
+    Favorite Favorite[]
+    Rating   Rating[]
 
-    // Many to Many
-    favoriteUsers User[] @relation(name: "UserToRecipe")
+    // Many to Many (explicit)
+    Quantity Quantity[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -134,15 +144,82 @@ enum LunchStep {
     DESSERT
 }
 
-
-model RecipeIngredient {
-    @@id([recipeId, ingredientId])
-    quantity Float
-    unit Unit
+model Image {
+    url String @unique
+    alt String
 
     // Many to One
-    recipeId     String
-    recipe       Recipe     @relation(fields: [recipeId], references: [id])
+    recipeId String
+    recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Favorite {
+    id       String  @id @unique @default(uuid())
+    favorite Boolean
+
+    // Many to One
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to One
+    recipeId String
+    Recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, recipeId])
+}
+
+model Review {
+    id     String @id @unique @default(uuid())
+    review String @db.LongText
+
+    // Many to One
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to One
+    recipeId String
+    Recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    // Many to Many (implicit)
+    thumbsPositive User[] @relation("ThumbsPositive")
+    thumbsNegative User[] @relation("ThumbsNegative")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Rating {
+    id     String @id @unique @default(uuid())
+    rating Int
+
+    // Many to One
+    userId String
+    User   User   @relation(fields: [userId], references: [id])
+
+    // Many to One
+    recipeId String
+    Recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, recipeId])
+}
+
+model Quantity {
+    id       String @id @unique @default(uuid())
+    quantity Float
+    unit     Unit
+
+    // Many to One
+    recipeId String
+    recipe   Recipe @relation(fields: [recipeId], references: [id])
 
     // Many to One
     ingredientId String
@@ -150,6 +227,8 @@ model RecipeIngredient {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([recipeId, ingredientId])
 }
 
 enum Unit {
