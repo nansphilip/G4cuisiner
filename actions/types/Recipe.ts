@@ -80,8 +80,8 @@ export interface RecipeFixtures {
     title: string;
     // slug is generated from title
     description: string;
-    numberOfServing: number | null;
-    preparationTime: number | null;
+    numberOfServing: number;
+    preparationTime: number;
     difficultyLevel: "EASY" | "MEDIUM" | "HARD";
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";

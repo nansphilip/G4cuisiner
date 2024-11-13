@@ -6,6 +6,8 @@ import { signUp } from "@lib/client";
 import LoadingButton from "@comps/server/loading-button";
 import PasswordInputClient from "@comps/client/password";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { combo } from "@lib/combo";
 
 type RegisterClientProps = {
     className: string;
@@ -24,9 +26,19 @@ export default function RegisterClient(props: RegisterClientProps) {
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
 
     // eslint-disable-next-line
-    const [profilePicture, setProfilePicture] = useState<File | undefined>();
+    // const [profilePicture, setProfilePicture] = useState<File | undefined>();
+
+    const avatarList = [
+        "/avatars/avatar1.webp",
+        "/avatars/avatar2.webp",
+        "/avatars/avatar3.webp",
+        "/avatars/avatar4.webp",
+        "/avatars/avatar5.webp",
+        "/avatars/avatar6.webp",
+    ];
 
     const Register = async () => {
         // Start loading
@@ -36,7 +48,8 @@ export default function RegisterClient(props: RegisterClientProps) {
             email: email,
             password: password,
             name: firstname + " " + lastname,
-            image: undefined, // TODO: Add image conversion to base64 -> imageToBase64(profilePicture)
+            image: imageUrl,
+            // image: profilePicture, // TODO: Add image conversion to base64 -> imageToBase64(profilePicture)
         });
 
         // Display feedback
@@ -109,18 +122,26 @@ export default function RegisterClient(props: RegisterClientProps) {
                     setPassword={(e) => setPassword(e.target.value)}
                 />
             </label>
-            {/* <label className="flex w-full flex-col gap-1">
-                <div>
-                    <span>Profile picture</span>
+            <div className="flex flex-col">
+                <span>Choose an avatar:</span>
+                <div className="mt-2 grid grid-cols-3 gap-4">
+                    {avatarList.map((avatarUrl, index) => (
+                        <button onClick={() => setImageUrl(avatarUrl)} type="button" key={index}>
+                            <Image
+                                src={avatarUrl}
+                                height={64}
+                                width={64}
+                                alt={`Avatar ${index + 1}`}
+                                className={combo(
+                                    "size-16 rounded-full border",
+                                    imageUrl === avatarUrl && "ring-2 ring-teal-400"
+                                )}
+                            />
+                        </button>
+                    ))}
                 </div>
-                <input
-                    className="h-6 cursor-pointer rounded border text-xs ring-teal-400 ring-offset-2 transition-all duration-150 file:pointer-events-none file:h-6 file:cursor-pointer file:border-none file:text-xs file:transition-all file:duration-150 hover:bg-gray-50 hover:file:bg-gray-200 focus:ring-2"
-                    name="profilePicture"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setProfilePicture(e.target.files?.[0])}
-                />
-            </label> */}
+            </div>
+
             <FormFeedback mode={mode}>{message}</FormFeedback>
             <LoadingButton type="button" onClick={Register} label="Register" loading={loading} />
         </div>

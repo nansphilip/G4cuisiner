@@ -413,3 +413,18 @@ export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeTyp
         throw new Error("Unable to delete many recipes -> " + (error as Error).message);
     }
 };
+
+export const selectRecipesByCreateDate = async (limit: number = 3): Promise<RecipeType[]> => {
+    try {
+        const recipes = await Prisma.recipe.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+            take: limit,
+        });
+        return recipes;
+    } catch (error) {
+        throw new Error("Unable to select recipes by create date -> " + (error as Error).message);
+    }
+};
+
