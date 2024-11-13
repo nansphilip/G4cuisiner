@@ -50,6 +50,30 @@ export const GetFavorite = async (props: InputFavoriteType): Promise<FavoriteTyp
     return favorite;
 };
 
+// Get All Favorites
+export async function fetchUserFavorites(userId: string) {
+    const userWithFavorites = await Prisma.favorite.findMany({
+        where: { userId: userId },
+        include: {
+            Recipe: {
+                include: {
+                    Image: true,
+                },
+            },
+        },
+    });
+
+    const recipes = userWithFavorites.map((fav) => {
+        const recipe = fav.Recipe;
+        return {
+            ...recipe,
+            images: recipe.Image,
+        };
+    });
+
+    return recipes;
+}
+
 export const UpdateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
     try {
         const { userId, recipeId, favorite } = props;

@@ -9,6 +9,8 @@ import Button from "@comps/client/button";
 import { BetterSessionClient, useSession } from "@lib/client";
 import { BetterSessionServer } from "@lib/auth";
 import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
+import Image from "next/image";
+import Link from "next/link";
 
 type LinkProps = {
     label: string;
@@ -105,9 +107,12 @@ export default function HeaderClient(props: HeaderClientProps) {
         },
     ];
 
+    const firstName = session?.user.name.split(" ")[0];
+    const profileImage = session?.user.image;
+
     return (
         <header className={className}>
-            <nav className="flex justify-center bg-white pb-1.5 pt-2">
+            <nav className="flex justify-center bg-secondary py-3">
                 <SlidingHover
                     className="flex items-start justify-center gap-1"
                     color="bg-gray-200"
@@ -118,6 +123,26 @@ export default function HeaderClient(props: HeaderClientProps) {
                         <HeaderDisplay key={index} index={index} linkOrGroup={linkOrGroup} session={session} />
                     ))}
                 </SlidingHover>
+                {session?.user && (
+                    <Link href="/profile" className="absolute right-5 top-1.5 flex flex-row items-center gap-4 rounded-l-lg rounded-r-full py-1 pl-4 pr-1 transition-all duration-150 hover:bg-gray-200">
+                        <span className="whitespace-nowrap font-semibold">Bonjour, {firstName} !</span>
+                        <div className="flex items-center justify-center overflow-hidden rounded-full">
+                            {profileImage ? (
+                                <Image
+                                    src={profileImage}
+                                    height={36}
+                                    width={36}
+                                    alt="Profile"
+                                    className="rounded-full object-cover"
+                                />
+                            ) : (
+                                <span className="flex size-9 items-center justify-center bg-tertiary font-bold text-white">
+                                    {firstName?.[0].toUpperCase()}
+                                </span>
+                            )}
+                        </div>
+                    </Link>
+                )}
             </nav>
             {/* <div className="absolute z-10 h-2 w-full bg-gradient-to-b from-white to-transparent"></div> */}
         </header>
@@ -251,7 +276,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                 <div
                     id={`popup-bg-${index}`}
                     className={combo(
-                        "bg-white opacity-100 absolute z-10 duration-200 transition-opacity rounded-lg",
+                        "bg-white opacity-100 absolute z-20 duration-200 transition-opacity rounded-lg",
                         !isOpen && "opacity-0 pointer-events-none"
                     )}
                 ></div>
