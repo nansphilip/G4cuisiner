@@ -10,6 +10,7 @@ import {
     TitleAndSlugRecipeType,
     UpdateRecipeType,
     CompleteRecipeType,
+    RecipeFilterType,
 } from "@actions/types/Recipe";
 
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
@@ -223,7 +224,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
 
             imageList: recipe.Image,
 
-            reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative,createdAt }) => ({
+            reviewList: recipe.Review.map(({ userId, User, review, thumbsPositive, thumbsNegative, createdAt }) => ({
                 userId: userId,
                 name: User.name,
                 rating: User.Rating?.[0]?.rating, // TODO : check if correct
@@ -275,6 +276,38 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
     } catch (error) {
         throw new Error("Unable to select many recipes -> " + (error as Error).message);
     }
+};
+
+export const getRecipesToFilter = async (): Promise<RecipeFilterType[]> => {
+    const recipeListRaw = await Prisma.recipe.findMany({
+        select: {
+            title: true,
+            slug: true,
+            lunchStep: true,
+            lunchType: true,
+            preparationTime: true,
+            difficultyLevel: true,
+            Image: {
+                select: {
+                    url: true,
+                    alt: true,
+                },
+            },
+        },
+    });
+    const recipeList = recipeListRaw.map(
+        ({ title, slug, lunchStep, lunchType, preparationTime, difficultyLevel, Image }) => ({
+            title,
+            preparationTime,
+            difficultyLevel,
+            lunchType,
+            lunchStep,
+            slug,
+            url: Image[0].url,
+            alt: Image[0].alt,
+        })
+    );
+    return recipeList;
 };
 
 export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<RecipeType> => {

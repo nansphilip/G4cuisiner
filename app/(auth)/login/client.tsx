@@ -27,12 +27,11 @@ export default function LoginClient(props: LoginClientProps) {
         // Start loading
         setLoading(true);
 
-        const { data, error } = await signIn.email(
-            {
-                email: email,
-                password: password,
-                dontRememberMe: !rememberMe,
-            });
+        const { data, error } = await signIn.email({
+            email: email,
+            password: password,
+            dontRememberMe: !rememberMe,
+        });
 
         // Display feedback
         if (data) {

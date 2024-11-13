@@ -115,3 +115,14 @@ export interface RecipeFixtures {
         ingredientId: string;
     }[];
 }
+
+export interface RecipeFilterType {
+    title: string;
+    preparationTime: number;
+    difficultyLevel: "EASY" | "MEDIUM" | "HARD";
+    lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
+    lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
+    slug: string;
+    url: string;
+    alt: string;
+}

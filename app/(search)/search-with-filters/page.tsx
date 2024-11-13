@@ -1,20 +1,14 @@
-import SearchWithFiltersClient from "./SearchWithFiltersClient";
-import {
-    LunchTypeList,
-    LunchStepList,
-    IngredientList,
-} from "@actions/database/Recipe";
+import SearchWithFiltersClient from "./client";
+import { getRecipesToFilter } from "@actions/database/Recipe";
 
-export default async function SearchWithFilters() {
-    const lunchTypes = await LunchTypeList();
-    const lunchSteps = await LunchStepList();
-    const ingredients = await IngredientList();
-
+export default async function SearchWithFiltersPage() {
+    const listRecipes = await getRecipesToFilter();
+    console.log(listRecipes);
     return (
-        <SearchWithFiltersClient
-            lunchTypeList={lunchTypes}
-            lunchStepList={lunchSteps}
-            ingredientList={ingredients}
-        />
+        <>
+            <form action="" className="size-full">
+                <SearchWithFiltersClient listRecipes={listRecipes} />
+            </form>
+        </>
     );
 }

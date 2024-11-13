@@ -11,13 +11,20 @@ type ImageCropperModalClientProps = {
     setCroppedImage: (croppedImage: string) => void;
 };
 
-export default function ImageCropperModalClient(props: ImageCropperModalClientProps) {
+export default function ImageCropperModalClient(
+    props: ImageCropperModalClientProps
+) {
     const { imageFile, setImageFile, setCroppedImage } = props;
 
     const [imageString, setImageString] = useState<string>("");
 
     const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 });
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+    });
     const [zoom, setZoom] = useState(1);
     const [rotate, setRotate] = useState(0);
 
@@ -27,7 +34,8 @@ export default function ImageCropperModalClient(props: ImageCropperModalClientPr
         // Read the file as data url
         reader.readAsDataURL(file);
         // When the file is read, set the image string
-        reader.onloadend = (reading) => setImageString(reading.target?.result as string);
+        reader.onloadend = (reading) =>
+            setImageString(reading.target?.result as string);
     };
 
     useEffect(() => {
@@ -40,7 +48,11 @@ export default function ImageCropperModalClient(props: ImageCropperModalClientPr
     };
 
     const saveImage = async () => {
-        const croppedImage = await getCroppedImg(imageString, croppedAreaPixels, rotate);
+        const croppedImage = await getCroppedImg(
+            imageString,
+            croppedAreaPixels,
+            rotate
+        );
         setCroppedImage(croppedImage as string);
         setImageFile(undefined);
     };
@@ -99,10 +111,21 @@ export default function ImageCropperModalClient(props: ImageCropperModalClientPr
                     </label>
                 </div>
                 <div className="flex flex-row gap-3">
-                    <Button type="button" className="w-1/2" variant="outline" buttonSize="lg" onClick={() => setImageFile(undefined)}>
+                    <Button
+                        type="button"
+                        className="w-1/2"
+                        variant="outline"
+                        buttonSize="lg"
+                        onClick={() => setImageFile(undefined)}
+                    >
                         Cancel
                     </Button>
-                    <Button type="button" className="w-1/2" buttonSize="lg" onClick={saveImage}>
+                    <Button
+                        type="button"
+                        className="w-1/2"
+                        buttonSize="lg"
+                        onClick={saveImage}
+                    >
                         Crop image
                     </Button>
                 </div>
