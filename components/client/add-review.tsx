@@ -11,7 +11,7 @@ type AddReviewClientProps = {
 };
 
 export default function AddReviewClient(props: AddReviewClientProps) {
-    const {userId, recipeId} = props;
+    const { userId, recipeId } = props;
 
     const router = useRouter();
 
@@ -33,7 +33,10 @@ export default function AddReviewClient(props: AddReviewClientProps) {
     };
 
     return (
-        <form action={handleSubmit} className="flex flex-col items-start justify-start gap-2">
+        <form
+            action={handleSubmit}
+            className="flex flex-col items-start justify-start gap-2"
+        >
             <label htmlFor="review">Écrire un commentaire</label>
             <input
                 className="w-full rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"

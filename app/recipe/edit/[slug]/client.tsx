@@ -37,8 +37,8 @@ export default function EditRecipeClient(props: EditRecipeClientProps) {
                 id: recipe.id,
                 title,
                 description,
-                image : null, // TODO: gérer la validation d'image, taille, format, stockage et sauvegarder l'url du dossier ici
-                userId: session.user.id
+                image: null, // TODO: gérer la validation d'image, taille, format, stockage et sauvegarder l'url du dossier ici
+                userId: session.user.id,
             };
 
             const response = await UpdateRecipeById(updatedRecipe);
@@ -96,7 +96,12 @@ export default function EditRecipeClient(props: EditRecipeClientProps) {
                 />
             </label> */}
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <LoadingButton type="button" onClick={HandleSubmit} label="Update recipe" loading={loading} />
+            <LoadingButton
+                type="button"
+                onClick={HandleSubmit}
+                label="Update recipe"
+                loading={loading}
+            />
         </form>
     );
 }

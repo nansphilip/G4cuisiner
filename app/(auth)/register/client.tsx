@@ -32,13 +32,12 @@ export default function RegisterClient(props: RegisterClientProps) {
         // Start loading
         setLoading(true);
 
-        const { data, error } = await signUp.email(
-            {
-                email: email,
-                password: password,
-                name: firstname + " " + lastname,
-                image: undefined, // TODO: Add image conversion to base64 -> imageToBase64(profilePicture)
-            });
+        const { data, error } = await signUp.email({
+            email: email,
+            password: password,
+            name: firstname + " " + lastname,
+            image: undefined, // TODO: Add image conversion to base64 -> imageToBase64(profilePicture)
+        });
 
         // Display feedback
         if (data) {
