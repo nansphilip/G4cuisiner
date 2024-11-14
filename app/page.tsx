@@ -11,8 +11,8 @@ export default async function HomePage() {
     const session = await getSession();
 
     const recipeList = await selectRecipesByCreateDate(3);
-    const userFavoriteList = session && (await fetchUserFavorites(session.user.id));
-    console.log(userFavoriteList);
+    const userFavoriteList =
+        session && (await fetchUserFavorites(session.user.id));
 
     return (
         <>
@@ -30,7 +30,7 @@ export default async function HomePage() {
                 <div className="flex flex-col justify-center gap-2">
                     {userFavoriteList && userFavoriteList.length > 0 ? (
                         <>
-                            <div className="mb-20 mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="mb-20 mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 ">
                                 {userFavoriteList.length > 0 ? (
                                     userFavoriteList.map((recipe, index) => (
                                         <div
@@ -39,13 +39,21 @@ export default async function HomePage() {
                                         >
                                             <div className="flex flex-row items-center  justify-between text-2xl font-bold">
                                                 <span>{recipe.title}</span>
-                                                <FavoriteDisplayClient userFavorite={true} classSvg="size-8" />
+                                                <FavoriteDisplayClient
+                                                    userFavorite={true}
+                                                    classSvg="size-8"
+                                                />
                                             </div>
                                             <div className="relative w-full">
-                                                <RecipeImageListClient isHomePage={true} imageList={recipe.images} />
+                                                <RecipeImageListClient
+                                                    isHomePage={true}
+                                                    imageList={recipe.images}
+                                                />
                                             </div>
                                             <div className="mt-2 w-full">
-                                                <p className="m-2 w-full text-xs">{recipe.description}</p>
+                                                <p className="m-2 w-full text-xs">
+                                                    {recipe.description}
+                                                </p>
                                             </div>
                                             <div className="mt-2 flex flex-col items-center justify-between">
                                                 <ButtonClient
@@ -60,13 +68,18 @@ export default async function HomePage() {
                                         </div>
                                     ))
                                 ) : (
-                                    <span>Vous n&apos;avez pas encore de recette favorite.</span>
+                                    <span>
+                                        Vous n&apos;avez pas encore de recette
+                                        favorite.
+                                    </span>
                                 )}
                             </div>
                         </>
                     ) : (
                         <>
-                            <h2 className="mb-4 text-2xl font-bold">Recettes récentes</h2>
+                            <h2 className="mb-4 text-2xl font-bold">
+                                Recettes récentes
+                            </h2>
                             <div className="mb-20 mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {recipeList.length > 0 ? (
                                     recipeList.map((recipe) => (
@@ -102,7 +115,9 @@ export default async function HomePage() {
                                         </div>
                                     ))
                                 ) : (
-                                    <span>Pas de recettes récentes disponibles.</span>
+                                    <span>
+                                        Pas de recettes récentes disponibles.
+                                    </span>
                                 )}
                             </div>
                         </>
