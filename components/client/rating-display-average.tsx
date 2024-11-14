@@ -1,18 +1,19 @@
+"use client"
+
 import { combo } from "@lib/combo";
 import { Star } from "lucide-react";
-import React from "react";
 
-type RatingProps = {
-    rating: number | null;
+type RatingDisplayAverageClientProps = {
+    ratingAverage: number | null;
     totalRatingAmount?: number;
-    counter?: boolean;
     classDiv?: string;
     classSvg?: string;
 };
 
-export default function Rating(props: RatingProps) {
-    const { rating, totalRatingAmount, counter = true, classDiv, classSvg } = props;
-    const filledStars = Math.round(rating ?? 0);
+export default function RatingDisplayAverageClient(props: RatingDisplayAverageClientProps) {
+    const { ratingAverage, totalRatingAmount, classDiv, classSvg } = props;
+    
+    const filledStars = Math.round(ratingAverage ?? 0);
 
     const stars = [1, 2, 3, 4, 5];
 
@@ -30,7 +31,7 @@ export default function Rating(props: RatingProps) {
                     />
                 ))}
             </span>
-            {counter && <span className="text-xs text-gray-500">notée par {totalRatingAmount} cuisiniers</span>}
+            <span className="text-xs text-gray-500">notée par {totalRatingAmount} cuisiniers</span>
         </div>
     );
 }

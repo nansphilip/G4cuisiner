@@ -65,6 +65,7 @@ export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
         unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
     }[];
     reviewList: {
+        reviewId: string;
         userId: string;
         name: string;
         review: string;

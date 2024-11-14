@@ -1,4 +1,4 @@
-import Button from "@comps/client/button";
+import ButtonClient from "@comps/client/button";
 import Image from "next/image";
 
 export type FruitProps = {
@@ -19,8 +19,8 @@ export default function FruitCard (props: FruitProps) {
                     <p className="text-xs text-gray-500">Fruit exotique</p>
                 </div>
                 <div className="flex flex-row justify-between">
-                    <Button type="button" variant="outline">Preview</Button>
-                    <Button type="button">Open fruit</Button>
+                    <ButtonClient type="button" variant="outline">Preview</ButtonClient>
+                    <ButtonClient type="button">Open fruit</ButtonClient>
                 </div>
             </div>
         </div>

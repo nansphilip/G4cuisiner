@@ -8,7 +8,7 @@ export const CreateFavorite = async (props: CreateUpdateFavoriteType): Promise<F
         const { userId, recipeId, favorite } = props;
 
         // Check if favorite already exists
-        const existingFavorite = await GetFavorite({ userId, recipeId });
+        const existingFavorite = await SelectFavorite({ userId, recipeId });
 
         // If favorite already exists, update it
         if (existingFavorite) {
@@ -30,7 +30,7 @@ export const CreateFavorite = async (props: CreateUpdateFavoriteType): Promise<F
     }
 };
 
-export const GetFavorite = async (props: InputFavoriteType): Promise<FavoriteType | null> => {
+export const SelectFavorite = async (props: InputFavoriteType): Promise<FavoriteType | null> => {
     const { userId, recipeId } = props;
 
     // Get favorite
@@ -79,7 +79,7 @@ export const UpdateFavorite = async (props: CreateUpdateFavoriteType): Promise<F
         const { userId, recipeId, favorite } = props;
 
         // Check if favorite already exists
-        const existingFavorite = await GetFavorite({ userId, recipeId });
+        const existingFavorite = await SelectFavorite({ userId, recipeId });
 
         // If favorite does not exist, create it
         if (!existingFavorite) {

@@ -1,28 +1,41 @@
 "use client";
 
 import { UpdateFavorite } from "@actions/database/Favorite";
-import { FavoriteType } from "@actions/types/Favorite";
 import { combo } from "@lib/combo";
+import { useStore } from "@lib/zustand";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-type FavoriteProps = {
-    userFavorite: FavoriteType | null;
-    userId: string | undefined;
+type FavoriteAddClientProps = {
     recipeId: string;
+    userId: string | undefined;
+    userFavorite: boolean | null | undefined;
     totalFavoriteAmount?: number;
     classDiv?: string;
     classSvg?: string;
 };
 
-export default function FavoriteCLient(props: FavoriteProps) {
-    const { userFavorite, userId, recipeId, totalFavoriteAmount, classDiv, classSvg } = props;
+export type FavoriteStoreProps = [boolean, Date];
 
-    const [isFavorite, setIsFavorite] = useState<boolean>(userFavorite?.favorite ?? false);
-    const [favorisCount, setFavorisCount] = useState<number>(totalFavoriteAmount ?? 0);
+export default function FavoriteAddClient(props: FavoriteAddClientProps) {
+    const { recipeId, userId, userFavorite, totalFavoriteAmount, classDiv, classSvg } = props;
 
     const router = useRouter();
+    
+    const [favorite, setFavorite] = useState<FavoriteStoreProps>([userFavorite ?? false, new Date()]);
+    const {favoriteStore, setFavoriteStore} = useStore();
+    const [favorisCount, setFavorisCount] = useState<number>(totalFavoriteAmount ?? 0);
+
+    useEffect(() => {
+        const isStoreMoreRecent = favoriteStore[1].getTime() > favorite[1].getTime();
+        // Update useState or useStore with the most recent value
+        if (isStoreMoreRecent) {
+            setFavorite(favoriteStore);
+        } else if (!isStoreMoreRecent) {
+            setFavoriteStore(favorite);
+        }
+    }, [favorite, setFavorite, favoriteStore, setFavoriteStore]);
 
     const toggleFavorite = async () => {
         if (!userId) {
@@ -33,12 +46,12 @@ export default function FavoriteCLient(props: FavoriteProps) {
         await UpdateFavorite({
             userId,
             recipeId,
-            favorite: !isFavorite,
+            favorite: !favorite[0],
         });
 
         // Update state
-        setIsFavorite(!isFavorite);
-        setFavorisCount(isFavorite ? favorisCount - 1 : favorisCount + 1);
+        setFavorite([!favorite[0], new Date()]);
+        setFavorisCount(favorite[0] ? favorisCount - 1 : favorisCount + 1);
     };
 
     return (
@@ -51,7 +64,7 @@ export default function FavoriteCLient(props: FavoriteProps) {
                 className={combo(
                     "size-5 stroke-[1.5px] transition-all duration-150",
                     classSvg,
-                    isFavorite
+                    favorite[0]
                         ? "fill-red-400 stroke-red-400  group-hover:fill-red-500 group-hover:stroke-red-500"
                         : "stroke-gray-600 group-hover:stroke-gray-700 fill-white group-hover:fill-gray-200"
                 )}

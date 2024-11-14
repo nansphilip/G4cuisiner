@@ -8,7 +8,7 @@ export default function ZustandSetClient() {
 
     return (
         <>
-            <Switch checked={switchState} setCheck={setSwitchState} />
+            <SwitchClient checked={switchState} setCheck={setSwitchState} />
             <span className="w-6 font-bold">{switchState ? "ON" : "OFF"}</span>
         </>
     );

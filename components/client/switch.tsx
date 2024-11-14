@@ -1,14 +1,14 @@
-import Button from "@comps/client/button";
+import ButtonClient from "@comps/client/button";
 import { combo } from "@lib/combo";
 
-type SwitchProps = {
+type SwitchClientProps = {
     checked: boolean;
     setCheck: (checked: boolean) => void;
     size?: "sm" | "md" | "lg";
     className?: string;
 };
 
-export default function Switch(props: SwitchProps) {
+export default function SwitchClient(props: SwitchClientProps) {
     const { checked, setCheck, size = "md", className } = props;
 
     const sizeClass = {
@@ -30,7 +30,7 @@ export default function Switch(props: SwitchProps) {
     };
 
     return (
-        <Button
+        <ButtonClient
             type="button"
             variant="transparent"
             ring="none"
@@ -48,6 +48,6 @@ export default function Switch(props: SwitchProps) {
                     className
                 )}
             ></div>
-        </Button>
+        </ButtonClient>
     );
 }

@@ -1,6 +1,12 @@
 "use server";
 
-import { InputReviewType, ReviewType } from "@actions/types/Review";
+import {
+    IdInputReviewType,
+    InputReviewType,
+    InputThumbsType,
+    ReviewType,
+    UpdateReviewType,
+} from "@actions/types/Review";
 import Prisma from "@lib/prisma";
 
 export const CreateReview = async (props: InputReviewType): Promise<ReviewType> => {
@@ -47,6 +53,83 @@ export const GetReview = async (props: InputReviewType): Promise<ReviewType | nu
     }
 
     return reviewData;
+};
+
+export const GetReviewThumb = async (props: InputThumbsType): Promise<{ positive: boolean; negative: boolean }[]> => {
+    const { userId, reviewIdList } = props;
+
+    // Récupérer toutes les reviews en une seule requête
+    const reviewList = await Prisma.review.findMany({
+        where: {
+            id: { in: reviewIdList },
+        },
+        select: {
+            thumbsPositive: {
+                select: {
+                    id: true,
+                },
+            },
+            thumbsNegative: {
+                select: {
+                    id: true,
+                },
+            },
+        },
+    });
+
+    if (reviewList.length !== reviewIdList.length) {
+        throw new Error("Some reviews do not exist");
+    }
+
+    const thumbStates = reviewList.map((review) => ({
+        positive: review.thumbsPositive.some((thumb) => thumb.id === userId),
+        negative: review.thumbsNegative.some((thumb) => thumb.id === userId),
+    }));
+
+    return thumbStates;
+};
+
+export const GetReviewById = async (props: IdInputReviewType): Promise<ReviewType | null> => {
+    const { reviewId } = props;
+
+    // Get review
+    const reviewData = await Prisma.review.findFirst({
+        where: {
+            id: reviewId,
+        },
+    });
+
+    if (!reviewData) {
+        return null;
+    }
+
+    return reviewData;
+};
+
+export const UpdateReview = async (props: UpdateReviewType): Promise<ReviewType> => {
+    const { reviewId, userId, thumbsPositive, thumbsNegative } = props;
+
+    const review = await GetReviewById({ reviewId });
+
+    if (!review) {
+        throw new Error("Review does not exist");
+    }
+
+    const updatedReview = await Prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            thumbsPositive: {
+                [thumbsPositive ? "connect" : "disconnect"]: { id: userId },
+            },
+            thumbsNegative: {
+                [thumbsNegative ? "connect" : "disconnect"]: { id: userId },
+            },
+        },
+    });
+
+    return updatedReview;
 };
 
 export const DeleteReview = async (props: InputReviewType): Promise<boolean> => {

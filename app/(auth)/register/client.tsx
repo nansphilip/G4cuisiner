@@ -4,7 +4,7 @@ import FormFeedback, { FormFeedbackProps } from "@comps/server/form-feedback";
 import { useState } from "react";
 import { signUp } from "@lib/client";
 import LoadingButton from "@comps/server/loading-button";
-import PasswordInputClient from "@comps/client/password";
+import PasswordClient from "@comps/client/password";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { combo } from "@lib/combo";
@@ -55,10 +55,10 @@ export default function RegisterClient(props: RegisterClientProps) {
         // Display feedback
         if (data) {
             setMode("success");
-            setMessage("Registration successful, you will receive an email to confirm your account. Redirecting...");
+            setMessage("Registration successful. Redirecting...");
             setTimeout(() => {
                 router.push("/dashboard");
-            }, 3000);
+            }, 1000);
         } else if (error) {
             setMode("danger");
             setMessage("Registration failed, something went wrong.");
@@ -113,7 +113,7 @@ export default function RegisterClient(props: RegisterClientProps) {
                     <span>Password </span>
                     <span className="text-red-500">*</span>
                 </div>
-                <PasswordInputClient
+                <PasswordClient
                     className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
                     name="password"
                     required

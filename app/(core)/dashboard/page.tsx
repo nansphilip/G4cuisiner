@@ -1,4 +1,4 @@
-import Button from "@comps/client/button";
+import ButtonClient from "@comps/client/button";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CircleAlert, CircleCheck } from "lucide-react"; // Ajout des icônes Lock et Unlock

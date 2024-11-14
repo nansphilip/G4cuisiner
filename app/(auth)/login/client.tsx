@@ -39,7 +39,7 @@ export default function LoginClient(props: LoginClientProps) {
             setMessage("Login successful, redirecting...");
             setTimeout(() => {
                 router.push("/dashboard");
-            }, 1500);
+            }, 500);
         } else if (error) {
             setMode("danger");
             setMessage("Login failed, email or password may be incorrect.");
