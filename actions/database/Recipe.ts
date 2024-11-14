@@ -416,17 +416,23 @@ export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeTyp
     }
 };
 
-export const selectRecipesByCreateDate = async (limit: number = 3): Promise<RecipeType[]> => {
-    try {
-        const recipes = await Prisma.recipe.findMany({
-            orderBy: {
-                createdAt: 'desc',
-            },
-            take: limit,
-        });
-        return recipes;
-    } catch (error) {
-        throw new Error("Unable to select recipes by create date -> " + (error as Error).message);
-    }
-};
+export async function selectRecipesByCreateDate  (limit: number = 3){
+
+    const recipesByDate = await Prisma.recipe.findMany({
+        orderBy: {
+            createdAt: 'desc',
+        },
+        take: limit,
+        include: {
+            Image: true,
+        },
+    });
+
+    const recipes = recipesByDate.map((recipe) => ({
+        ...recipe,
+        images: recipe.Image,
+    }));
+
+    return recipes;
+}
 

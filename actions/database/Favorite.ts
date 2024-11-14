@@ -53,7 +53,7 @@ export const SelectFavorite = async (props: InputFavoriteType): Promise<Favorite
 // Get All Favorites
 export async function fetchUserFavorites(userId: string) {
     const userWithFavorites = await Prisma.favorite.findMany({
-        where: { userId: userId },
+        where: { userId: userId , favorite : true},
         select: {
             Recipe: {
                 include: {

@@ -1,58 +1,62 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { fetchUserFavorites } from "@actions/database/Favorite";
+import React, {useEffect, useState} from "react";
+import {fetchUserFavorites} from "@actions/database/Favorite";
 import SearchFavoriteClient from "@comps/client/search-favorite";
-import { useSession } from "@lib/client";
-import RecipeImageListClient from "@comps/client/image-listing";
+import RecipeImageListClient, {RecipeProps} from "@comps/client/image-listing";
 import FavoriteAddClient from "@comps/client/favorite-add";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
+import {useSession} from "@lib/client";
+import FavoriteDisplayClient from "@comps/client/favorite-display";
+import {CompleteRecipeType} from "@actions/types/Recipe";
+
 
 export default function FavoritesClient() {
     const { data: session } = useSession();
-    
-    const [favorites, setFavorites] = useState<boolean[]>([]);
-    const [filteredFavorites, setFilteredFavorites] = useState<any[]>([]);
 
-    // Chargement des favoris de l'utilisateur connecté
+    const [favorites, setFavorites] = useState<CompleteRecipeType[]>([]);
+    const [filteredFavorites, setFilteredFavorites] = useState<CompleteRecipeType[]>([]);
+
+    const loadFavorites = async () => {
+        if (session && session.user) {
+            const userFavoriteList = session && (await fetchUserFavorites(session.user.id));
+            setFavorites(userFavoriteList);
+            setFilteredFavorites(userFavoriteList);
+        }
+    };
     useEffect(() => {
-        const loadFavorites = async () => {
-            if (session && session.user) {
-                const userFavorites = await fetchUserFavorites(session.user.id);
-                setFavorites(userFavorites);
-                setFilteredFavorites(userFavorites);
-            }
-        };
-
-        loadFavorites();
+        if (session) {
+            loadFavorites();
+        }
     }, [session]);
 
+
     const handleSearch = (query: string) => {
-        const filtered = favorites.filter((recipe) => recipe.title.toLowerCase().startsWith(query.toLowerCase()));
+        const filtered = favorites.filter((fav) =>
+            fav.title.toLowerCase().includes(query.toLowerCase())
+        );
         setFilteredFavorites(filtered);
     };
 
     return (
         <div className="size-full">
             <div className="p-4">
-                <SearchFavoriteClient onSearch={handleSearch} />
+                <SearchFavoriteClient onSearch={handleSearch}/>
             </div>
             <div className="flex flex-col gap-2">
                 {filteredFavorites.length > 0 ? (
                     filteredFavorites.map((recipe) => (
                         <div
                             key={recipe.id}
-                            className="my-4 flex flex-row gap-4 rounded-lg border-2 border-gray-300 p-2 shadow-lg"
-                        >
-                            {recipe.imageList && recipe.imageList.length > 0 ? (
-                                <div className="h-full">
-                                    <RecipeImageListClient isFavoritePage={true} imageList={recipe.imageList} />
-                                </div>
-                            ) : (
-                                <div className="h-full">
-                                    <span className="text-gray-500">No Image</span>
-                                </div>
-                            )}
+                            className="my-4 flex flex-row gap-4 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
+                            <div className="flex flex-row items-center  justify-between text-2xl font-bold">
+                                <span>{recipe.title}</span>
+                                <FavoriteDisplayClient userFavorite={true} classSvg="size-8"/>
+                            </div>
+                            <div className="h-full">
+                                <RecipeImageListClient image={recipe.image} />
+                            </div>
+
                             <div className="flex grow justify-between font-semibold text-gray-700">
                                 <div className="w-full ">
                                     <h1 className="text-xl">{recipe.title}</h1>
@@ -73,15 +77,15 @@ export default function FavoritesClient() {
                                             totalRatingAmount={recipe.totalRatingAmount}
                                         />
                                     </div>
-                                    <div className="mt-auto self-end whitespace-nowrap">
-                                        <FavoriteAddClient
-                                            userFavorite={recipe.userFavorite}
-                                            userId={session?.user.id}
-                                            recipeId={recipe.id}
-                                            totalFavoriteAmount={recipe.totalFavoriteAmount}
-                                            classSvg="size-6"
-                                        />
-                                    </div>
+                                    {/*<div className="mt-auto self-end whitespace-nowrap">*/}
+                                    {/*    <FavoriteAddClient*/}
+                                    {/*        userFavorite={recipe.userFavorite}*/}
+                                    {/*        userId={session?.user.id}*/}
+                                    {/*        recipeId={recipe.id}*/}
+                                    {/*        totalFavoriteAmount={recipe.totalFavoriteAmount}*/}
+                                    {/*        classSvg="size-6"*/}
+                                    {/*    />*/}
+                                    {/*</div>*/}
                                 </div>
                             </div>
                         </div>
