@@ -2,13 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { combo } from "@lib/combo";
 import SlidingHover from "@comps/client/sliding-motion";
 import ButtonClient from "@comps/client/button";
 import { BetterSessionClient, useSession } from "@lib/client";
 import { BetterSessionServer } from "@lib/auth";
 import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
+import SearchClient from "@app/(search)/search-page/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -26,6 +27,7 @@ type LinkPropsList = (LinkProps | LinkGroup)[];
 
 type HeaderClientProps = {
     serverSession: BetterSessionServer;
+    slugList: TitleAndSlugRecipeType[];
     slugPageList: {
         group: string;
         route: string;
@@ -35,33 +37,23 @@ type HeaderClientProps = {
 };
 
 export default function HeaderClient(props: HeaderClientProps) {
-    const { serverSession, slugPageList, className } = props;
+    const { serverSession, slugList, className } = props;
     const { data: sessionClient } = useSession();
     const session = sessionClient ?? serverSession;
 
-    const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
-        label: group,
-        href: `${route}/${slugList[0].slug}`,
-        group: slugList.map(({ title, slug }) => ({
-            label: title,
-            href: `${route}/${slug}`,
-        })),
-    }));
+    // const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
+    //     label: group,
+    //     href: `${route}/${slugList[0].slug}`,
+    //     group: slugList.map(({ title, slug }) => ({
+    //         label: title,
+    //         href: `${route}/${slug}`,
+    //     })),
+    // }));
 
     const linkList: LinkPropsList = [
-        { label: "Home", href: "/" },
-        {
-            label: "Recherche",
-            href: "/search-page",
-            group: [
-                { label: "Barre de recherche", href: "/search-page" },
-                {
-                    label: "Recherche par filtres",
-                    href: "/search-with-filters",
-                },
-            ],
-        },
-        {
+        { label: "Accueil", href: "/" },
+        { label: "Recherche par filtres", href: "/search-with-filters" },
+        /* {
             label: "Exemples",
             href: "/fruits",
             group: [
@@ -71,41 +63,43 @@ export default function HeaderClient(props: HeaderClientProps) {
                 { label: "Display Fruits", href: "/fruits" },
                 { label: "Server Fruits", href: "/random-fruit" },
             ],
-        },
-        ...slugLinkList,
+        }, */
+        // ...slugLinkList,
         {
-            label: "My Account",
+            label: "Mon compte",
             href: "/dashboard",
             group: [
                 {
-                    label: "Create recipe",
+                    label: "Creation recette",
                     href: "/recipe/create",
                     sessionActive: true,
                 },
                 {
-                    label: "Edit recipe",
+                    label: "Edition recette",
                     href: "/recipe/edit",
                     sessionActive: true,
                 },
-                { label: "Favorites", href: "/favorites", sessionActive: true },
+                { label: "Favoris", href: "/favorites", sessionActive: true },
                 { label: "Dashboard", href: "/dashboard", sessionActive: true },
                 {
-                    label: "Edit profile",
+                    label: "Profil",
                     href: "/profile",
                     sessionActive: true,
                 },
-                { label: "Logout", href: "/logout", sessionActive: true },
+                { label: "Déconnexion", href: "/logout", sessionActive: true },
             ],
         },
         {
-            label: "Authentication",
+            label: "Authentification",
             href: "/login",
             group: [
-                { label: "Login", href: "/login", sessionActive: false },
-                { label: "Register", href: "/register", sessionActive: false },
+                { label: "Se connecter", href: "/login", sessionActive: false },
+                { label: "S'inscrire", href: "/register", sessionActive: false },
             ],
         },
     ];
+
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const firstName = session?.user.name.split(" ")[0];
     const profileImage = session?.user.image;
@@ -113,6 +107,9 @@ export default function HeaderClient(props: HeaderClientProps) {
     return (
         <header className={className}>
             <nav className="flex justify-center bg-secondary py-3">
+                <Link href="/" className="absolute left-5 top-1.5 flex items-center gap-2">
+                    <Image src="/logo-mobile.svg" width={40} height={40} alt="Logo" />
+                </Link>
                 <SlidingHover
                     className="flex items-start justify-center gap-1"
                     color="bg-gray-200"
@@ -122,9 +119,24 @@ export default function HeaderClient(props: HeaderClientProps) {
                     {linkList.map((linkOrGroup, index) => (
                         <HeaderDisplay key={index} index={index} linkOrGroup={linkOrGroup} session={session} />
                     ))}
+                    <ButtonClient
+                        type="button"
+                        variant="transparent"
+                        className="relative z-30 py-1"
+                        ring="none"
+                        onClick={() => setIsSearchOpen(!isSearchOpen)}
+                    >
+                        <Search />
+                    </ButtonClient>
                 </SlidingHover>
+                <SearchClient
+                    className={combo("absolute border-1.5 border-gray-400 shadow-lg rounded-xl top-16 w-[300px]", !isSearchOpen && "hidden")}
+                    recipeList={slugList}
+                />
                 {session?.user && (
-                    <Link href="/profile" className="absolute right-5 top-1.5 flex flex-row items-center gap-4 rounded-l-lg rounded-r-full py-1 pl-4 pr-1 transition-all duration-150 hover:bg-gray-200">
+                    <div
+                        className="absolute right-5 top-1.5 flex flex-row items-center gap-4 py-1 pr-1"
+                    >
                         <span className="whitespace-nowrap font-semibold">Bonjour, {firstName} !</span>
                         <div className="flex items-center justify-center overflow-hidden rounded-full">
                             {profileImage ? (
@@ -141,7 +153,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 </span>
                             )}
                         </div>
-                    </Link>
+                    </div>
                 )}
             </nav>
             {/* <div className="absolute z-10 h-2 w-full bg-gradient-to-b from-white to-transparent"></div> */}

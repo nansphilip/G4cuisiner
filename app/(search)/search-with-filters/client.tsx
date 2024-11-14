@@ -1,53 +1,28 @@
 "use client";
 import { RecipeFilterType } from "@actions/types/Recipe";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
-import { Slider, SliderValue } from "@nextui-org/slider";
+import { Slider } from "@nextui-org/slider";
 import Link from "next/link";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 
 type SearchWithFiltersClientProps = {
     listRecipes: RecipeFilterType[];
 };
 
-export default function SearchWithFiltersClient(
-    props: SearchWithFiltersClientProps
-) {
+export default function SearchWithFiltersClient(props: SearchWithFiltersClientProps) {
     const { listRecipes } = props;
     const [recipes, setRecipes] = useState(listRecipes);
-    const array = [];
 
-    const [filtersLunchType, setFiltersLunchType] = useState<boolean[]>([
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-    ]);
+    const [filtersLunchType, setFiltersLunchType] = useState<boolean[]>([false, false, false, false, false, false]);
 
-    const [filtersLunchStep, setFiltersLunchStep] = useState([
-        false,
-        false,
-        false,
-        false,
-    ]);
+    const [filtersLunchStep, setFiltersLunchStep] = useState([false, false, false, false]);
 
-    const [filtersDifficultyLevel, setFiltersDifficultyLevel] = useState([
-        false,
-        false,
-        false,
-        false,
-    ]);
+    const [filtersDifficultyLevel, setFiltersDifficultyLevel] = useState([false, false, false, false]);
 
-    const [filtersPreparationTime, setFiltersPreparationTime] = useState<
-        number[]
-    >([5, 240]);
+    const [filtersPreparationTime, setFiltersPreparationTime] = useState<number[]>([5, 240]);
 
-    const handleChangeradio = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        index: number
-    ) => {
+    const handleChangeradio = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { name } = e.target;
         if (name === "lunchType") {
             const newFilters = filtersLunchType.map((_, idx) => idx === index);
@@ -56,19 +31,14 @@ export default function SearchWithFiltersClient(
             const newFilters = filtersLunchStep.map((_, idx) => idx === index);
             setFiltersLunchStep(newFilters);
         } else if (name === "difficultyLevel") {
-            const newFilters = filtersDifficultyLevel.map(
-                (_, idx) => idx === index
-            );
+            const newFilters = filtersDifficultyLevel.map((_, idx) => idx === index);
             setFiltersDifficultyLevel(newFilters);
         }
     };
 
     useEffect(() => {
-        const arrayFilteredRecipes: typeof listRecipes = [];
         const filteredRecipes = listRecipes.filter((recipe) => {
-            const isLunchTypeFilterActive = filtersLunchType.some(
-                (value) => value
-            );
+            const isLunchTypeFilterActive = filtersLunchType.some((value) => value);
             const lunchType = isLunchTypeFilterActive
                 ? (recipe.lunchType === "BREAKFAST" && filtersLunchType[0]) ||
                   (recipe.lunchType === "LUNCH" && filtersLunchType[1]) ||
@@ -77,9 +47,7 @@ export default function SearchWithFiltersClient(
                   (recipe.lunchType === "SNACK" && filtersLunchType[4])
                 : true;
 
-            const isLunchStepFilterActive = filtersLunchStep.some(
-                (value) => value
-            );
+            const isLunchStepFilterActive = filtersLunchStep.some((value) => value);
             const lunchStep = isLunchStepFilterActive
                 ? (recipe.lunchStep === "APPETIZER" && filtersLunchStep[0]) ||
                   (recipe.lunchStep === "STARTER" && filtersLunchStep[1]) ||
@@ -87,16 +55,11 @@ export default function SearchWithFiltersClient(
                   (recipe.lunchStep === "DESSERT" && filtersLunchStep[3])
                 : true;
 
-            const isDifficultyLevelFilterActive = filtersDifficultyLevel.some(
-                (value) => value
-            );
+            const isDifficultyLevelFilterActive = filtersDifficultyLevel.some((value) => value);
             const difficultyLevel = isDifficultyLevelFilterActive
-                ? (recipe.difficultyLevel === "EASY" &&
-                      filtersDifficultyLevel[0]) ||
-                  (recipe.difficultyLevel === "MEDIUM" &&
-                      filtersDifficultyLevel[1]) ||
-                  (recipe.difficultyLevel === "HARD" &&
-                      filtersDifficultyLevel[2])
+                ? (recipe.difficultyLevel === "EASY" && filtersDifficultyLevel[0]) ||
+                  (recipe.difficultyLevel === "MEDIUM" && filtersDifficultyLevel[1]) ||
+                  (recipe.difficultyLevel === "HARD" && filtersDifficultyLevel[2])
                 : true;
 
             const preparationTime =
@@ -105,28 +68,14 @@ export default function SearchWithFiltersClient(
             return lunchType && lunchStep && difficultyLevel && preparationTime;
         });
         setRecipes(filteredRecipes);
-    }, [
-        filtersLunchStep,
-        filtersPreparationTime,
-        filtersLunchType,
-        filtersDifficultyLevel,
-    ]);
+    }, [filtersLunchStep, filtersPreparationTime, filtersLunchType, filtersDifficultyLevel, listRecipes]);
 
-    const setLunchType = (recipe: string) => {
-        if (recipe === "BREAKFAST") {
-            return "Petit-déjeuner";
-        }
-    };
-
-    // results => map sur recipe
     return (
-        <div className="p-6 bg-gray-100  flex flex-col items-center">
+        <div className="flex flex-col items-center rounded-xl bg-gray-100 p-6">
             <div className="flex">
-                <fieldset className="m-4 p-4 border border-gray-300 rounded-lg bg-white shadow-md">
-                    <legend className="text-lg font-semibold mb-2">
-                        Type de repas
-                    </legend>
-                    <div className="flex items-center mb-2">
+                <fieldset className="m-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md">
+                    <legend className="mb-2 text-lg font-semibold">Type de repas</legend>
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -139,7 +88,7 @@ export default function SearchWithFiltersClient(
                             Petit-déjeuner
                         </label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -152,7 +101,7 @@ export default function SearchWithFiltersClient(
                             Déjeuner
                         </label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -163,7 +112,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="brunch">Brunch</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -174,7 +123,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="dinner">Dîner</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -186,11 +135,9 @@ export default function SearchWithFiltersClient(
                         <label htmlFor="snack">Snack</label>
                     </div>
                 </fieldset>
-                <fieldset className="m-4 p-4 border border-gray-300 rounded-lg bg-white shadow-md">
-                    <legend className="text-lg font-semibold mb-2">
-                        Etape du repas
-                    </legend>
-                    <div className="flex items-center mb-2">
+                <fieldset className="m-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md">
+                    <legend className="mb-2 text-lg font-semibold">Etape du repas</legend>
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -201,7 +148,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="appetizer">Apéritif</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -212,7 +159,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="starter">Entrée</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -223,7 +170,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="main">Plat</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -235,11 +182,9 @@ export default function SearchWithFiltersClient(
                         <label htmlFor="dessert">Dessert</label>
                     </div>
                 </fieldset>
-                <fieldset className="m-4 p-4 border border-gray-300 rounded-lg bg-white shadow-md">
-                    <legend className="text-lg font-semibold mb-2">
-                        Difficulté
-                    </legend>
-                    <div className="flex items-center mb-2">
+                <fieldset className="m-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md">
+                    <legend className="mb-2 text-lg font-semibold">Difficulté</legend>
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
@@ -250,7 +195,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="easy">Facile</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
@@ -261,7 +206,7 @@ export default function SearchWithFiltersClient(
                         />
                         <label htmlFor="medium">Moyen</label>
                     </div>
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
@@ -273,10 +218,8 @@ export default function SearchWithFiltersClient(
                         <label htmlFor="hard">Difficile</label>
                     </div>
                 </fieldset>
-                <fieldset className="m-4 p-4 border border-gray-300 rounded-lg bg-white shadow-md flex flex-col justify-around items-center">
-                    <legend className="text-lg font-semibold mb-2">
-                        Temps de préparation
-                    </legend>
+                <fieldset className="m-4 flex flex-col items-center justify-around rounded-lg border border-gray-300 bg-white p-4 shadow-md">
+                    <legend className="mb-2 text-lg font-semibold">Temps de préparation</legend>
                     <Slider
                         id="preparationTime"
                         step={5}
@@ -288,35 +231,27 @@ export default function SearchWithFiltersClient(
                             unitDisplay: "short",
                         }}
                         className="max-w-md"
-                        value={[
-                            filtersPreparationTime[0],
-                            filtersPreparationTime[1],
-                        ]}
+                        value={[filtersPreparationTime[0], filtersPreparationTime[1]]}
                         onChange={(value: number | number[]) => {
                             if (Array.isArray(value)) {
                                 setFiltersPreparationTime([value[0], value[1]]);
                             }
                         }}
                     />
-                    <label
-                        htmlFor="preparationTime"
-                        className="mt-2 text-gray-700"
-                    >
-                        {filtersPreparationTime[0]} -{" "}
-                        {filtersPreparationTime[1]} Minutes
+                    <label htmlFor="preparationTime" className="mt-2 text-gray-700">
+                        {filtersPreparationTime[0]} - {filtersPreparationTime[1]} Minutes
                     </label>
                 </fieldset>
             </div>
-            <div className="flex flex-wrap">
-                {recipes.map((recipe) => {
+            <div className="flex flex-wrap justify-center gap-3">
+                {recipes.map((recipe, index) => {
                     const difficultyLevelFormatted =
                         (recipe.difficultyLevel === "EASY" && "Facile") ||
                         (recipe.difficultyLevel === "MEDIUM" && "Moyen") ||
                         (recipe.difficultyLevel === "HARD" && "Difficile");
 
                     const lunchTypeFormatted =
-                        (recipe.lunchType === "BREAKFAST" &&
-                            "Petit déjeuner") ||
+                        (recipe.lunchType === "BREAKFAST" && "Petit déjeuner") ||
                         (recipe.lunchType === "BRUNCH" && "Brunch") ||
                         (recipe.lunchType === "DINNER" && "Dîner") ||
                         (recipe.lunchType === "LUNCH" && "Déjeuner") ||
@@ -328,26 +263,19 @@ export default function SearchWithFiltersClient(
                         (recipe.lunchStep === "MAIN" && "Plat principal") ||
                         (recipe.lunchStep === "DESSERT" && "Dessert");
                     return (
-                        <Link href={`recipe/${recipe.slug}`}>
-                            <Card className="py-4 m-1" key={recipe.slug}>
-                                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                                    <small className="text-default-500">
-                                        {lunchTypeFormatted}
-                                    </small>
-                                    <small className="text-default-500">
-                                        {lunchStepFormatted}
-                                    </small>
-                                    <small className="text-default-500">
-                                        {difficultyLevelFormatted}
-                                    </small>
-                                    <h4 className="font-bold text-large">
-                                        {recipe.title}
-                                    </h4>
+                        <Link href={`recipe/${recipe.slug}`} key={index}>
+                            <Card className="h-full py-2">
+                                <CardHeader className="flex-col items-start px-4 pb-0 pt-2">
+                                    <small className="text-default-500">{lunchTypeFormatted}</small>
+                                    <small className="text-default-500">{lunchStepFormatted}</small>
+                                    <small className="text-default-500">{difficultyLevelFormatted}</small>
+                                    <h4 className="text-large font-bold text-black">{recipe.title}</h4>
                                 </CardHeader>
                                 <CardBody className="overflow-visible py-2">
                                     <Image
                                         alt="Card background"
-                                        className="object-cover rounded-xl"
+                                        className="aspect-[4/3] rounded-xl
+                                        object-cover"
                                         src={recipe.url}
                                         width={270}
                                     />

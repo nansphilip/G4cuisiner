@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { fetchUserFavorites } from "@actions/database/Favorite";
-import Rating from "@comps/server/rating";
-import RecipeImageListClient from "@comps/client/recipe-image-list";
-import Favorite from "@comps/client/favorite";
 import SearchFavoriteClient from "@comps/client/search-favorite";
 import { useSession } from "@lib/client";
+import RecipeImageListClient from "@comps/client/image-listing";
+import FavoriteAddClient from "@comps/client/favorite-add";
+import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 
 export default function FavoritesClient() {
     const { data: session } = useSession();
@@ -68,13 +68,13 @@ export default function FavoritesClient() {
                                 </div>
                                 <div className="flex flex-col items-end">
                                     <div className="self-end">
-                                        <Rating
+                                        <RatingDisplayAverageClient
                                             rating={recipe.ratingAverage}
                                             totalRatingAmount={recipe.totalRatingAmount}
                                         />
                                     </div>
                                     <div className="mt-auto self-end whitespace-nowrap">
-                                        <Favorite
+                                        <FavoriteAddClient
                                             userFavorite={recipe.userFavorite}
                                             userId={session?.user.id}
                                             recipeId={recipe.id}

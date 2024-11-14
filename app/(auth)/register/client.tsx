@@ -70,7 +70,7 @@ export default function RegisterClient(props: RegisterClientProps) {
         <div className={className}>
             <div className="flex w-full flex-row gap-2">
                 <label className="flex flex-col gap-1">
-                    Firstname
+                    Prénom
                     <input
                         className="w-full rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
                         name="firstname"
@@ -82,7 +82,7 @@ export default function RegisterClient(props: RegisterClientProps) {
                     />
                 </label>
                 <label className="flex flex-col gap-1">
-                    Lastname
+                    Nom
                     <input
                         className="w-full rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
                         name="lastname"
@@ -110,7 +110,7 @@ export default function RegisterClient(props: RegisterClientProps) {
             </label>
             <label className="flex w-full flex-col gap-1">
                 <div>
-                    <span>Password </span>
+                    <span>Mot de passe</span>
                     <span className="text-red-500">*</span>
                 </div>
                 <PasswordClient
@@ -123,7 +123,7 @@ export default function RegisterClient(props: RegisterClientProps) {
                 />
             </label>
             <div className="flex flex-col">
-                <span>Choose an avatar:</span>
+                <span>Choisissez un avatar :</span>
                 <div className="mt-2 grid grid-cols-3 gap-4">
                     {avatarList.map((avatarUrl, index) => (
                         <button onClick={() => setImageUrl(avatarUrl)} type="button" key={index}>
@@ -143,7 +143,7 @@ export default function RegisterClient(props: RegisterClientProps) {
             </div>
 
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <LoadingButton type="button" onClick={Register} label="Register" loading={loading} />
+            <LoadingButton type="button" onClick={Register} label="S'inscrire" loading={loading} />
         </div>
     );
 }

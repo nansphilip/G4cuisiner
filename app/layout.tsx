@@ -20,12 +20,14 @@ export default async function RootLayout({
 }>) {
     const session = await getSession();
 
-    const slugPageList = [{ group: "Recipe", route: "/recipe", slugList: await SelectEveryRecipeSlugs() }];
+    const slugList = await SelectEveryRecipeSlugs()
+
+    const slugPageList = [{ group: "Recettes", route: "/recipe", slugList }];
 
     return (
         <html lang="fr" className="h-full overflow-y-hidden">
             <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-y-hidden`}>
-                <HeaderClient serverSession={session} slugPageList={slugPageList} className="w-full" />
+                <HeaderClient serverSession={session} slugList={slugList} slugPageList={slugPageList} className="w-full" />
                 <MainClient>{children}</MainClient>
             </body>
         </html>

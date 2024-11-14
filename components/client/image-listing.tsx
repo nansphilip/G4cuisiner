@@ -10,10 +10,11 @@ export type RecipeProps = {
         alt: string;
     }[];
     className?: string;
+    isHomePage?: boolean;
 };
 
 export default function RecipeImageListClient(props: RecipeProps) {
-    const { imageList, className } = props;
+    const { imageList, isHomePage, className } = props;
 
     const imageTemplate = "/template.webp";
     const [imageLoadList, setImageLoadList] = useState<{ url: string; alt: string }[]>(
@@ -24,6 +25,45 @@ export default function RecipeImageListClient(props: RecipeProps) {
             };
         })
     );
+    // const recipeList = await SelectEveryRecipeSlugs();
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    if (isHomePage) {
+        return (
+            imageLoadList[currentIndex] && (
+                <div>
+                    <Image
+                        key={currentIndex}
+                        className="aspect-[5/4] rounded-lg object-cover"
+                        src={imageLoadList[currentIndex].url}
+                        alt={imageLoadList[currentIndex].alt}
+                        height={200}
+                        width={250}
+                        onError={() => {
+                            const newImageList = [...imageLoadList];
+                            newImageList[currentIndex] = {
+                                url: imageTemplate,
+                                alt: imageLoadList[currentIndex].alt,
+                            };
+                            setImageLoadList(newImageList);
+                        }}
+                    />
+
+                    <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2">
+                        {imageLoadList.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentIndex(index)}
+                                className={`size-3 rounded-full bg-white ${
+                                    currentIndex === index ? "bg-gray-700" : "bg-gray-300"
+                                }`}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )
+        );
+    }
 
     return (
         <div className={combo("flex flex-row gap-3 overflow-x-auto", className)}>
@@ -34,7 +74,7 @@ export default function RecipeImageListClient(props: RecipeProps) {
                     src={url}
                     onError={() => {
                         const newImageList = [...imageLoadList];
-                        newImageList[index] = {url: imageTemplate, alt};
+                        newImageList[index] = { url: imageTemplate, alt };
                         setImageLoadList(newImageList);
                     }}
                     height={200}

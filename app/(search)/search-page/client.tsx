@@ -6,9 +6,12 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 
 interface SearchBarProps {
     recipeList: TitleAndSlugRecipeType[];
+    className?: string;
 }
 
-export default function SearchClient({ recipeList }: SearchBarProps) {
+export default function SearchClient(props: SearchBarProps) {
+    const { recipeList, className } = props;
+
     const [search, setSearch] = useState("");
 
     useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,15 +30,13 @@ export default function SearchClient({ recipeList }: SearchBarProps) {
 
     return (
         <>
-            <div>
-                <Autocomplete label="Recherche de recette">
-                    {recipeFiltered.map((recipe) => (
-                        <AutocompleteItem key={recipe.slug} value={recipe.slug} href={`/recipe/${recipe.slug}`}>
-                            {recipe.title}
-                        </AutocompleteItem>
-                    ))}
-                </Autocomplete>
-            </div>
+            <Autocomplete className={className} label="Recherche de recette">
+                {recipeFiltered.map((recipe) => (
+                    <AutocompleteItem key={recipe.slug} value={recipe.slug} href={`/recipe/${recipe.slug}`}>
+                        {recipe.title}
+                    </AutocompleteItem>
+                ))}
+            </Autocomplete>
         </>
     );
 }

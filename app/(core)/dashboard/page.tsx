@@ -58,16 +58,16 @@ export default async function DashboardPage() {
             {/* Header avec le titre et bouton Logout */}
             <div className="flex items-center justify-between p-4">
                 <h2 className="text-2xl font-bold">User Dashboard</h2>
-                <Button type="link" href="/logout" variant="danger">
-                    Logout
-                </Button>
+                <ButtonClient type="link" href="/logout" variant="danger">
+                    Déconnexion
+                </ButtonClient>
             </div>
 
             {/* Section utilisateur */}
             <div className="grid grid-cols-2 gap-8 p-4">
                 <div className="space-y-4">
                     <div className="flex flex-col gap-1">
-                        <p className="text-xs">Name</p>
+                        <p className="text-xs">Nom</p>
                         <span className="font-semibold">{name}</span>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
                         <span className="font-semibold">{email}</span>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <p className="text-xs">Verified</p>
+                        <p className="text-xs">Vérifié</p>
                         <div
                             className={combo(
                                 "flex items-center justify-start gap-1 font-semibold",
@@ -84,12 +84,12 @@ export default async function DashboardPage() {
                         >
                             {emailVerified ? (
                                 <>
-                                    <span>Yes</span>
+                                    <span>Oui</span>
                                     <CircleCheck size={16} />
                                 </>
                             ) : (
                                 <>
-                                    <span>No</span>
+                                    <span>Non</span>
                                     <CircleAlert size={16} />
                                 </>
                             )}
@@ -114,21 +114,21 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-semibold">Filter Users by Role</h3>
+                        <h3 className="text-xl font-semibold">Filtrer les utilisateurs par rôle</h3>
                         <select
                             className="rounded-md border px-4 py-2"
                             defaultValue="All"
                         >
-                            <option value="All">All Roles</option>
-                            <option value="User">User</option>
-                            <option value="Moderator">Moderator</option>
+                            <option value="All">Tous</option>
+                            <option value="User">Utilisateur</option>
+                            <option value="Moderator">Modérateur</option>
                             <option value="Admin">Admin</option>
                         </select>
                     </div>
 
                     {/* Barre de recherche */}
                     <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-semibold">Search Users</h3>
+                        <h3 className="text-xl font-semibold">Rechercher des utilisateurs</h3>
                         <input
                             type="text"
                             placeholder="Search by username"
@@ -140,23 +140,23 @@ export default async function DashboardPage() {
 
             {/* Liste des utilisateurs */}
             <UserList users={users} />
-            <div className="text-center">
-                <Button
+            {/* <div className="text-center">
+                <ButtonClient
                     type="button"
                     variant="default"
                 >
-                    Show More
-                </Button>
-            </div>
+                    Voir Plus
+                </ButtonClient>
+            </div> */}
 
             {/* Section des commentaires signalés */}
-            <ReviewComments comments={reportedComments} />
+            {/* <ReviewComments comments={reportedComments} /> */}
 
             {/* Section des nouvelles recettes */}
-            <ReviewRecipes recipes={recipes} />
+            {/* <ReviewRecipes recipes={recipes} /> */}
 
             {/* Section des nouveaux ingrédients */}
-            <ReviewIngredients ingredients={ingredients} />
+            {/* <ReviewIngredients ingredients={ingredients} /> */}
         </div>
     );
 }
@@ -194,10 +194,10 @@ const UserList = ({ users }: UserListProps) => {
                 <table className="min-w-full table-auto border-collapse">
                     <thead>
                         <tr>
-                            <th className="border-b px-4 py-2 text-left">Name</th>
+                            <th className="border-b px-4 py-2 text-left">Nom</th>
                             <th className="border-b px-4 py-2 text-left">Email</th>
                             <th className="border-b px-4 py-2 text-left">Role</th>
-                            <th className="border-b px-4 py-2 text-left">Verified</th>
+                            <th className="border-b px-4 py-2 text-left">Vérifié</th>
                             <th className="border-b px-4 py-2 text-left">Actions</th>
                         </tr>
                     </thead>
@@ -208,14 +208,14 @@ const UserList = ({ users }: UserListProps) => {
                                 <td className="border-b px-4 py-2">{user.email}</td>
                                 <td className="border-b px-4 py-2">
                                     <select className="rounded-md border px-2 py-1" defaultValue={user.role}>
-                                        <option value="USER">User</option>
-                                        <option value="MODO">Moderator</option>
+                                        <option value="USER">Utilisateur</option>
+                                        <option value="MODO">Modérateur</option>
                                         <option value="ADMIN">Admin</option>
                                     </select>
                                 </td>
                                 <td className="border-b px-4 py-2">
                                     <div className={combo("flex items-center gap-1 font-semibold", user.emailVerified ? "text-green-500" : "text-red-500")}>
-                                        {user.emailVerified ? "Yes" : "No"}
+                                        {user.emailVerified ? "Oui" : "Non"}
                                     </div>
                                 </td>
                                 <td className="border-b px-4 py-2">
@@ -254,24 +254,24 @@ const ReviewComments = ({ comments }: ReviewCommentsProps) => {
 
     return (
         <div className="space-y-4 p-4">
-            <h3 className="text-xl font-semibold">Review Reported Comments</h3>
+            <h3 className="text-xl font-semibold">Evaluation des Commentaires Signalés</h3>
 
             {/* Section des ratios des commentaires sur la même ligne */}
             <div className="mb-4 flex gap-6 text-sm">
                 <div className="flex items-center">
-                    <span className="mr-2 font-medium text-gray-500">Total Reported:</span>
+                    <span className="mr-2 font-medium text-gray-500">Total Signalés:</span>
                     <span className="text-gray-500">{totalComments}</span>
                 </div>
                 <div className="flex items-center">
-                    <span className="mr-2 font-medium text-yellow-600">Pending:</span>
+                    <span className="mr-2 font-medium text-yellow-600">En attente:</span>
                     <span className="text-yellow-600">{pendingCount}</span>
                 </div>
                 <div className="flex items-center">
-                    <span className="mr-2 font-medium text-green-500">Approved:</span>
+                    <span className="mr-2 font-medium text-green-500">Approuvé:</span>
                     <span className="text-green-500">{approvedCount}</span>
                 </div>
                 <div className="flex items-center">
-                    <span className="mr-2 font-medium text-red-500">Rejected:</span>
+                    <span className="mr-2 font-medium text-red-500">Rejeté:</span>
                     <span className="text-red-500">{rejectedCount}</span>
                 </div>
             </div>
@@ -281,9 +281,9 @@ const ReviewComments = ({ comments }: ReviewCommentsProps) => {
                 <table className="min-w-full table-auto border-collapse">
                     <thead>
                         <tr>
-                            <th className="border-b px-4 py-2 text-left">Comment</th>
-                            <th className="border-b px-4 py-2 text-left">Recipe</th>
-                            <th className="border-b px-4 py-2 text-left">User</th>
+                            <th className="border-b px-4 py-2 text-left">Commentaire</th>
+                            <th className="border-b px-4 py-2 text-left">Recette</th>
+                            <th className="border-b px-4 py-2 text-left">Utilisateur</th>
                             <th className="border-b px-4 py-2 text-left">Status</th>
                             <th className="border-b px-4 py-2 text-left">Actions</th>
                         </tr>
@@ -306,32 +306,32 @@ const ReviewComments = ({ comments }: ReviewCommentsProps) => {
                                     <div className="flex items-center gap-2">
                                         {comment.status === "Pending" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                         {comment.status === "Rejected" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                         {comment.status === "Approved" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                     </div>
@@ -359,16 +359,16 @@ type ReviewRecipesProps = {
 const ReviewRecipes = ({ recipes }: ReviewRecipesProps) => {
     return (
         <div className="space-y-4 p-4">
-            <h3 className="text-xl font-semibold">Review New Recipes</h3>
+            <h3 className="text-xl font-semibold">Evaluation des Nouvelles Recettes</h3>
 
             {/* Table des recettes à réviser */}
             <div className="mt-4 overflow-x-auto">
                 <table className="min-w-full table-auto border-collapse">
                     <thead>
                         <tr>
-                            <th className="border-b px-4 py-2 text-left">Name</th>
+                            <th className="border-b px-4 py-2 text-left">Nom</th>
                             <th className="border-b px-4 py-2 text-left">Description</th>
-                            <th className="border-b px-4 py-2 text-left">User</th>
+                            <th className="border-b px-4 py-2 text-left">Utilisateur</th>
                             <th className="border-b px-4 py-2 text-left">Status</th>
                             <th className="border-b px-4 py-2 text-left">Actions</th>
                         </tr>
@@ -391,32 +391,32 @@ const ReviewRecipes = ({ recipes }: ReviewRecipesProps) => {
                                     <div className="flex items-center gap-2">
                                         {recipe.status === "Pending" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                         {recipe.status === "Rejected" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                         {recipe.status === "Approved" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                     </div>
@@ -445,16 +445,16 @@ type ReviewIngredientsProps = {
 const ReviewIngredients = ({ ingredients }: ReviewIngredientsProps) => {
     return (
         <div className="space-y-4 p-4">
-            <h3 className="text-xl font-semibold">Review New Ingredients</h3>
+            <h3 className="text-xl font-semibold">Evaluation des Nouveaux Ingrédients</h3>
 
             {/* Table des ingrédients à réviser */}
             <div className="mt-4 overflow-x-auto">
                 <table className="min-w-full table-auto border-collapse">
                     <thead>
                         <tr>
-                            <th className="border-b px-4 py-2 text-left">Name</th>
+                            <th className="border-b px-4 py-2 text-left">Nom</th>
                             <th className="border-b px-4 py-2 text-left">Description</th>
-                            <th className="border-b px-4 py-2 text-left">User</th>
+                            <th className="border-b px-4 py-2 text-left">Utilisateur</th>
                             <th className="border-b px-4 py-2 text-left">Status</th>
                             <th className="border-b px-4 py-2 text-left">Actions</th>
                         </tr>
@@ -477,32 +477,32 @@ const ReviewIngredients = ({ ingredients }: ReviewIngredientsProps) => {
                                     <div className="flex items-center gap-2">
                                         {ingredient.status === "Pending" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                         {ingredient.status === "Rejected" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                         {ingredient.status === "Approved" && (
                                             <>
-                                                <Button type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
-                                                    Approve
-                                                </Button>
-                                                <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
-                                                    Reject
-                                                </Button>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
+                                                    Approuvé
+                                                </ButtonClient>
+                                                <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+                                                    Rejeté
+                                                </ButtonClient>
                                             </>
                                         )}
                                     </div>

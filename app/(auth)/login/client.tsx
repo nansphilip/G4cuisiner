@@ -62,7 +62,7 @@ export default function LoginClient(props: LoginClientProps) {
                 />
             </label>
             <label className="flex w-full flex-col gap-1">
-                Password
+                Mot de passe
                 <input
                     className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
                     name="password"
@@ -80,10 +80,10 @@ export default function LoginClient(props: LoginClientProps) {
                     value={rememberMe ? "on" : "off"}
                     onChange={(e) => setRememberMe(e.target.checked)}
                 />
-                <span className="text-gray-500 transition-all duration-150 hover:text-gray-700">Remember me</span>
+                <span className="text-gray-500 transition-all duration-150 hover:text-gray-700">Se souvenir de moi</span>
             </label>
             <FormFeedback mode={mode}>{message}</FormFeedback>
-            <LoadingButton type="button" onClick={Login} label="Login" loading={loading} />
+            <LoadingButton type="button" onClick={Login} label="Se connecter" loading={loading} />
         </div>
     );
 }
