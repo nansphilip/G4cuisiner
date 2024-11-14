@@ -14,6 +14,7 @@ model User {
     emailVerified Boolean
     image         String?
     role          Role    @default(USER)
+    restricted    Boolean @default(false)
 
     // One to Many
     Session Session[]
