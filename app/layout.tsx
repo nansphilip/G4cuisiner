@@ -11,7 +11,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "G4cuisiner",
-    description: "Application de partage de recettes",
+    description:
+        "Rejoignez notre communauté culinaire pour découvrir, partager et noter des recettes de cuisine. Ajoutez vos recettes préférées en favoris, laissez des commentaires et explorez une variété de plats créatifs pour inspirer vos repas.",
 };
 
 export default async function RootLayout({
@@ -22,7 +23,7 @@ export default async function RootLayout({
     const session = await getSession();
     const isUserAdmin = session && (await SelectUserRole({ userId: session.user.id }));
 
-    const slugList = await SelectEveryRecipeSlugs()
+    const slugList = await SelectEveryRecipeSlugs();
 
     const slugPageList = [{ group: "Recettes", route: "/recipe", slugList }];
 
