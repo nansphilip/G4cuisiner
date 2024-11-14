@@ -34,7 +34,7 @@ export default function RecipeImageListClient(props: RecipeProps) {
                 <div>
                     <Image
                         key={currentIndex}
-                        className="aspect-[5/4] rounded-lg object-cover"
+                        className="aspect-[5/4] rounded-lg object-cover w-full"
                         src={imageLoadList[currentIndex].url}
                         alt={imageLoadList[currentIndex].alt}
                         height={200}
@@ -55,7 +55,7 @@ export default function RecipeImageListClient(props: RecipeProps) {
                                 key={index}
                                 onClick={() => setCurrentIndex(index)}
                                 className={`size-3 rounded-full bg-white ${
-                                    currentIndex === index ? "bg-gray-700" : "bg-gray-300"
+                                    currentIndex === index ? "bg-gray-700 opacity-100" : "bg-gray-300 opacity-50"
                                 }`}
                             />
                         ))}

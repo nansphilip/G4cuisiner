@@ -408,7 +408,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                 <div
                     id={`popup-bg-${index}`}
                     className={combo(
-                        "bg-white opacity-100 absolute z-20 duration-200 transition-opacity rounded-lg",
+                        "bg-white opacity-100 absolute z-10 duration-200 transition-opacity rounded-lg",
                         !isOpen && "opacity-0 pointer-events-none"
                     )}
                 ></div>

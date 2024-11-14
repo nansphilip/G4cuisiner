@@ -6,7 +6,7 @@ import { useStore } from "@lib/zustand";
 import { useEffect, useState } from "react";
 import { FavoriteStoreProps } from "./favorite-add";
 
-type FavoriteDisplayClientProps = {
+export type FavoriteDisplayClientProps = {
     userFavorite: boolean | null;
     classDiv?: string;
     classSvg?: string;

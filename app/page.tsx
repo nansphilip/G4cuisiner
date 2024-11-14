@@ -2,10 +2,10 @@ import { selectRecipesByCreateDate } from "@actions/database/Recipe";
 import logo from "@public/logo.svg";
 import Image from "next/image";
 import { fetchUserFavorites } from "@actions/database/Favorite";
-import { getSession } from "@lib/auth";
 import ButtonClient from "@comps/client/button";
 import FavoriteDisplayClient from "@comps/client/favorite-display";
 import RecipeImageListClient from "@comps/client/image-listing";
+import { getSession } from "@lib/auth";
 
 export default async function HomePage() {
     const session = await getSession();
@@ -13,6 +13,7 @@ export default async function HomePage() {
     const recipeList = await selectRecipesByCreateDate(3);
     const userFavoriteList =
         session && (await fetchUserFavorites(session.user.id));
+
 
     return (
         <>
@@ -27,7 +28,7 @@ export default async function HomePage() {
                 <div className="flex justify-center">
                     <Image src={logo} height={250} width={250} alt="logo" />
                 </div>
-                <div className="flex flex-col justify-center gap-2">
+                <div className="flex flex-col justify-center gap-2 items-center">
                     {userFavoriteList && userFavoriteList.length > 0 ? (
                         <>
                             <div className="mb-20 mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 ">
@@ -85,21 +86,9 @@ export default async function HomePage() {
                                     recipeList.map((recipe) => (
                                         <div
                                             key={recipe.id}
-                                            className="flex h-full flex-col rounded-lg border border-tertiary bg-tertiary p-4 shadow-md transition-all duration-150 hover:shadow-lg"
-                                        >
-                                            {/*<div className="relative w-full">*/}
-                                            {/*    <RecipeImageListClient isHomePage={true} imageList={recipe.images || []}/>*/}
-                                            {/*</div>*/}
-                                            <div className="relative h-40 w-64">
-                                                {" "}
-                                                {/* Conteneur plus petit */}
-                                                <Image
-                                                    src="/template.webp"
-                                                    alt="Template Image"
-                                                    height={160}
-                                                    width={256}
-                                                    className="size-full rounded-md object-cover"
-                                                />
+                                            className="flex h-full flex-col rounded-lg border border-tertiary bg-tertiary p-4 shadow-md transition-all duration-150 hover:shadow-lg">
+                                            <div className="relative w-full">
+                                                <RecipeImageListClient isHomePage={true} imageList={recipe.images}/>
                                             </div>
                                             <div className="mt-2 flex flex-col items-center justify-between">
                                                 <ButtonClient

@@ -7,7 +7,7 @@ import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-type FavoriteAddClientProps = {
+export type FavoriteAddClientProps = {
     recipeId: string;
     userId: string | undefined;
     userFavorite: boolean | null | undefined;
