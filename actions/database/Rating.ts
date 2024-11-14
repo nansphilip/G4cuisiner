@@ -8,7 +8,7 @@ export const CreateRating = async (props: CreateUpdateRatingType): Promise<Ratin
         const { userId, recipeId, rating } = props;
 
         // Check if rating already exists
-        const existingRating = await GetRating({ userId, recipeId });
+        const existingRating = await SelectRating({ userId, recipeId });
 
         // If rating already exists, update it
         if (existingRating) {
@@ -30,7 +30,7 @@ export const CreateRating = async (props: CreateUpdateRatingType): Promise<Ratin
     }
 };
 
-export const GetRating = async (props: InputRatingType): Promise<RatingType | null> => {
+export const SelectRating = async (props: InputRatingType): Promise<RatingType | null> => {
     const { userId, recipeId } = props;
 
     // Get rating
@@ -55,7 +55,7 @@ export const UpdateRating = async (props: CreateUpdateRatingType): Promise<Ratin
         const { userId, recipeId, rating } = props;
 
         // Check if rating already exists
-        const existingRating = await GetRating({ userId, recipeId });
+        const existingRating = await SelectRating({ userId, recipeId });
 
         // If rating does not exist, create it
         if (!existingRating) {
@@ -86,7 +86,7 @@ export const DeleteRating = async (props: InputRatingType): Promise<boolean> => 
         const { userId, recipeId } = props;
 
         // Check if rating already exists
-        const existingRating = await GetRating({ userId, recipeId });
+        const existingRating = await SelectRating({ userId, recipeId });
 
         // If rating does not exist, return false
         if (!existingRating) {

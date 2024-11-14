@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { combo } from "@lib/combo";
 import SlidingHover from "@comps/client/sliding-motion";
-import Button from "@comps/client/button";
+import ButtonClient from "@comps/client/button";
 import { BetterSessionClient, useSession } from "@lib/client";
 import { BetterSessionServer } from "@lib/auth";
 import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
@@ -240,7 +240,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
 
         return (
             <div className="flex flex-col gap-2">
-                <Button
+                <ButtonClient
                     id={`popup-btn-${index}`}
                     {...(href ? { type: "link", href } : { type: "button" })}
                     variant="transparent"
@@ -257,7 +257,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                 >
                     <span>{label}</span>
                     <ChevronDown className={combo("transition-transform duration-300", isOpen && "-rotate-180")} />
-                </Button>
+                </ButtonClient>
                 {/* Navigation popup */}
                 <div
                     onMouseEnter={() => setIsOpen(true)}
@@ -316,7 +316,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
     if (!displayButton) return <></>;
 
     return (
-        <Button
+        <ButtonClient
             type="link"
             variant="transparent"
             buttonSize="lg"
@@ -327,6 +327,6 @@ const HeaderLink = (props: HeaderLinkProps) => {
             className={combo("relative z-30 text-nowrap py-1", pathname === href && "font-bold")}
         >
             {label}
-        </Button>
+        </ButtonClient>
     );
 };

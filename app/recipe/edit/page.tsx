@@ -1,21 +1,21 @@
-import Button from "@comps/client/button";
-import EditClient from "./client";
-import type { Metadata } from "next"
+import ButtonClient from "@comps/client/button";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Edit recipe",
     description: "Edit recipe page.",
-}
+};
 
 export default async function EditPage() {
-
     return (
         <>
-            <p>Cette page n&apos;est pas disponible pour le moment.</p>
-            <Button type="link" href="/" variant="outline">
-                Retour Accueil
-            </Button>
-            <EditClient />
+            <h2 className="text-xl font-bold">Cette page n&apos;existe pas, alors dégage !</h2>
+            <ButtonClient type="link" href="/" variant="danger" buttonSize="lg" fontSize="lg">
+                S&apos;enfuir très loin en courant
+            </ButtonClient>
+            <ButtonClient type="link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" variant="link">
+                Ne pas cliquer ici, merci.
+            </ButtonClient>
         </>
     );
 }

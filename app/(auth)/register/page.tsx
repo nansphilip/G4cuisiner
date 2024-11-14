@@ -1,5 +1,5 @@
 import RegisterClient from "@app/(auth)/register/client";
-import Button from "@comps/client/button";
+import ButtonClient from "@comps/client/button";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next"
@@ -20,9 +20,9 @@ export default async function RegisterPage() {
                 <h2 className="text-2xl font-bold">Register</h2>
                 <p className="text-center text-xs text-gray-500">Register with your personal informations.</p>
                 <RegisterClient className="flex w-[240px] flex-col items-center justify-center gap-2" />
-                <Button type="link" variant="link" ring="none" fontSize="sm" href="/login">
+                <ButtonClient type="link" variant="link" ring="none" fontSize="sm" href="/login">
                     Already registered?
-                </Button>
+                </ButtonClient>
             </div>
         </>
     );

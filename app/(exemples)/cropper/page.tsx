@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ImageSquare from "../../../components/client/image-square";
+import ImageSquare from "../../../components/server/image-square";
 import ImageCropperModalClient from "../../../components/client/image-cropper-modal";
 
 export default function CropperPage() {

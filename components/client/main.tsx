@@ -11,7 +11,7 @@ type MainCenterOrStartClientProps = {
 /**
  * Check if main is scrollable, if true, justify content to start, else center content
  */
-export default function MainCenterOrStartClient(props: MainCenterOrStartClientProps) {
+export default function MainClient(props: MainCenterOrStartClientProps) {
     const { children } = props;
     
     const pathname = usePathname();

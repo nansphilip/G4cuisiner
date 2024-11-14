@@ -1,4 +1,4 @@
-import Button from "@comps/client/button";
+import ButtonClient from "@comps/client/button";
 import ZustandSetClient from "./client";
 import type { Metadata } from "next"
 
@@ -16,9 +16,9 @@ export default function ZustandSetPage() {
             </div>
             <div>
                 <span>Go to </span>
-                <Button type="link" variant="link" buttonSize="none" href="/zustand-get">
+                <ButtonClient type="link" variant="link" buttonSize="none" href="/zustand-get">
                     Zustand Get Page
-                </Button>
+                </ButtonClient>
                 <span> to see result</span>
             </div>
         </>

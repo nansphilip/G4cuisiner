@@ -34,7 +34,7 @@ type ButtonProps = {
       }
 );
 
-export default function Button(props: ButtonProps) {
+export default function ButtonClient(props: ButtonProps) {
     const {
         type,
         href,

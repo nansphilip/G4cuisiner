@@ -2,19 +2,17 @@
 
 import { signOut } from "@lib/client";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
-export default function LogoutClient({ children }: { children: React.ReactNode }) {
+export default function LogoutClient() {
     const router = useRouter();
 
     const logout = async () => {
         await signOut();
+        router.push("/");
     };
 
-    useEffect(() => {
-        logout();
-        router.push("/");
-    }, [router]);
+    // Logout
+    logout();
 
-    return <>{children}</>;
+    return <></>;
 }

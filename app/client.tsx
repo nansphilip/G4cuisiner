@@ -1,7 +1,7 @@
 "use client";
 
-import {useSession} from "@lib/client";
-import Button from "@comps/client/button";
+import { useSession } from "@lib/client";
+import ButtonClient from "@comps/client/button";
 import Loader from "@comps/server/loader";
 import {fetchUserFavorites} from "@actions/database/Favorite";
 import React, {useEffect, useState} from "react";
@@ -86,6 +86,9 @@ export default function HomeClient() {
                     Logout
                 </Button>
             </div>
+            <ButtonClient type="link" href="/logout" variant="outline">
+                Logout
+            </ButtonClient>
         </>
     ) : (
         <>
@@ -129,6 +132,12 @@ export default function HomeClient() {
                     Login
                 </Button>
             </div>
+            <ButtonClient type="link" href="/register" variant="outline">
+                Register
+            </ButtonClient>
+            <ButtonClient type="link" href="/login">
+                Login
+            </ButtonClient>
         </>
     );
 }

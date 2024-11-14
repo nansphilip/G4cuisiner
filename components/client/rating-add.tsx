@@ -1,25 +1,38 @@
 "use client";
 
 import { DeleteRating, UpdateRating } from "@actions/database/Rating";
-import { RatingType } from "@actions/types/Rating";
 import { combo } from "@lib/combo";
+import { useStore } from "@lib/zustand";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-type RatingClientProps = {
+type RatingAddClientProps = {
+    userRating: number | null;
     userId: string | undefined;
     recipeId: string;
-    userRating: RatingType | null;
     classDiv?: string;
     classSvg?: string;
 };
 
-export default function RatingClient(props: RatingClientProps) {
+export type RatingStoreProps = [number, Date];
+
+export default function RatingAddClient(props: RatingAddClientProps) {
     const { userId, recipeId, userRating, classDiv, classSvg } = props;
 
-    const [rating, setRating] = useState<number>(userRating?.rating ?? 0);
+    const [rating, setRating] = useState<RatingStoreProps>([userRating ?? 0, new Date()]);
+    const {ratingStore, setRatingStore} = useStore();
     const [hoverIndex, setHoverIndex] = useState<number>(0);
+
+    useEffect(() => {
+        const isStoreMoreRecent = ratingStore[1].getTime() > rating[1].getTime();
+        // Update useState or useStore with the most recent value
+        if (isStoreMoreRecent) {
+            setRating(ratingStore);
+        } else if (!isStoreMoreRecent) {
+            setRatingStore(rating);
+        }
+    }, [rating, setRating, ratingStore, setRatingStore]);
 
     const router = useRouter();
 
@@ -30,7 +43,7 @@ export default function RatingClient(props: RatingClientProps) {
         }
 
         // Check if rating is new
-        const newRating = rating !== star;
+        const newRating = rating[0] !== star;
 
         if (newRating) {
             // Update database
@@ -41,7 +54,7 @@ export default function RatingClient(props: RatingClientProps) {
         }
 
         // Update state
-        setRating(newRating ? star : 0);
+        setRating([newRating ? star : 0, new Date()]);
         setHoverIndex(newRating ? hoverIndex : 0);
     };
 
@@ -61,7 +74,7 @@ export default function RatingClient(props: RatingClientProps) {
                         className={combo(
                             "size-5 hover:scale-110 stroke-[1.5px] transition-all duration-150",
                             classSvg,
-                            star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-400 fill-white",
+                            star <= rating[0] ? "text-yellow-400 fill-yellow-400" : "text-gray-400 fill-white",
                             star <= hoverIndex &&
                                 "fill-yellow-500 text-yellow-500 active:text-yellow-700 active:fill-yellow-700",
                             star > hoverIndex && hoverIndex !== 0 && "text-gray-400 fill-white"

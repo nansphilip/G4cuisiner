@@ -12,7 +12,7 @@ export const GetFruits = async (): Promise<FruitType[]> => {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(fruitList);
-            }, 1000);
+            }, 500);
         });
     } catch (error) {
         throw new Error("Unable to GetFruits -> " + (error as Error).message);

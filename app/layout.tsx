@@ -1,7 +1,7 @@
 import "@/globals.css";
 import { SelectEveryRecipeSlugs } from "@actions/database/Recipe";
 import HeaderClient from "@comps/client/header";
-import MainCenterOrStartClient from "@comps/client/main-center-or-start";
+import MainClient from "@comps/client/main";
 import { getSession } from "@lib/auth";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -26,7 +26,7 @@ export default async function RootLayout({
         <html lang="fr" className="h-full overflow-y-hidden">
             <body className={`${inter.className} flex h-full flex-col items-center justify-center overflow-y-hidden`}>
                 <HeaderClient serverSession={session} slugPageList={slugPageList} className="w-full" />
-                <MainCenterOrStartClient>{children}</MainCenterOrStartClient>
+                <MainClient>{children}</MainClient>
             </body>
         </html>
     );

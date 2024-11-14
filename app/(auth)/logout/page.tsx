@@ -1,5 +1,4 @@
 import LogoutClient from "@app/(auth)/logout/client";
-import Loader from "@comps/server/loader";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next"
@@ -16,9 +15,7 @@ export default async function LogoutPage() {
 
     return (
         <>
-            <LogoutClient>
-                <Loader />
-            </LogoutClient>
+            <LogoutClient />
         </>
     );
 }
