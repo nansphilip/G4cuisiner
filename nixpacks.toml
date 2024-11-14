@@ -1,7 +1,7 @@
 # nixpacks.toml
 
-[phases.setup]
-commands = [
-    "pnpx prisma generate",
-    "pnpx prisma migrate dev --name init",
-]
+# [phases.setup]
+# commands = [
+#     "pnpx prisma generate",
+#     "pnpx prisma migrate dev --name init",
+# ]
