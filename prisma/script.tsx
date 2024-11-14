@@ -35,6 +35,7 @@ export const fixtures = async () => {
                 difficultyLevel,
                 lunchStep,
                 lunchType,
+                Steps,
                 userId,
                 Image,
                 Favorite,
@@ -62,6 +63,7 @@ export const fixtures = async () => {
                     difficultyLevel,
                     lunchStep,
                     lunchType,
+                    Steps,
                     userId,
 
                     Image: {

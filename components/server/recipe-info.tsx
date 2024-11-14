@@ -1,4 +1,5 @@
 import { CompleteRecipeType } from "@actions/types/Recipe";
+import StarRating from "@comps/client/dificulty";
 
 type RecipeInfoProps = {
     recipe: CompleteRecipeType;
@@ -10,9 +11,7 @@ export default function RecipeInfo(props: RecipeInfoProps) {
 
     // Format data
     const difficultyLevelFormatted =
-        (difficultyLevel === "EASY" && "Facile") ||
-        (difficultyLevel === "MEDIUM" && "Moyen") ||
-        (difficultyLevel === "HARD" && "Difficile");
+        (difficultyLevel === "EASY" && 1) || (difficultyLevel === "MEDIUM" && 2) || (difficultyLevel === "HARD" && 3);
 
     const lunchTypeFormatted =
         (lunchType === "BREAKFAST" && "Petit déjeuner") ||
@@ -26,10 +25,10 @@ export default function RecipeInfo(props: RecipeInfoProps) {
         (lunchStep === "STARTER" && "Entrée") ||
         (lunchStep === "MAIN" && "Plat principal") ||
         (lunchStep === "DESSERT" && "Dessert");
-    
+
     const infoList = [
         { label: "Préparation", value: `${preparationTime} min` },
-        { label: "Difficulté", value: difficultyLevelFormatted },
+        //{ label: "Difficulté", value: difficultyLevelFormatted },
         { label: "Type de repas", value: lunchTypeFormatted },
         { label: "Étape de repas", value: lunchStepFormatted },
     ];
@@ -37,11 +36,14 @@ export default function RecipeInfo(props: RecipeInfoProps) {
     return (
         <div className="flex flex-row items-stretch justify-between gap-4">
             {infoList.map((info, index) => (
-                <div key={index} className="flex h-24 w-1/4 flex-col items-center justify-center rounded-md border">
+                <div key={index} className="flex h-32 w-1/4 flex-col items-center justify-center rounded-md border">
                     <span className="text-xl font-bold">{info.value}</span>
                     <span className="text-xs text-gray-500">{info.label}</span>
                 </div>
             ))}
+            <div className="flex h-32 w-1/4 flex-col items-center justify-center rounded-md border">
+                <StarRating number={difficultyLevelFormatted} editable={false} />
+            </div>
         </div>
     );
 }

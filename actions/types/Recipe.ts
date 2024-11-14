@@ -29,12 +29,12 @@ export interface IngredientRecipeType {
     }[];
 }
 
-export interface CommonType extends TitleRecipeType, SlugRecipeType {
+export interface CommonType extends TitleRecipeType {
     description: string;
 
     numberOfServing: number;
     preparationTime: number;
-
+    Steps: string;
     difficultyLevel: "EASY" | "MEDIUM" | "HARD"; // default medium
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
@@ -46,7 +46,7 @@ export interface CreateRecipeType extends CommonType, ImageRecipeType, Ingredien
 
 export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
 
-export interface RecipeType extends IdRecipeType, CommonType {
+export interface RecipeType extends IdRecipeType, CommonType, SlugRecipeType {
     createdAt: Date;
     updatedAt: Date;
 }
@@ -86,6 +86,7 @@ export interface RecipeFixtures {
     difficultyLevel: "EASY" | "MEDIUM" | "HARD";
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
+    Steps: string;
     userId: string;
 
     Image: {
