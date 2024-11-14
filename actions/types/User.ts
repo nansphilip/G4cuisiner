@@ -1,7 +1,12 @@
 "use server";
 
 export interface IdUserType {
-  id: string;
+  userId: string;
+}
+
+export interface UpdateUserRestrictionType {
+  userId: string;
+  restricted: boolean;
 }
 
 export interface UserType {
@@ -25,3 +30,8 @@ export interface UserFixtures {
   role: "USER" | "MODO" | "ADMIN";
   restricted: boolean;
 }
+
+export interface UserRoleSelectProps {
+  initialRole: "USER" | "MODO" | "ADMIN";
+  userId: string;
+};

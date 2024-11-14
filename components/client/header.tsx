@@ -2,12 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ChevronDown, Search } from "lucide-react";
+import { ChefHat, ChevronDown, Search, X } from "lucide-react";
 import { combo } from "@lib/combo";
 import SlidingHover from "@comps/client/sliding-motion";
 import ButtonClient from "@comps/client/button";
 import { BetterSessionClient, useSession } from "@lib/client";
-import { BetterSessionServer } from "@lib/auth";
 import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
 import SearchClient from "@app/(search)/search-page/client";
 import Image from "next/image";
@@ -26,20 +25,19 @@ type LinkGroup = {
 type LinkPropsList = (LinkProps | LinkGroup)[];
 
 type HeaderClientProps = {
-    serverSession: BetterSessionServer;
     slugList: TitleAndSlugRecipeType[];
     slugPageList: {
         group: string;
         route: string;
         slugList: TitleAndSlugRecipeType[];
     }[];
+    isUserAdmin: boolean | null;
     className?: string;
 };
 
 export default function HeaderClient(props: HeaderClientProps) {
-    const { serverSession, slugList, className } = props;
-    const { data: sessionClient } = useSession();
-    const session = sessionClient ?? serverSession;
+    const { slugList, isUserAdmin, className } = props;
+    const { data: session } = useSession();
 
     // const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
     //     label: group,
@@ -67,25 +65,25 @@ export default function HeaderClient(props: HeaderClientProps) {
         // ...slugLinkList,
         {
             label: "Mon compte",
-            href: "/dashboard",
+            href: "/favorites",
             group: [
                 {
-                    label: "Creation recette",
+                    label: "Création recette",
                     href: "/recipe/create",
                     sessionActive: true,
                 },
                 {
-                    label: "Edition recette",
+                    label: "Édition recette",
                     href: "/recipe/edit",
                     sessionActive: true,
                 },
-                { label: "Favoris", href: "/favorites", sessionActive: true },
+                // { label: "Favoris", href: "/favorites", sessionActive: true },
                 { label: "Dashboard", href: "/dashboard", sessionActive: true },
-                {
-                    label: "Profil",
-                    href: "/profile",
-                    sessionActive: true,
-                },
+                // {
+                //     label: "Profil",
+                //     href: "/profile",
+                //     sessionActive: true,
+                // },
                 { label: "Déconnexion", href: "/logout", sessionActive: true },
             ],
         },
@@ -100,13 +98,124 @@ export default function HeaderClient(props: HeaderClientProps) {
     ];
 
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const firstName = session?.user.name.split(" ")[0];
     const profileImage = session?.user.image;
 
     return (
         <header className={className}>
-            <nav className="flex justify-center bg-secondary py-3">
+            <div className="lg:hidden">
+                <nav
+                    className={combo(
+                        "absolute bottom-0 rounded-t-2xl flex flex-col gap-2 border-1.5 z-50 w-full bg-white p-3",
+                        !isMobileMenuOpen && "hidden"
+                    )}
+                >
+                    <div className="flex flex-row items-center gap-2">
+                        <span className="w-full text-lg font-bold">Navigation</span>
+                        <ButtonClient
+                            type="button"
+                            className="py-1.5"
+                            variant="ghost"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            <X />
+                        </ButtonClient>
+                    </div>
+                    <ButtonClient
+                        type="link"
+                        href="/"
+                        variant="outline"
+                        className="py-2"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Accueil
+                    </ButtonClient>
+                    <ButtonClient
+                        type="link"
+                        href="/search-with-filters"
+                        variant="outline"
+                        className="py-2"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Recherche par filtres
+                    </ButtonClient>
+                    {session ? (
+                        <>
+                            <ButtonClient
+                                type="link"
+                                href="/create-recipe"
+                                variant="outline"
+                                className="py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Création recette
+                            </ButtonClient>
+                            <ButtonClient
+                                type="link"
+                                href="/edit-recipe"
+                                variant="outline"
+                                className="py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Édition recette
+                            </ButtonClient>
+                            {isUserAdmin && (
+                                <ButtonClient
+                                    type="link"
+                                    href="/dashboard"
+                                    variant="outline"
+                                    className="py-2"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    Dashboard
+                                </ButtonClient>
+                            )}
+                            <ButtonClient
+                                type="link"
+                                href="/logout"
+                                variant="outline"
+                                className="py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Déconnexion
+                            </ButtonClient>
+                        </>
+                    ) : (
+                        <>
+                            <ButtonClient
+                                type="link"
+                                href="/login"
+                                variant="outline"
+                                className="py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Se connecter
+                            </ButtonClient>
+                            <ButtonClient
+                                type="link"
+                                href="/register"
+                                variant="outline"
+                                className="py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                S&apos;inscrire
+                            </ButtonClient>
+                        </>
+                    )}
+                </nav>
+                <ButtonClient
+                    type="button"
+                    className="absolute bottom-8 right-8 rounded-full border-2 bg-white p-4 shadow-lg"
+                    variant="transparent"
+                    ring="none"
+                    onClick={() => setIsMobileMenuOpen(true)}
+                >
+                    <ChefHat />
+                </ButtonClient>
+            </div>
+            <nav className="flex justify-center bg-secondary py-3 max-md:hidden">
                 <Link href="/" className="absolute left-5 top-1.5 flex items-center gap-2">
                     <Image src="/logo-mobile.svg" width={40} height={40} alt="Logo" />
                 </Link>
@@ -117,7 +226,13 @@ export default function HeaderClient(props: HeaderClientProps) {
                     duration="duration-200"
                 >
                     {linkList.map((linkOrGroup, index) => (
-                        <HeaderDisplay key={index} index={index} linkOrGroup={linkOrGroup} session={session} />
+                        <HeaderDisplay
+                            key={index}
+                            isUserAdmin={isUserAdmin}
+                            index={index}
+                            linkOrGroup={linkOrGroup}
+                            session={session}
+                        />
                     ))}
                     <ButtonClient
                         type="button"
@@ -130,14 +245,18 @@ export default function HeaderClient(props: HeaderClientProps) {
                     </ButtonClient>
                 </SlidingHover>
                 <SearchClient
-                    className={combo("absolute border-1.5 border-gray-400 shadow-lg rounded-xl top-16 w-[300px]", !isSearchOpen && "hidden")}
+                    className={combo(
+                        "absolute border-1.5 border-gray-400 shadow-lg rounded-xl top-16 w-[300px]",
+                        !isSearchOpen && "hidden"
+                    )}
                     recipeList={slugList}
                 />
                 {session?.user && (
-                    <div
-                        className="absolute right-5 top-1.5 flex flex-row items-center gap-4 py-1 pr-1"
+                    <Link
+                        href={"/favorites"}
+                        className="absolute right-5 top-[10px] flex flex-row items-center gap-4 rounded-full transition-all duration-150 hover:bg-gray-200 lg:pl-4"
                     >
-                        <span className="whitespace-nowrap font-semibold">Bonjour, {firstName} !</span>
+                        <span className="whitespace-nowrap font-semibold max-lg:hidden">Bonjour, {firstName} !</span>
                         <div className="flex items-center justify-center overflow-hidden rounded-full">
                             {profileImage ? (
                                 <Image
@@ -153,7 +272,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 </span>
                             )}
                         </div>
-                    </div>
+                    </Link>
                 )}
             </nav>
             {/* <div className="absolute z-10 h-2 w-full bg-gradient-to-b from-white to-transparent"></div> */}
@@ -165,6 +284,7 @@ type HeaderDisplayProps = {
     index: number;
     linkOrGroup: LinkProps | LinkGroup;
     session: BetterSessionClient["data"];
+    isUserAdmin: boolean | null;
 };
 
 const HeaderDisplay = (props: HeaderDisplayProps) => {
@@ -175,7 +295,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Destructure props
-    const { index, linkOrGroup, session } = props;
+    const { index, linkOrGroup, isUserAdmin, session } = props;
 
     useEffect(() => {
         if ("group" in linkOrGroup && isOpen) {
@@ -281,7 +401,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                     )}
                 >
                     {group.map((groupLink, index) => (
-                        <HeaderLink key={index} link={groupLink} session={session} />
+                        <HeaderLink key={index} isUserAdmin={isUserAdmin} link={groupLink} session={session} />
                     ))}
                 </div>
                 {/* Background popup */}
@@ -303,17 +423,18 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
         );
     } else {
         const link: LinkProps = linkOrGroup;
-        return <HeaderLink link={link} session={session} />;
+        return <HeaderLink isUserAdmin={isUserAdmin} link={link} session={session} />;
     }
 };
 
 type HeaderLinkProps = {
     link: LinkProps;
     session: BetterSessionClient["data"];
+    isUserAdmin: boolean | null;
 };
 
 const HeaderLink = (props: HeaderLinkProps) => {
-    const { link, session } = props;
+    const { link, isUserAdmin, session } = props;
     const { label, href, sessionActive = undefined } = link;
 
     // Get the current pathname
@@ -326,6 +447,7 @@ const HeaderLink = (props: HeaderLinkProps) => {
         sessionActive === undefined; // If sessionActive is undefined
 
     if (!displayButton) return <></>;
+    if (label === "Dashboard" && !isUserAdmin) return <></>;
 
     return (
         <ButtonClient

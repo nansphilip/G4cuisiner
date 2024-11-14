@@ -31,7 +31,7 @@ export default function RestrictClient({ initialRestricted, userId, classDiv }: 
                 onClick={toggleRestriction}
                 className={combo("rounded px-4 py-1 w-full", isRestricted ? "bg-gray-50 text-gray-500 hover:bg-gray-200" : "bg-gray-200 text-gray-700 hover:bg-gray-300")}
             >
-                {isRestricted ? "Unrestrict" : "Restrict"}
+                {isRestricted ? "Dérestreindre" : "Restreindre"}
             </button>
         </div>
     );

@@ -12,6 +12,7 @@ export default async function HomePage() {
 
     const recipeList = await selectRecipesByCreateDate(3);
     const userFavoriteList = session && (await fetchUserFavorites(session.user.id));
+    console.log(userFavoriteList);
 
     return (
         <>

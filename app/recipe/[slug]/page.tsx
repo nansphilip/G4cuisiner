@@ -13,6 +13,7 @@ import ReviewAddClient from "@comps/client/review-add";
 import FavoriteAddClient from "@comps/client/favorite-add";
 import RatingAddClient from "@comps/client/rating-add";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
+import { SelectUserRestriction } from "@actions/database/User";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -59,6 +60,7 @@ export default async function RecipePage(props: RecipePageProps) {
     const userThumbs =
         session &&
         (await GetReviewThumb({ reviewIdList: reviewList.map(({ reviewId }) => reviewId), userId: session.user.id }));
+    const isUserRestricted = session && (await SelectUserRestriction({ userId: session.user.id }));
 
     return (
         <div className="mt-2 w-full space-y-5">
@@ -115,7 +117,11 @@ export default async function RecipePage(props: RecipePageProps) {
             <hr />
             <section className="space-y-2">
                 <h2 className="text-2xl font-bold">Commentaires</h2>
-                <ReviewAddClient userRating={userRating} recipeId={recipeId} />
+                {isUserRestricted ? (
+                    <p className="w-full text-center italic">Vous avez été restreint, vous ne pouvez pas commenter.</p>
+                ) : (
+                    <ReviewAddClient userRating={userRating} recipeId={recipeId} />
+                )}
                 <p>Commentaires des cuisiniers</p>
                 <ReviewDisplayClient
                     userId={session?.user.id}
