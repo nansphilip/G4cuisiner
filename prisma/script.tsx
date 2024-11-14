@@ -4,9 +4,9 @@ import { accountData, fruitData, ingredientData, recipeData, userData } from "./
 export const fixtures = async () => {
     try {
         // User table
-        for (const { id, name, email, emailVerified, image, role } of userData) {
+        for (const { id, name, email, emailVerified, image, role, restricted } of userData) {
             await Prisma.user.create({
-                data: { id, name, email, emailVerified, image, role },
+                data: { id, name, email, emailVerified, image, role, restricted },
             });
         }
 
@@ -35,6 +35,7 @@ export const fixtures = async () => {
                 difficultyLevel,
                 lunchStep,
                 lunchType,
+                Steps,
                 userId,
                 Image,
                 Favorite,
@@ -62,6 +63,7 @@ export const fixtures = async () => {
                     difficultyLevel,
                     lunchStep,
                     lunchType,
+                    Steps,
                     userId,
 
                     Image: {

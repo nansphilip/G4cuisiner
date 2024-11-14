@@ -23,6 +23,7 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
             difficultyLevel,
             lunchType,
             lunchStep,
+            Steps,
             userId,
             imageList,
             ingredientList,
@@ -60,6 +61,7 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType>
                 difficultyLevel,
                 lunchType,
                 lunchStep,
+                Steps,
                 userId,
                 Image: {
                     create: imageList.map(({ url, alt }) => ({
@@ -214,6 +216,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             difficultyLevel: recipe.difficultyLevel,
             lunchType: recipe.lunchType,
             lunchStep: recipe.lunchStep,
+            Steps: recipe.Steps,
             userId: recipe.userId,
 
             createdAt: recipe.createdAt,

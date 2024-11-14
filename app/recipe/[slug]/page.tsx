@@ -14,6 +14,7 @@ import FavoriteAddClient from "@comps/client/favorite-add";
 import RatingAddClient from "@comps/client/rating-add";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 import { SelectUserRestriction } from "@actions/database/User";
+import StepsInfo from "@comps/server/steps-info";
 
 export const metadata: Metadata = {
     title: "Recipe",
@@ -99,8 +100,8 @@ export default async function RecipePage(props: RecipePageProps) {
             </section>
             <hr />
             <section>
-                <h3>Instructions</h3>
-                <p>Insert markdown</p>
+                <h2 className="text-2xl font-bold">Etapes de la recette</h2>
+                <StepsInfo recipe={recipe} />
             </section>
             <hr />
             <section className="space-y-1">

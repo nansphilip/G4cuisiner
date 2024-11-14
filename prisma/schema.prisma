@@ -104,6 +104,8 @@ model Recipe {
     difficultyLevel Difficulty @default(MEDIUM)
     lunchType       LunchType
     lunchStep       LunchStep
+    Steps String @db.LongText //Recipe steps with a string
+
 
     // One to Many
     Image Image[]
