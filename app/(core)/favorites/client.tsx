@@ -20,7 +20,7 @@ export default function FavoritesClient(props: FavoritesClientProps) {
     const [filteredFavorites, setFilteredFavorites] = useState(recipeUserFavoriteList);
 
     const handleSearch = (query: string) => {
-        const filtered = recipeUserFavoriteList.filter((fav) => fav.title.toLowerCase().includes(query.toLowerCase()));
+        const filtered = recipeUserFavoriteList.filter((fav) => fav.title.toLowerCase().startsWith(query.toLowerCase()));
         setFilteredFavorites(filtered);
     };
 
@@ -41,6 +41,7 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                                         <RatingDisplayAverageClient
                                             totalRatingAmount={recipe.totalRatingAmount}
                                             ratingAverage={recipe.ratingAverage}
+                                            classDiv="flex flex-row"
                                         />
                                     </div>
                                     <span className="text-xs">{recipe.description}</span>
