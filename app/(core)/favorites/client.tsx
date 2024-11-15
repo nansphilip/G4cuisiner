@@ -1,86 +1,61 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {fetchUserFavorites} from "@actions/database/Favorite";
+import React, { useState } from "react";
 import SearchFavoriteClient from "@comps/client/search-favorite";
 import RecipeImageListClient from "@comps/client/image-listing";
-import RatingDisplayAverageClient from "@comps/client/rating-display-average";
-import {useSession} from "@lib/client";
+import { SelectRecipeUserFavoriteType } from "@actions/types/Favorite";
 import FavoriteAddClient from "@comps/client/favorite-add";
+import { BetterSessionServer } from "@lib/auth";
+import ButtonClient from "@comps/client/button";
+import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 
+type FavoritesClientProps = {
+    recipeUserFavoriteList: SelectRecipeUserFavoriteType[];
+    session: BetterSessionServer;
+};
 
-export default function FavoritesClient() {
-    const {data: session} = useSession();
+export default function FavoritesClient(props: FavoritesClientProps) {
+    const { recipeUserFavoriteList, session } = props;
 
-    const [favorites, setFavorites] = useState<any[]>([]);
-    const [filteredFavorites, setFilteredFavorites] = useState<any[]>([]);
-
-
-    const loadFavorites = async () => {
-        if (session && session.user) {
-            const userFavoriteList = session && (await fetchUserFavorites(session.user.id));
-            setFavorites(userFavoriteList);
-            setFilteredFavorites(userFavoriteList);
-        }
-    };
-    useEffect(() => {
-        if (session) {
-            loadFavorites();
-        }
-    }, [session]);
-
+    const [filteredFavorites, setFilteredFavorites] = useState(recipeUserFavoriteList);
 
     const handleSearch = (query: string) => {
-        const filtered = favorites.filter((fav) =>
-            fav.title.toLowerCase().includes(query.toLowerCase())
-        );
+        const filtered = recipeUserFavoriteList.filter((fav) => fav.title.toLowerCase().includes(query.toLowerCase()));
         setFilteredFavorites(filtered);
     };
 
     return (
-        <div className="size-full">
-            <div className="p-4">
-                <SearchFavoriteClient onSearch={handleSearch}/>
-            </div>
-            <div className="flex flex-col gap-2">
+        <div className="space-y-5 pb-4">
+            <SearchFavoriteClient onSearch={handleSearch} />
+            <div className="flex flex-col gap-4">
                 {filteredFavorites.length > 0 ? (
-                    filteredFavorites.map((recipe) => (
-                        <div
-                            key={recipe.id}
-                            className="my-4 flex gap-4 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
+                    filteredFavorites.map((recipe, index) => (
+                        <div key={index} className="flex gap-3 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
                             <div className="h-full">
-                                <RecipeImageListClient imageList={[recipe.images[0]]} />
+                                <RecipeImageListClient imageList={[recipe.images]} />
                             </div>
-                            <div className="flex text-2xl font-bold">
-                                <div>{recipe.title}
-                                    <p className="text-xs mt-4">{recipe.description}</p>
-
-                                </div>
-                                {/*<FavoriteAddClient*/}
-                                {/*    userId={session?.user.id}*/}
-                                {/*    userFavorite={userFavorite}*/}
-                                {/*    recipeId={recipeId}*/}
-                                {/*    totalFavoriteAmount={totalFavoriteAmount}*/}
-                                {/*    classSvg="size-10"*/}
-                                {/*/>*/}
-
-
-                                <div className="flex grow justify-between font-semibold text-gray-700">
-                                    <div className="flex flex-col items-end">
-                                        <div className="self-end">
-                                            <RatingDisplayAverageClient
-                                                ratingAverage={recipe.ratingAverage}
-                                                totalRatingAmount={recipe.totalRatingAmount}
-                                            />
-                                        </div>
-                                        <div className="flex justify-end">
-                                            <a href={`/recipe/${recipe.slug}`}
-                                               className="mt-4 block font-bold text-primary hover:underline">
-                                                Voir la recette
-                                            </a>
-
-                                        </div>
+                            <div className="flex w-full flex-row justify-between text-2xl">
+                                <div className="flex flex-col">
+                                    <div className="flex flex-row">
+                                        <span className="font-bold">{recipe.title}</span>
+                                        <RatingDisplayAverageClient
+                                            totalRatingAmount={recipe.totalRatingAmount}
+                                            ratingAverage={recipe.ratingAverage}
+                                        />
                                     </div>
+                                    <span className="text-xs">{recipe.description}</span>
+                                </div>
+                                <div className="flex flex-col items-end justify-between">
+                                    <FavoriteAddClient
+                                        userId={session?.user.id}
+                                        userFavorite={recipe.userFavorite}
+                                        recipeId={recipe.id}
+                                        totalFavoriteAmount={recipe.totalFavoriteAmount}
+                                        classSvg="size-10"
+                                    />
+                                    <ButtonClient type="link" href={`/recipe/${recipe.slug}`}>
+                                        Voir la recette
+                                    </ButtonClient>
                                 </div>
                             </div>
                         </div>
@@ -96,4 +71,4 @@ export default function FavoritesClient() {
             </div>
         </div>
     );
-};
+}

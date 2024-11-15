@@ -20,7 +20,7 @@ export default async function DashboardPage() {
     if (!session) redirect("/login");
 
     const isUserAdmin = await SelectUserRole({ userId: session.user.id });
-    if (!isUserAdmin) redirect("/");
+    if (!isUserAdmin) redirect("/favorites");
 
     const name = session.user.name;
     const email = session.user.email;

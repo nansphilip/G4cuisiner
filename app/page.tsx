@@ -1,7 +1,7 @@
 import { selectRecipesByCreateDate } from "@actions/database/Recipe";
 import logo from "@public/logo.svg";
 import Image from "next/image";
-import { fetchUserFavorites } from "@actions/database/Favorite";
+import { SelectRecipeUserFavorite } from "@actions/database/Favorite";
 import { getSession } from "@lib/auth";
 import ButtonClient from "@comps/client/button";
 import FavoriteDisplayClient from "@comps/client/favorite-display";
@@ -12,7 +12,7 @@ export default async function HomePage() {
 
     const recipeList = await selectRecipesByCreateDate(3);
     const userFavoriteList =
-        session && (await fetchUserFavorites(session.user.id));
+        session && (await SelectRecipeUserFavorite(session.user.id));
 
     return (
         <>

@@ -11,7 +11,7 @@ export type FavoriteAddClientProps = {
     recipeId: string;
     userId: string | undefined;
     userFavorite: boolean | null | undefined;
-    totalFavoriteAmount?: number;
+    totalFavoriteAmount: number;
     classDiv?: string;
     classSvg?: string;
 };
@@ -35,9 +35,6 @@ export default function FavoriteAddClient(props: FavoriteAddClientProps) {
         } else if (!isStoreMoreRecent) {
             setFavoriteStore(favorite);
         }
-
-        console.log("favorite", favorite);
-        console.log("favoriteStore", favoriteStore);
     }, [favorite, setFavorite, favoriteStore, setFavoriteStore]);
 
     const toggleFavorite = async () => {
