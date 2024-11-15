@@ -65,7 +65,8 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             if (ingredientString !== "" && ingredientString !== null) {
                 const ingredientsArray = ingredientString?.split(",");
                 ingredientsArray?.forEach((item) => {
-                    const [id, quantity, unitName] = item.split(":");
+                    const [id, name, quantity, unitName] = item.split(":");
+                    console.log(id, name, quantity, unitName);
                     listeIngredient.push({
                         quantity: Number(quantity.trim()),
                         unit: unitName.trim() as IngredientRecipeType["ingredientList"][number]["unit"],
@@ -83,6 +84,7 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             const difficultyLevel: Difficulty = ratingNumber === 1 ? "EASY" : ratingNumber === 2 ? "MEDIUM" : "HARD";
             let minutesPrep = Number(formData.get("minuteTotalPrep")) as number;
             const hoursPrep = Number(formData.get("hourTotalPrep")) as number;
+            console.log(minutesPrep, hoursPrep);
             minutesPrep += hoursPrep > 0 ? hoursPrep * 60 : 0;
             const preparationTime = minutesPrep;
 
