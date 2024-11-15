@@ -138,19 +138,6 @@ export default function AddIngredientComponent({ ingredientList }: { ingredientL
         <>
             <div className="flex h-64 flex-col gap-4 rounded-xl border p-4 shadow">
                 <h1>Ingrédient : </h1>
-                {/* <input
-                    type="text"
-                    list="data"
-                    id="ingredient"
-                    value={inputIngredient}
-                    onChange={(e) => setInputIngredient(e.target.value)}
-                    className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
-                />
-                <datalist id="data">
-                    {ingredientList.map((IngredientType) => (
-                        <option key={IngredientType.id} value={IngredientType.name} />
-                    ))}
-                </datalist> */}
                 <Autocomplete
                     label="Recherche d'ingrédient"
                     onSelectionChange={onSelectionChange}
@@ -174,7 +161,7 @@ export default function AddIngredientComponent({ ingredientList }: { ingredientL
                         id="quantity"
                         value={inputQuantity}
                         onChange={(e) => setInputQuantity(e.target.value)}
-                        className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
+                        className="w-full rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
                     />
                     <select
                         onChange={(e) => setSelectedCombo(e.target.value)}
@@ -195,12 +182,12 @@ export default function AddIngredientComponent({ ingredientList }: { ingredientL
                     Ajouter l&apos;ingrédient
                 </button>
             </div>
-            <div className="flex flex-col gap-4 rounded-xl">
+            <div className="flex w-full flex-col gap-4 rounded-xl lg:w-2/3">
                 {ingredientRecipeList.map((ingredient) => {
                     return (
                         <div
                             key={ingredient.id}
-                            className="flex items-center justify-between gap-4 rounded-md border p-4 shadow"
+                            className="flex flex-col items-center justify-between gap-4 rounded-md border p-4 shadow lg:flex-row"
                         >
                             <IngredientImage imageUrl={ingredient.imageUrl} name={ingredient.name} />
 

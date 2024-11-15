@@ -52,7 +52,7 @@ export default function ImageImporter() {
     const [titreState, setTitre] = useState("");
     return (
         <>
-            <label className="flex w-2/3 flex-col gap-1">
+            <label className="flex w-full flex-col gap-1">
                 <h2 className="text-xl font-bold">Titre</h2>
                 <input
                     className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
@@ -64,7 +64,7 @@ export default function ImageImporter() {
                     onChange={(e) => setTitre(e.target.value)}
                 />
             </label>
-            <label className="flex w-2/3 flex-col gap-1">
+            <label className="flex w-full flex-col gap-1">
                 <h2 className="text-xl font-bold">Description</h2>
                 <textarea
                     className="rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
