@@ -105,6 +105,7 @@ model Recipe {
     lunchType       LunchType
     lunchStep       LunchStep
     Steps String @db.LongText //Recipe steps with a string
+    status          Status @default(PENDING)
 
 
     // One to Many
@@ -124,6 +125,12 @@ model Recipe {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+enum Status {
+    PENDING
+    APPROVED
+    REJECTED
 }
 
 enum Difficulty {
