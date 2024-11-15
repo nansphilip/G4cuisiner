@@ -48,7 +48,7 @@ export default function Editor() {
                 </div>
             )}
             {isVisible && (
-                <div className="flex w-full flex-row items-center justify-between gap-4">
+                <div className="flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
                     <AddStepButton addStep={addStep} save={save} />
                 </div>
             )}
@@ -108,14 +108,14 @@ function AddStepButton({ addStep, save }: { addStep: () => void; save: () => voi
         <>
             <button
                 type="button"
-                className="ml-40 w-[140px] rounded-md bg-black px-4 py-2 text-white hover:bg-gray-700"
+                className="m-auto w-full rounded-md bg-black px-4 py-2 text-white hover:bg-gray-700 lg:w-[140px]"
                 onClick={addStep}
             >
                 Ajouter une étape
             </button>
             <button
                 type="button"
-                className="mr-40 h-full w-[140px] rounded-md bg-black px-4 py-2 text-white hover:bg-gray-700"
+                className="m-auto size-full rounded-md bg-black px-4 py-2 text-white hover:bg-gray-700 lg:w-[140px]"
                 onClick={save}
             >
                 Enregistrer

@@ -18,7 +18,6 @@ import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function CreateRecipePage() {
-
     const session = await getSession();
     if (!session) redirect("/login");
 
@@ -27,11 +26,11 @@ export default async function CreateRecipePage() {
 
     return (
         <>
-            <CreateRecipeClient className="flex w-2/3 flex-col items-center justify-center gap-6 rounded-xl border p-4 shadow">
-                <label className="mb-6 flex w-2/3 flex-col gap-1">
+            <CreateRecipeClient className="flex w-full flex-col items-center justify-center gap-6 rounded-xl border p-4 shadow xl:w-2/3">
+                <label className="mb-6 flex w-full flex-col gap-1 lg:w-2/3">
                     <ImageImporter />
                 </label>
-                <div className="flex justify-center gap-10">
+                <div className="flex flex-col justify-center gap-10 lg:flex-row">
                     <TypePlatCards />
                     <div className="flex w-auto flex-none flex-col gap-10 rounded-xl border p-4 shadow">
                         <LunchTypeCombo />
@@ -70,9 +69,9 @@ export default async function CreateRecipePage() {
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-center gap-4 rounded-xl border p-4 shadow ">
+                <div className="flex w-full flex-col items-center justify-between gap-4 rounded-xl border p-4 shadow ">
                     <h2 className="text-xl font-bold">Choisir les ingrédients de la recette : </h2>
-                    <div className="flex gap-4">
+                    <div className="flex w-full flex-col gap-4 lg:flex-row">
                         <AddIngredientComponent ingredientList={ingredientList} />
                     </div>
                 </div>

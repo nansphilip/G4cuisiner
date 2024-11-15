@@ -29,7 +29,7 @@ const TypePlatCard = (props: TypePlatCardProps) => {
                 height={80}
             />
             <div className="px-6 py-4">
-                <h1 className="mb-2 text-xl font-bold">{title}</h1>
+                <h1 className="mb-2 text-xl font-bold ">{title}</h1>
             </div>
         </div>
     );
@@ -54,6 +54,7 @@ const TypePlatCards = () => {
         {
             imageSrc: "/lunchStep/appetizer.webp",
             title: "APPETIZER",
+            name: "Apéritif",
             index: 1,
             isActive: activeCard === 1,
             // onClick: () => handleCardClick(1),
@@ -61,6 +62,7 @@ const TypePlatCards = () => {
         {
             imageSrc: "/lunchStep/starter.webp",
             title: "STARTER",
+            name: "Entrée",
             index: 2,
             isActive: activeCard === 2,
             // onClick: () => handleCardClick(2),
@@ -68,6 +70,7 @@ const TypePlatCards = () => {
         {
             imageSrc: "/lunchStep/main.webp",
             title: "MAIN",
+            name: "Plat",
             index: 3,
             isActive: activeCard === 3,
             // onClick: () => handleCardClick(3),
@@ -75,6 +78,7 @@ const TypePlatCards = () => {
         {
             imageSrc: "/lunchStep/dessert.webp",
             title: "DESSERT",
+            name: "Dessert",
             index: 4,
             isActive: activeCard === 4,
             // onClick: () => handleCardClick(4),
@@ -82,16 +86,16 @@ const TypePlatCards = () => {
     ];
 
     return (
-        <div className="flex w-3/5 flex-col items-center justify-center rounded-xl border p-4 shadow">
+        <div className="flex w-full flex-col items-center justify-center rounded-xl border p-4 shadow lg:w-3/5">
             <h2 className="mb-6 text-xl font-bold">Sélectionner le type de repas : </h2>
-            <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="grid w-full grid-cols-2 gap-4 md:p-4">
                 {plateList.map((plate) => {
                     const isActive = activeCard === plate.index;
                     return (
                         <TypePlatCard
                             key={plate.index}
                             imageSrc={plate.imageSrc}
-                            title={plate.title}
+                            title={plate.name}
                             isActive={isActive}
                             onClick={() => handleCardClick(plate.index)}
                         />
