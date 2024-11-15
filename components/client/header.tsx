@@ -152,6 +152,15 @@ export default function HeaderClient(props: HeaderClientProps) {
                     >
                         Recherche par filtres
                     </ButtonClient>
+                    <ButtonClient
+                        type="link"
+                        href="/search-form"
+                        variant="outline"
+                        className="py-2"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Qu&apos;est ce qu&apos;on mange ce soir ?
+                    </ButtonClient>
                     {session ? (
                         <>
                             <ButtonClient

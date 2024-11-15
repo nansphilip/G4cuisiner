@@ -19,10 +19,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ onComplete }) => {
     const answers = [
         { id: 1, text: "Le midi", idQ: 1 },
         { id: 2, text: "Le soir", idQ: 1 },
-        { id: 3, text: "Aucun des deux, c'est à un autre moment", idQ: 1 },
+        { id: 3, text: "Autre", idQ: 1 },
         { id: 4, text: "Du salé", idQ: 2 },
         { id: 5, text: "Du sucré", idQ: 2 },
-        { id: 6, text: "Pressé, et j'ai faim !", idQ: 3 },
+        { id: 6, text: "Pressé, j'ai faim !", idQ: 3 },
         { id: 7, text: "J'ai tout mon temps !", idQ: 3 },
     ];
 
@@ -63,7 +63,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ onComplete }) => {
                         <div
                             key={option.id}
                             onClick={() => handleClick(option)}
-                            className={`flex h-32 w-full cursor-pointer items-center justify-center rounded-md bg-tertiary p-6 text-center text-2xl text-white transition-all duration-700 ease-in-out hover:bg-black ${
+                            className={`flex h-32 w-full cursor-pointer items-center justify-center rounded-md bg-tertiary p-6 text-center text-lg text-white transition-all duration-700 ease-in-out hover:bg-black lg:text-2xl ${
                                 selected === option.id ? "animate-rotate-y-and-fade" : ""
                             }`}
                         >

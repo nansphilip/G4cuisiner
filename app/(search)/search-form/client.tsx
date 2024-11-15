@@ -30,7 +30,7 @@ export default function QuestionaryClient() {
             {isVisible && (
                 <div id="conteneur-begin" className="flex flex-col items-center justify-center gap-4">
                     <h1 className="text-center text-3xl font-bold">Trouvons un plat à cuisiner!</h1>
-                    <p className="text-center text-lg">
+                    <p className="max-w-[500px] text-center text-lg">
                         Tu as faim, tu es motivé à cuisiner un bon petit plat mais tu n&apos;as pas d&apos;idée de
                         recette ? Alors tu es au bon endroit, laisse toi guider !
                     </p>
