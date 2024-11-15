@@ -18,8 +18,8 @@ export default function RatingDisplayAverageClient(props: RatingDisplayAverageCl
     const stars = [1, 2, 3, 4, 5];
 
     return (
-        <div className="flex flex-col items-center gap-1">
-            <span className={combo("flex items-center", classDiv)}>
+        <div className={combo("flex flex-col items-center", classDiv)}>
+            <span className="flex items-center gap-1">
                 {stars.map((star) => (
                     <Star
                         key={star}
