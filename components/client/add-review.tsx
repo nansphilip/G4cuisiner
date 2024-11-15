@@ -24,9 +24,7 @@ export default function AddReviewClient(props: AddReviewClientProps) {
         }
 
         // Create review
-        const data = await CreateReview({ userId, recipeId, review });
-
-        console.log(data);
+        await CreateReview({ userId, recipeId, review });
 
         // Reset form
         setReview("");

@@ -55,7 +55,6 @@ export default function AddIngredientComponent({ ingredientList }: { ingredientL
 
         //Gets the ingredient id by its name
         // const idIngredient = ingredientList.find((ingredient) => ingredient.name === name)?.id;
-        // console.log(idIngredient + " - " + name);
 
         //Set the listIngredientString in the invisible textarea
         const temp = updatedList
@@ -126,7 +125,6 @@ export default function AddIngredientComponent({ ingredientList }: { ingredientL
     const [counter, setCounter] = useState(1);
     const [listIngredientString, setListIngredientString] = useState("");
     const [selectedCombo, setSelectedCombo] = useState<string>("GRAM");
-    console.log(inputIngredient);
 
     const onSelectionChange = (value: string) => {
         setInputIngredient(value);

@@ -22,9 +22,9 @@ export default function FavoriteAddClient(props: FavoriteAddClientProps) {
     const { recipeId, userId, userFavorite, totalFavoriteAmount, classDiv, classSvg } = props;
 
     const router = useRouter();
-    
+
     const [favorite, setFavorite] = useState<FavoriteStoreProps>([userFavorite ?? false, new Date()]);
-    const {favoriteStore, setFavoriteStore} = useStore();
+    const { favoriteStore, setFavoriteStore } = useStore();
     const [favorisCount, setFavorisCount] = useState<number>(totalFavoriteAmount ?? 0);
 
     useEffect(() => {
@@ -35,6 +35,9 @@ export default function FavoriteAddClient(props: FavoriteAddClientProps) {
         } else if (!isStoreMoreRecent) {
             setFavoriteStore(favorite);
         }
+
+        console.log("favorite", favorite);
+        console.log("favoriteStore", favoriteStore);
     }, [favorite, setFavorite, favoriteStore, setFavoriteStore]);
 
     const toggleFavorite = async () => {

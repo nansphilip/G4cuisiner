@@ -100,7 +100,7 @@ export default async function RecipePage(props: RecipePageProps) {
             </section>
             <hr />
             <section>
-                <h2 className="text-2xl font-bold">Etapes de la recette</h2>
+                <h2 className="text-2xl font-bold">Instructions</h2>
                 <StepsInfo recipe={recipe} />
             </section>
             <hr />

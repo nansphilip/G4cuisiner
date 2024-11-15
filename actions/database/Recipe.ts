@@ -383,12 +383,11 @@ export const DeleteRecipe = async (props: IdRecipeType): Promise<RecipeType> => 
         if (!existingRecipe) {
             throw new Error("Recipe does not exist");
         }
-        const recipe = await Prisma.recipe.delete({
+        await Prisma.recipe.delete({
             where: {
                 id,
             },
         });
-        console.log("Deleted recipe -> ", recipe, existingRecipe);
         return existingRecipe;
     } catch (error) {
         throw new Error("Unable to delete recipe -> " + (error as Error).message);
@@ -405,14 +404,13 @@ export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeTyp
             }
             existingRecipeList.push(existingRecipe);
         });
-        const recipeList = await Prisma.recipe.deleteMany({
+        await Prisma.recipe.deleteMany({
             where: {
                 id: {
                     in: props.map((recipe) => recipe.id),
                 },
             },
         });
-        console.log("Deleted recipe list -> ", recipeList, existingRecipeList);
         return existingRecipeList;
     } catch (error) {
         throw new Error("Unable to delete many recipes -> " + (error as Error).message);

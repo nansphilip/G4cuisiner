@@ -109,7 +109,7 @@ export default function HeaderClient(props: HeaderClientProps) {
 
     return (
         <header className={className}>
-            <div className="lg:hidden">
+            <div className="md:hidden">
                 <nav
                     className={combo(
                         "absolute bottom-0 rounded-t-2xl flex flex-col gap-2 border-1.5 z-50 w-full bg-white p-3",
@@ -213,7 +213,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                 </nav>
                 <ButtonClient
                     type="button"
-                    className="absolute bottom-8 right-8 rounded-full border-2 bg-white p-4 shadow-lg z-50"
+                    className={combo("absolute bottom-8 right-8 rounded-full border-2 bg-white p-4 shadow-lg z-50",isMobileMenuOpen && "hidden")}
                     variant="transparent"
                     ring="none"
                     onClick={() => setIsMobileMenuOpen(true)}
