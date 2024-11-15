@@ -104,7 +104,7 @@ export default async function HomePage() {
                                             <div className="mt-2 flex flex-col items-center justify-between">
                                                 <ButtonClient
                                                     type="link"
-                                                    href="{`/recipe/${recipe.slug}`}"
+                                                    href={`/recipe/${recipe.slug}`}
                                                     buttonSize="sm"
                                                     variant="outline"
                                                     className="border bg-primary font-bold text-black"
