@@ -455,6 +455,7 @@ export const getRecipeByFilter = async (
                     lte: preparationTime, // Filtrer par `preparationTime`
                 },
             }),
+            status: "APPROVED"
         },
         select: {
             id: true,
