@@ -533,14 +533,14 @@ export const SelectPendingRecipes = async () => {
             where: {
                 status: "PENDING", // Seulement les recettes en attente
             },
-            include: {
-                // Inclure les relations associées si nécessaire (par exemple les images ou ingrédients)
-                Image: true,
-                Favorite: true,
-                Review: true,
-                Rating: true,
-                Quantity: true,
-            },
+            // include: {
+            //     // Inclure les relations associées si nécessaire (par exemple les images ou ingrédients)
+            //     Image: true,
+            //     Favorite: true,
+            //     Review: true,
+            //     Rating: true,
+            //     Quantity: true,
+            // },
         });
 
         return pendingRecipes;

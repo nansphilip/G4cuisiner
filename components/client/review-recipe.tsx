@@ -3,18 +3,10 @@
 import { useState } from "react";
 import ButtonClient from "@comps/client/button";
 import { UpdateRecipeStatus } from "@actions/database/Recipe";
-
-interface Recipe {
-    id: string;
-    title: string;
-    description: string;
-    userId: string;
-    status: "PENDING" | "APPROVED" | "REJECTED";
-    user: string; // Nom de l'utilisateur qui a soumis la recette
-}
+import { RecipeType } from "@actions/types/Recipe";
 
 interface ReviewRecipesProps {
-    recipes: Recipe[];
+    recipes: RecipeType[];
 }
 
 const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {

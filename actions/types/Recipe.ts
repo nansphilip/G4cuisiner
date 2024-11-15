@@ -29,6 +29,10 @@ export interface IngredientRecipeType {
     }[];
 }
 
+export interface StatusRecipeType {
+    status: "PENDING" | "APPROVED" | "REJECTED";
+}
+
 export interface CommonType extends TitleRecipeType {
     description: string;
 
@@ -38,7 +42,6 @@ export interface CommonType extends TitleRecipeType {
     difficultyLevel: "EASY" | "MEDIUM" | "HARD"; // default medium
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
-    status: "PENDING" | "APPROVED" | "REJECTED";
 
     userId: string;
 }
@@ -47,7 +50,7 @@ export interface CreateRecipeType extends CommonType, ImageRecipeType, Ingredien
 
 export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
 
-export interface RecipeType extends IdRecipeType, CommonType, SlugRecipeType {
+export interface RecipeType extends IdRecipeType, CommonType, SlugRecipeType, StatusRecipeType {
     createdAt: Date;
     updatedAt: Date;
 }
