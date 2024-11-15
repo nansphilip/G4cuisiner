@@ -17,7 +17,7 @@ export interface SelectRecipeUserFavoriteType {
     images: {
         url: string;
         alt: string;
-    };
+    }[];
     ratingAverage: number;
     totalRatingAmount: number;
     totalFavoriteAmount: number;

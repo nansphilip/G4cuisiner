@@ -1,6 +1,11 @@
 "use server";
 
-import { InputFavoriteType, FavoriteType, CreateUpdateFavoriteType, SelectRecipeUserFavoriteType } from "@actions/types/Favorite";
+import {
+    InputFavoriteType,
+    FavoriteType,
+    CreateUpdateFavoriteType,
+    SelectRecipeUserFavoriteType,
+} from "@actions/types/Favorite";
 import Prisma from "@lib/prisma";
 
 export const CreateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
@@ -81,8 +86,8 @@ export async function SelectRecipeUserFavorite(userId: string): Promise<SelectRe
         const ratingAverage =
             Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
 
-            const totalFavoriteAmount = Recipe.Favorite.filter(({ favorite }) => favorite).length;
-            const totalRatingAmount = Recipe.Rating.length;
+        const totalFavoriteAmount = Recipe.Favorite.filter(({ favorite }) => favorite).length;
+        const totalRatingAmount = Recipe.Rating.length;
 
         return {
             id: Recipe.id,
@@ -93,10 +98,10 @@ export async function SelectRecipeUserFavorite(userId: string): Promise<SelectRe
             totalFavoriteAmount,
             totalRatingAmount,
             userFavorite: Recipe.Favorite[0].favorite,
-            images: {
-                url: Recipe.Image[0].url,
-                alt: Recipe.Image[0].alt,
-            },
+            images: Recipe.Image.map(({url, alt}) => ({
+                url,
+                alt,
+            }))
         };
     });
 

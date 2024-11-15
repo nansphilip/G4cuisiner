@@ -32,7 +32,7 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                     filteredFavorites.map((recipe, index) => (
                         <div key={index} className="flex gap-3 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
                             <div className="h-full">
-                                <RecipeImageListClient imageList={[recipe.images]} />
+                                <RecipeImageListClient imageList={[recipe.images[0]]} />
                             </div>
                             <div className="flex w-full flex-row justify-between text-2xl">
                                 <div className="flex flex-col">
