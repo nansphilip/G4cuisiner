@@ -3,19 +3,18 @@
 import React, {useEffect, useState} from "react";
 import {fetchUserFavorites} from "@actions/database/Favorite";
 import SearchFavoriteClient from "@comps/client/search-favorite";
-import RecipeImageListClient, {RecipeProps} from "@comps/client/image-listing";
-import FavoriteAddClient from "@comps/client/favorite-add";
+import RecipeImageListClient from "@comps/client/image-listing";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 import {useSession} from "@lib/client";
-import FavoriteDisplayClient from "@comps/client/favorite-display";
-import {CompleteRecipeType} from "@actions/types/Recipe";
+import FavoriteAddClient from "@comps/client/favorite-add";
 
 
 export default function FavoritesClient() {
-    const { data: session } = useSession();
+    const {data: session} = useSession();
 
-    const [favorites, setFavorites] = useState<CompleteRecipeType[]>([]);
-    const [filteredFavorites, setFilteredFavorites] = useState<CompleteRecipeType[]>([]);
+    const [favorites, setFavorites] = useState<any[]>([]);
+    const [filteredFavorites, setFilteredFavorites] = useState<any[]>([]);
+
 
     const loadFavorites = async () => {
         if (session && session.user) {
@@ -48,44 +47,40 @@ export default function FavoritesClient() {
                     filteredFavorites.map((recipe) => (
                         <div
                             key={recipe.id}
-                            className="my-4 flex flex-row gap-4 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
-                            <div className="flex flex-row items-center  justify-between text-2xl font-bold">
-                                <span>{recipe.title}</span>
-                                <FavoriteDisplayClient userFavorite={true} classSvg="size-8"/>
-                            </div>
+                            className="my-4 flex gap-4 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
                             <div className="h-full">
-                                <RecipeImageListClient image={recipe.image} />
+                                <RecipeImageListClient imageList={[recipe.images[0]]} />
                             </div>
+                            <div className="flex text-2xl font-bold">
+                                <div>{recipe.title}
+                                    <p className="text-xs mt-4">{recipe.description}</p>
 
-                            <div className="flex grow justify-between font-semibold text-gray-700">
-                                <div className="w-full ">
-                                    <h1 className="text-xl">{recipe.title}</h1>
-                                    <p className="text-xs">{recipe.description}</p>
-                                    <div className="flex whitespace-nowrap">
-                                        <a
-                                            href={`/recipe/${recipe.slug}`}
-                                            className="mt-4 block font-bold text-primary hover:underline"
-                                        >
-                                            Voir la recette
-                                        </a>
-                                    </div>
                                 </div>
-                                <div className="flex flex-col items-end">
-                                    <div className="self-end">
-                                        <RatingDisplayAverageClient
-                                            rating={recipe.ratingAverage}
-                                            totalRatingAmount={recipe.totalRatingAmount}
-                                        />
+                                {/*<FavoriteAddClient*/}
+                                {/*    userId={session?.user.id}*/}
+                                {/*    userFavorite={userFavorite}*/}
+                                {/*    recipeId={recipeId}*/}
+                                {/*    totalFavoriteAmount={totalFavoriteAmount}*/}
+                                {/*    classSvg="size-10"*/}
+                                {/*/>*/}
+
+
+                                <div className="flex grow justify-between font-semibold text-gray-700">
+                                    <div className="flex flex-col items-end">
+                                        <div className="self-end">
+                                            <RatingDisplayAverageClient
+                                                ratingAverage={recipe.ratingAverage}
+                                                totalRatingAmount={recipe.totalRatingAmount}
+                                            />
+                                        </div>
+                                        <div className="flex justify-end">
+                                            <a href={`/recipe/${recipe.slug}`}
+                                               className="mt-4 block font-bold text-primary hover:underline">
+                                                Voir la recette
+                                            </a>
+
+                                        </div>
                                     </div>
-                                    {/*<div className="mt-auto self-end whitespace-nowrap">*/}
-                                    {/*    <FavoriteAddClient*/}
-                                    {/*        userFavorite={recipe.userFavorite}*/}
-                                    {/*        userId={session?.user.id}*/}
-                                    {/*        recipeId={recipe.id}*/}
-                                    {/*        totalFavoriteAmount={recipe.totalFavoriteAmount}*/}
-                                    {/*        classSvg="size-6"*/}
-                                    {/*    />*/}
-                                    {/*</div>*/}
                                 </div>
                             </div>
                         </div>

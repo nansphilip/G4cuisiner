@@ -37,7 +37,7 @@ export default async function HomePage() {
                                             key={index}
                                             className="h-full flex-col rounded-lg border border-tertiary bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
                                         >
-                                            <div className="flex flex-row items-center  justify-between text-2xl font-bold">
+                                            <div className="flex flex-row items-center  justify-between text-2xl font-bold mb-2">
                                                 <span>{recipe.title}</span>
                                                 <FavoriteDisplayClient
                                                     userFavorite={true}
