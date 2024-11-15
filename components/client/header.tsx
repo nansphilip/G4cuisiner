@@ -92,7 +92,11 @@ export default function HeaderClient(props: HeaderClientProps) {
             href: "/login",
             group: [
                 { label: "Se connecter", href: "/login", sessionActive: false },
-                { label: "S'inscrire", href: "/register", sessionActive: false },
+                {
+                    label: "S'inscrire",
+                    href: "/register",
+                    sessionActive: false,
+                },
             ],
         },
     ];
@@ -113,7 +117,9 @@ export default function HeaderClient(props: HeaderClientProps) {
                     )}
                 >
                     <div className="flex flex-row items-center gap-2">
-                        <span className="w-full text-lg font-bold">Navigation</span>
+                        <span className="w-full text-lg font-bold">
+                            Navigation
+                        </span>
                         <ButtonClient
                             type="button"
                             className="py-1.5"
@@ -207,7 +213,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                 </nav>
                 <ButtonClient
                     type="button"
-                    className="absolute bottom-8 right-8 rounded-full border-2 bg-white p-4 shadow-lg"
+                    className="absolute bottom-8 right-8 rounded-full border-2 bg-white p-4 shadow-lg z-50"
                     variant="transparent"
                     ring="none"
                     onClick={() => setIsMobileMenuOpen(true)}
@@ -216,8 +222,16 @@ export default function HeaderClient(props: HeaderClientProps) {
                 </ButtonClient>
             </div>
             <nav className="flex justify-center bg-secondary py-3 max-md:hidden">
-                <Link href="/" className="absolute left-5 top-1.5 flex items-center gap-2">
-                    <Image src="/logo-mobile.svg" width={40} height={40} alt="Logo" />
+                <Link
+                    href="/"
+                    className="absolute left-5 top-1.5 flex items-center gap-2"
+                >
+                    <Image
+                        src="/logo-mobile.svg"
+                        width={40}
+                        height={40}
+                        alt="Logo"
+                    />
                 </Link>
                 <SlidingHover
                     className="flex items-start justify-center gap-1"
@@ -256,7 +270,9 @@ export default function HeaderClient(props: HeaderClientProps) {
                         href={"/favorites"}
                         className="absolute right-5 top-[10px] flex flex-row items-center gap-4 rounded-full transition-all duration-150 hover:bg-gray-200 lg:pl-4"
                     >
-                        <span className="whitespace-nowrap font-semibold max-lg:hidden">Bonjour, {firstName} !</span>
+                        <span className="whitespace-nowrap font-semibold max-lg:hidden">
+                            Bonjour, {firstName} !
+                        </span>
                         <div className="flex items-center justify-center overflow-hidden rounded-full">
                             {profileImage ? (
                                 <Image
@@ -303,10 +319,18 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const offset = 8;
 
             // Get popup elements
-            const buttonEl = document.querySelector(`#popup-btn-${index}`) as HTMLElement;
-            const navigationEl = document.querySelector(`#popup-nav-${index}`) as HTMLElement;
-            const backgroundEl = document.querySelector(`#popup-bg-${index}`) as HTMLElement;
-            const hoverZoneEl = document.querySelector(`#popup-hov-${index}`) as HTMLElement;
+            const buttonEl = document.querySelector(
+                `#popup-btn-${index}`
+            ) as HTMLElement;
+            const navigationEl = document.querySelector(
+                `#popup-nav-${index}`
+            ) as HTMLElement;
+            const backgroundEl = document.querySelector(
+                `#popup-bg-${index}`
+            ) as HTMLElement;
+            const hoverZoneEl = document.querySelector(
+                `#popup-hov-${index}`
+            ) as HTMLElement;
 
             // Check if elements exist to prevent a rendering error
             if (!buttonEl || !navigationEl || !backgroundEl || !hoverZoneEl) {
@@ -314,9 +338,15 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             }
 
             // Get the largest link element width
-            const subButtonLinkList = Array.from(navigationEl.querySelectorAll("a")) as HTMLElement[];
-            const subButtonWidthList = subButtonLinkList.map((element) => element.scrollWidth);
-            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) => Math.max(a, b));
+            const subButtonLinkList = Array.from(
+                navigationEl.querySelectorAll("a")
+            ) as HTMLElement[];
+            const subButtonWidthList = subButtonLinkList.map(
+                (element) => element.scrollWidth
+            );
+            const largestSubButtonWidth = subButtonWidthList.reduce((a, b) =>
+                Math.max(a, b)
+            );
 
             // Get button dimensions and position
             const buttonRect = buttonEl.getBoundingClientRect();
@@ -326,14 +356,17 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const buttonLeft = buttonRect.left;
 
             // Get the largest width between the largest link and the button
-            const subButtonIsLarger = largestSubButtonWidth > buttonWidth ? "auto" : null;
+            const subButtonIsLarger =
+                largestSubButtonWidth > buttonWidth ? "auto" : null;
 
             // Set navigation dimensions and position
             navigationEl.style.top = `${buttonTop + buttonHeight + offset}px`;
             navigationEl.style.width = subButtonIsLarger ?? `${buttonWidth}px`;
             if (subButtonIsLarger) {
                 // Center the navigation popup
-                navigationEl.style.left = `${buttonLeft - (largestSubButtonWidth - buttonWidth) / 2 - 8}px`;
+                navigationEl.style.left = `${
+                    buttonLeft - (largestSubButtonWidth - buttonWidth) / 2 - 8
+                }px`;
             }
 
             // Get navigation dimensions
@@ -382,13 +415,19 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                     ring="none"
                     className={combo(
                         "relative z-30 flex gap-1 text-nowrap py-1",
-                        group.filter((link) => pathname === link.href).length > 0 && "font-bold"
+                        group.filter((link) => pathname === link.href).length >
+                            0 && "font-bold"
                     )}
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}
                 >
                     <span>{label}</span>
-                    <ChevronDown className={combo("transition-transform duration-300", isOpen && "-rotate-180")} />
+                    <ChevronDown
+                        className={combo(
+                            "transition-transform duration-300",
+                            isOpen && "-rotate-180"
+                        )}
+                    />
                 </ButtonClient>
                 {/* Navigation popup */}
                 <div
@@ -401,7 +440,12 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                     )}
                 >
                     {group.map((groupLink, index) => (
-                        <HeaderLink key={index} isUserAdmin={isUserAdmin} link={groupLink} session={session} />
+                        <HeaderLink
+                            key={index}
+                            isUserAdmin={isUserAdmin}
+                            link={groupLink}
+                            session={session}
+                        />
                     ))}
                 </div>
                 {/* Background popup */}
@@ -415,7 +459,10 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                 {/* Hover zone */}
                 <div
                     id={`popup-hov-${index}`}
-                    className={combo("absolute z-30", !isOpen && "pointer-events-none")}
+                    className={combo(
+                        "absolute z-30",
+                        !isOpen && "pointer-events-none"
+                    )}
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}
                 ></div>
@@ -423,7 +470,13 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
         );
     } else {
         const link: LinkProps = linkOrGroup;
-        return <HeaderLink isUserAdmin={isUserAdmin} link={link} session={session} />;
+        return (
+            <HeaderLink
+                isUserAdmin={isUserAdmin}
+                link={link}
+                session={session}
+            />
+        );
     }
 };
 
@@ -458,7 +511,10 @@ const HeaderLink = (props: HeaderLinkProps) => {
             roundedSize="md"
             ring="none"
             href={href}
-            className={combo("relative z-30 text-nowrap py-1", pathname === href && "font-bold")}
+            className={combo(
+                "relative z-30 text-nowrap py-1",
+                pathname === href && "font-bold"
+            )}
         >
             {label}
         </ButtonClient>

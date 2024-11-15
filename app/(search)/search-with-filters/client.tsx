@@ -117,7 +117,7 @@ export default function SearchWithFiltersClient(
 
     return (
         <div className="flex flex-col items-center rounded-xl bg-gray-100 p-6">
-            <div className="flex">
+            <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center">
                 <fieldset className="m-4 rounded-lg border border-gray-300 bg-white p-4 shadow-md">
                     <legend className="mb-2 text-lg font-semibold">
                         Type de repas
