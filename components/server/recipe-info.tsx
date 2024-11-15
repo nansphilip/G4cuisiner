@@ -11,7 +11,7 @@ export default function RecipeInfo(props: RecipeInfoProps) {
 
     // Format data
     const difficultyLevelFormatted =
-        (difficultyLevel === "EASY" && 1) || (difficultyLevel === "MEDIUM" && 2) || (difficultyLevel === "HARD" && 3);
+        ((difficultyLevel === "EASY" && 1) || (difficultyLevel === "MEDIUM" && 2) || (difficultyLevel === "HARD" && 3)) as number;
 
     const lunchTypeFormatted =
         (lunchType === "BREAKFAST" && "Petit déjeuner") ||

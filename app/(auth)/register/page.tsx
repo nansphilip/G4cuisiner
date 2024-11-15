@@ -18,7 +18,7 @@ export default async function RegisterPage() {
         <>
             <div className="flex flex-col items-center justify-center gap-2 rounded-xl border p-4 shadow">
                 <h2 className="text-2xl font-bold">Inscription</h2>
-                <p className="text-center text-xs text-gray-500">S'inscrire avec ses informations personnelles.</p>
+                <p className="text-center text-xs text-gray-500">S&apos;inscrire avec ses informations personnelles.</p>
                 <RegisterClient className="flex w-[240px] flex-col items-center justify-center gap-2" />
                 <ButtonClient type="link" variant="link" ring="none" fontSize="sm" href="/login">
                     Déjà inscrit ?

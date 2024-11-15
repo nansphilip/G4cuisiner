@@ -1,6 +1,6 @@
 "use client";
 import { IngredientCreateRecipe } from "@actions/types/Ingredient";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Key } from "react";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
@@ -126,8 +126,10 @@ export default function AddIngredientComponent({ ingredientList }: { ingredientL
     const [listIngredientString, setListIngredientString] = useState("");
     const [selectedCombo, setSelectedCombo] = useState<string>("GRAM");
 
-    const onSelectionChange = (value: string) => {
-        setInputIngredient(value);
+    const onSelectionChange = (key: Key | null) => {
+        if (typeof key === "string") {
+            setInputIngredient(key);
+        }
     };
 
     const onInputChange = (value: string) => {

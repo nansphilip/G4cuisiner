@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@lib/zustand";
-import Switch from "@comps/client/switch";
+import SwitchClient from "@comps/client/switch";
 
 export default function ZustandSetClient() {
     const { switchState, setSwitchState } = useStore();

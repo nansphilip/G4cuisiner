@@ -79,11 +79,11 @@ export default function HeaderClient(props: HeaderClientProps) {
                     href: "/recipe/create",
                     sessionActive: true,
                 },
-                {
-                    label: "Édition recette",
-                    href: "/recipe/edit",
-                    sessionActive: true,
-                },
+                // {
+                //     label: "Édition recette",
+                //     href: "/recipe/edit",
+                //     sessionActive: true,
+                // },
                 // { label: "Favoris", href: "/favorites", sessionActive: true },
                 { label: "Dashboard", href: "/dashboard", sessionActive: true },
                 // {
@@ -172,7 +172,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                             >
                                 Création recette
                             </ButtonClient>
-                            <ButtonClient
+                            {/* <ButtonClient
                                 type="link"
                                 href="/edit-recipe"
                                 variant="outline"
@@ -180,7 +180,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Édition recette
-                            </ButtonClient>
+                            </ButtonClient> */}
                             {isUserAdmin && (
                                 <ButtonClient
                                     type="link"

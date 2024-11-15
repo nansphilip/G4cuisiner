@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Rating from "./rating-recipe";
 import ButtonClient from "@comps/client/button";
@@ -13,17 +15,25 @@ export type RecipeProps = {
 export default function FindRecipeCard(props: RecipeProps) {
     const { index, slug, description, recipeImageUrl, ratingAverage } = props;
 
+    const imageTemplate = "/template.webp";
+
     return (
         <div
             key={index}
             className="flex w-2/3 flex-col overflow-hidden rounded-lg border shadow transition-transform duration-150 hover:scale-105"
         >
             <div className="shrink-0">
-                <Image className="size-full object-cover" src={recipeImageUrl} alt={slug} width={250} height={200} />
+                <Image
+                    className="size-full object-cover"
+                    src={recipeImageUrl ?? imageTemplate}
+                    alt={slug}
+                    width={250}
+                    height={200}
+                />
             </div>
             <div className="flex flex-col gap-4 p-4">
                 <div className="flex flex-row justify-between">
-                    <p className="text-black-500 text-xl font-bold">{slug}</p>
+                    <p className="text-xl font-bold text-gray-500">{slug}</p>
                     <Rating rating={ratingAverage} />
                 </div>
                 <p className="text-xs text-gray-500">{description}</p>

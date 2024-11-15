@@ -65,7 +65,7 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             if (ingredientString !== "" && ingredientString !== null) {
                 const ingredientsArray = ingredientString?.split(",");
                 ingredientsArray?.forEach((item) => {
-                    const [id, name, quantity, unitName] = item.split(":");
+                    const [id, quantity, unitName] = item.split(":");
                     listeIngredient.push({
                         quantity: Number(quantity.trim()),
                         unit: unitName.trim() as IngredientRecipeType["ingredientList"][number]["unit"],

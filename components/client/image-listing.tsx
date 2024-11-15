@@ -34,7 +34,7 @@ export default function RecipeImageListClient(props: RecipeProps) {
                 <div>
                     <Image
                         key={currentIndex}
-                        className="aspect-[5/4] rounded-lg object-cover w-full"
+                        className="aspect-[5/4] w-full rounded-lg object-cover"
                         src={imageLoadList[currentIndex].url}
                         alt={imageLoadList[currentIndex].alt}
                         height={200}

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 export default function ImageImporter() {
-    const handleFileUpload = async (event) => {
+    const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
         if (files) {
@@ -23,10 +23,6 @@ export default function ImageImporter() {
                 const renamedFile = new File([file], newFileName, { type: file.type });
                 formData.append("image", renamedFile); // Ajouter le fichier renommé à FormData
             });
-
-            // Récupérer le nom du fichier
-            const fileName = files.name;
-            console.log("Nom du fichier:", fileName);
 
             try {
                 const response = await fetch("/api/upload", {

@@ -1,6 +1,11 @@
 import React from "react";
 
-const Rating = ({ rating }) => {
+type RatingProps = {
+    rating: number;
+};
+
+const Rating = (props: RatingProps) => {
+    const { rating } = props;
     const maxRating = 5; // Nombre total d'étoiles
     const filledStars = Math.round(rating); // Arrondir la note à l'entier le plus proche pour les étoiles remplies
 
