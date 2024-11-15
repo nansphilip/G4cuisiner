@@ -12,6 +12,7 @@ import {
     CompleteRecipeType,
     RecipeFilterType,
 } from "@actions/types/Recipe";
+import { LunchStep, LunchType } from "@prisma/client";
 
 export const CreateRecipe = async (props: CreateRecipeType): Promise<RecipeType> => {
     try {
@@ -228,16 +229,18 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
 
             imageList: recipe.Image,
 
-            reviewList: recipe.Review.map(({ id, userId, User, review, thumbsPositive, thumbsNegative,createdAt }) => ({
-                reviewId: id,
-                userId: userId,
-                name: User.name,
-                rating: User.Rating?.[0]?.rating, // TODO : check if correct
-                review: review,
-                thumbsPositive: thumbsPositive.length,
-                thumbsNegative: thumbsNegative.length,
-                createdAt: createdAt,
-            })),
+            reviewList: recipe.Review.map(
+                ({ id, userId, User, review, thumbsPositive, thumbsNegative, createdAt }) => ({
+                    reviewId: id,
+                    userId: userId,
+                    name: User.name,
+                    rating: User.Rating?.[0]?.rating, // TODO : check if correct
+                    review: review,
+                    thumbsPositive: thumbsPositive.length,
+                    thumbsNegative: thumbsNegative.length,
+                    createdAt: createdAt,
+                })
+            ),
 
             ingredientList: recipe.Quantity.map(({ ingredientId, ingredient, quantity, unit }) => ({
                 ingredientId: ingredientId,
@@ -417,11 +420,71 @@ export const DeleteManyRecipe = async (props: IdRecipeType[]): Promise<RecipeTyp
     }
 };
 
-export async function selectRecipesByCreateDate  (limit: number = 3){
+export type RecipeFilterFormType = {
+    id: string;
+    slug: string;
+    description: string;
+    imageUrl: string | null;
+    ratingAverage: number; // L'image peut être null si aucune image n'est associée
+};
 
+export const getRecipeByFilter = async (
+    lunchTypes: LunchType[],
+    lunchStep: LunchStep[],
+    preparationTime: number
+): Promise<RecipeFilterFormType[]> => {
+    const recipes = await Prisma.recipe.findMany({
+        where: {
+            lunchType: {
+                in: lunchTypes, // Filtrer par plusieurs valeurs
+            },
+            lunchStep: {
+                in: lunchStep,
+            },
+            ...(preparationTime !== undefined && {
+                preparationTime: {
+                    lte: preparationTime, // Filtrer par `preparationTime`
+                },
+            }),
+        },
+        select: {
+            id: true,
+            slug: true,
+            description: true,
+            Image: {
+                select: {
+                    url: true,
+                },
+                take: 1,
+            },
+            Rating: {
+                select: {
+                    rating: true,
+                },
+            },
+        },
+    });
+
+    // Calculate average rating
+    // Transformez les résultats pour inclure uniquement la première URL d'image
+    return recipes.map((recipe) => {
+        const notNullRatingList = recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null); // TODO : check if correct
+        const ratingAverage =
+            Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
+        return {
+            id: recipe.id,
+            slug: recipe.slug,
+            description: recipe.description,
+            imageUrl: recipe.Image?.[0]?.url || null,
+            ratingAverage, // Utilise null si aucune image n'est associée
+        };
+    });
+};
+
+export async function selectRecipesByCreateDate(limit: number = 3) {
     const recipesByDate = await Prisma.recipe.findMany({
         orderBy: {
-            createdAt: 'desc',
+            createdAt: "desc",
         },
         take: limit,
         include: {
@@ -436,4 +499,3 @@ export async function selectRecipesByCreateDate  (limit: number = 3){
 
     return recipes;
 }
-
