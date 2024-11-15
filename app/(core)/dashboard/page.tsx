@@ -9,6 +9,8 @@ import RestrictClient from "@comps/client/restrict-user";
 import { SelectEveryUser, SelectUserRole } from "@actions/database/User";
 import { UserType } from "@actions/types/User";
 import UserRoleSelect from "@comps/client/update-user-role";
+import { SelectPendingRecipes } from "@actions/database/Recipe";
+import ReviewRecipes from "@/components/client/review-recipe";
 
 export const metadata: Metadata = {
     title: "Dashboard",
@@ -27,6 +29,7 @@ export default async function DashboardPage() {
     const emailVerified = session.user.emailVerified;
 
     const users = await SelectEveryUser();
+    const pendingRecipes = await SelectPendingRecipes();
 
     const timerList: {
         type: "Created" | "Updated" | "Expires";
@@ -36,26 +39,6 @@ export default async function DashboardPage() {
         { type: "Updated", date: session.user.updatedAt },
         { type: "Expires", date: session.session.expiresAt },
     ];
-
-    // // Liste fictive des commentaires signalés
-    // const reportedComments = [
-    //     { id: 1, text: "This comment is pending review.", recipe: "Recipe A", user: "Alice Johnson", status: "Pending" },
-    //     { id: 2, text: "This comment has been rejected.", recipe: "Recipe B", user: "Bob Smith", status: "Rejected" },
-    //     { id: 3, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dignissim, ligula at bibendum aliquet, tortor arcu malesuada sapien, in varius justo eros eget libero. Aenean ac eros in ex fermentum malesuada. Fusce tincidunt fermentum eros, sit amet pulvinar erat placerat et. Curabitur sit amet feugiat magna. Duis at nulla id urna aliquet dictum. Donec vestibulum nulla ut ligula lacinia, non consectetur eros gravida. Vivamus maximus dolor at mi facilisis, nec vehicula sem tempor.", recipe: "Recipe C", user: "Emma Stone", status: "Approved" },
-    // ];
-
-    // const recipes = [
-    //     { id: 1, description: "This recipe is pending review.", recipeName: "Pates à la crème de marron et fourme d'ambert au poivre de champignon d'espelette du mexique asiatique", user: "Alice Johnson", status: "Pending" },
-    //     { id: 2, description: "This recipe has been rejected.", recipeName: "Recipe B", user: "Bob Smith", status: "Rejected" },
-    //     { id: 3, description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dignissim, ligula at bibendum aliquet, tortor arcu malesuada sapien, in varius justo eros eget libero. Aenean ac eros in ex fermentum malesuada. Fusce tincidunt fermentum eros, sit amet pulvinar erat placerat et. Curabitur sit amet feugiat magna. Duis at nulla id urna aliquet dictum. Donec vestibulum nulla ut ligula lacinia, non consectetur eros gravida. Vivamus maximus dolor at mi facilisis, nec vehicula sem tempor.", recipeName: "Recipe C", user: "Emma Stone", status: "Approved" },
-    // ];
-
-    // // Liste fictive d'ingrédients à réviser
-    // const ingredients = [
-    //     { id: 1, description: "This ingredient is pending review.", ingredientName: "Salt", user: "Alice Johnson", status: "Pending" },
-    //     { id: 2, description: "This ingredient has been rejected.", ingredientName: "Sugar", user: "Bob Smith", status: "Rejected" },
-    //     { id: 3, description: "Est ce que les ingrédients ont vraiment besoin d'une description ? A méditer.", ingredientName: "Stevia", user: "Emma Stone", status: "Approved" },
-    // ];
 
     return (
         <div className="mt-2 size-full space-y-5">
@@ -111,47 +94,8 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </div>
-
-            {/* Filtrage par rôle et barre de recherche */}
-            {/* <div className="flex items-center justify-between p-4">
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-semibold">Filtrer les utilisateurs par rôle</h3>
-                        <select className="rounded-md border px-4 py-2" defaultValue="All">
-                            <option value="All">Tous</option>
-                            <option value="User">Utilisateur</option>
-                            <option value="Moderator">Modérateur</option>
-                            <option value="Admin">Admin</option>
-                        </select>
-                    </div> */}
-
-                    {/* Barre de recherche */}
-                    {/* <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-semibold">Rechercher des utilisateurs</h3>
-                        <input type="text" placeholder="Search by username" className="rounded-md border px-4 py-2" />
-                    </div>
-                </div>
-            </div> */}
-
-            {/* Liste des utilisateurs */}
             <UserList users={users} />
-            {/* <div className="text-center">
-                <ButtonClient
-                    type="button"
-                    variant="default"
-                >
-                    Voir Plus
-                </ButtonClient>
-            </div> */}
-
-            {/* Section des commentaires signalés */}
-            {/* <ReviewComments comments={reportedComments} /> */}
-
-            {/* Section des nouvelles recettes */}
-            {/* <ReviewRecipes recipes={recipes} /> */}
-
-            {/* Section des nouveaux ingrédients */}
-            {/* <ReviewIngredients ingredients={ingredients} /> */}
+            <ReviewRecipes recipes={pendingRecipes} />
         </div>
     );
 }
@@ -240,9 +184,9 @@ const UserList = ({ users }: UserListProps) => {
 // const ReviewComments = ({ comments }: ReviewCommentsProps) => {
 //     // Calcul des ratios de statut
 //     const totalComments = comments.length;
-//     const pendingCount = comments.filter(comment => comment.status === "Pending").length;
-//     const approvedCount = comments.filter(comment => comment.status === "Approved").length;
-//     const rejectedCount = comments.filter(comment => comment.status === "Rejected").length;
+//     const pendingCount = comments.filter(comment => comment.status === "PENDING").length;
+//     const approvedCount = comments.filter(comment => comment.status === "APPROVED").length;
+//     const rejectedCount = comments.filter(comment => comment.status === "REJECTED").length;
 
 //     return (
 //         <div className="space-y-4 p-4">
@@ -337,15 +281,6 @@ const UserList = ({ users }: UserListProps) => {
 //     );
 // };
 
-// type ReviewRecipesProps = {
-//     recipes: {
-//         id: number;
-//         description: string;
-//         recipeName: string;
-//         user: string;
-//         status: "Pending" | "Approved" | "Rejected";
-//     }[];
-// };
 
 // // Composant pour la révision des recettes
 // const ReviewRecipes = ({ recipes }: ReviewRecipesProps) => {

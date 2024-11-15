@@ -91,6 +91,7 @@ export const SelectRecipeById = async (props: IdRecipeType): Promise<RecipeType 
         const recipe = await Prisma.recipe.findUnique({
             where: {
                 id,
+                status: "APPROVED"
             },
         });
         if (!recipe) {
@@ -125,6 +126,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
         const recipe = await Prisma.recipe.findUnique({
             where: {
                 slug,
+                status: "APPROVED"
             },
             include: {
                 Image: {
@@ -218,6 +220,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             lunchType: recipe.lunchType,
             lunchStep: recipe.lunchStep,
             Steps: recipe.Steps,
+            status: recipe.status,
             userId: recipe.userId,
 
             createdAt: recipe.createdAt,
@@ -260,6 +263,9 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
 export const SelectEveryRecipeSlugs = async (): Promise<TitleAndSlugRecipeType[]> => {
     try {
         const recipeList = await Prisma.recipe.findMany({
+            where: {
+                status: "APPROVED"
+            },
             select: {
                 title: true,
                 slug: true,
@@ -288,6 +294,9 @@ export const SelectEveryRecipes = async (): Promise<RecipeType[]> => {
 
 export const getRecipesToFilter = async (): Promise<RecipeFilterType[]> => {
     const recipeListRaw = await Prisma.recipe.findMany({
+        where: {
+            status: "APPROVED"
+        },
         select: {
             title: true,
             slug: true,
@@ -483,6 +492,9 @@ export const getRecipeByFilter = async (
 
 export async function selectRecipesByCreateDate(limit: number = 3) {
     const recipesByDate = await Prisma.recipe.findMany({
+        where: {
+            status: "APPROVED"
+        },
         orderBy: {
             createdAt: "desc",
         },
@@ -499,3 +511,40 @@ export async function selectRecipesByCreateDate(limit: number = 3) {
 
     return recipes;
 }
+
+// actions/database/Recipe.ts
+export const UpdateRecipeStatus = async ({ recipeId, status }: { recipeId: string; status: "APPROVED" | "REJECTED" }): Promise<boolean> => {
+    try {
+        await Prisma.recipe.update({
+            where: { id: recipeId },
+            data: { status },
+        });
+        return true;
+    } catch (error) {
+        throw new Error("Unable to update recipe status -> " + (error as Error).message);
+    }
+};
+
+
+export const SelectPendingRecipes = async () => {
+    try {
+        // Récupérer toutes les recettes avec le statut PENDING
+        const pendingRecipes = await Prisma.recipe.findMany({
+            where: {
+                status: "PENDING", // Seulement les recettes en attente
+            },
+            include: {
+                // Inclure les relations associées si nécessaire (par exemple les images ou ingrédients)
+                Image: true,
+                Favorite: true,
+                Review: true,
+                Rating: true,
+                Quantity: true,
+            },
+        });
+
+        return pendingRecipes;
+    } catch (error) {
+        throw new Error("Unable to fetch pending recipes -> " + (error as Error).message);
+    }
+};

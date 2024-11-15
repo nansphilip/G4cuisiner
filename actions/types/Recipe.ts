@@ -38,6 +38,7 @@ export interface CommonType extends TitleRecipeType {
     difficultyLevel: "EASY" | "MEDIUM" | "HARD"; // default medium
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
+    status: "PENDING" | "APPROVED" | "REJECTED";
 
     userId: string;
 }
@@ -87,6 +88,7 @@ export interface RecipeFixtures {
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
     Steps: string;
+    status: "PENDING" | "APPROVED" | "REJECTED";
     userId: string;
 
     Image: {

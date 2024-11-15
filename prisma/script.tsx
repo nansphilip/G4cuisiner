@@ -36,6 +36,7 @@ export const fixtures = async () => {
                 lunchStep,
                 lunchType,
                 Steps,
+                status,
                 userId,
                 Image,
                 Favorite,
@@ -64,6 +65,7 @@ export const fixtures = async () => {
                     lunchStep,
                     lunchType,
                     Steps,
+                    status,
                     userId,
 
                     Image: {
