@@ -52,7 +52,7 @@ export default function HeaderClient(props: HeaderClientProps) {
         { label: "Accueil", href: "/" },
         {
             label: "Recherche",
-            href: "/search",
+            href: "/search-with-filters",
             group: [
                 { label: "Recherche par filtres", href: "/search-with-filters" },
                 { label: "Qu'est ce qu'on mange ce soir ?", href: "/search-form" },

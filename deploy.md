@@ -3,7 +3,7 @@
 ## Init
 
 ```bash
-pnpm install && pnpx prisma generate && pnpx prisma migrate deploy && pnpm run reload
+pnpm install && pnpm dlx prisma generate && pnpm dlx prisma migrate deploy && pnpm run reload
 ```
 
 ## Build

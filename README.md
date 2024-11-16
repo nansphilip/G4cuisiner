@@ -47,13 +47,13 @@ G4cuisiner is G4 School student project.
 - Generate the Prisma client
 
   ```bash
-  pnpx prisma generate
+  pnpm dlx prisma generate
   ```
 
 - Run Prisma database migrations
 
   ```bash
-  pnpx prisma migrate dev --name initial-migration
+  pnpm dlx prisma migrate dev --name initial-migration
   ```
 
 - Insert fixtures
