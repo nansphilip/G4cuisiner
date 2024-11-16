@@ -56,11 +56,15 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             // Récupérer la liste des ingrédients et autres données du formulaire
             const textArea = document.getElementById("ingredient-list");
             const ingredientString = textArea?.innerHTML;
-            const listeIngredient: {
+            type Ingredient = {
+                name: string;
+                description: string;
+                image: string | null;
                 quantity: number;
                 unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
                 ingredientId: string;
-            }[] = [];
+            }[];
+            const listeIngredient: Ingredient = [];
 
             if (ingredientString !== "" && ingredientString !== null) {
                 const ingredientsArray = ingredientString?.split(",");
@@ -71,6 +75,9 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
                         quantity: Number(quantity.trim()),
                         unit: unitName.trim() as IngredientRecipeType["ingredientList"][number]["unit"],
                         ingredientId: id.trim(),
+                        image: null,
+                        name: name.trim(),
+                        description: "",
                     });
                 });
             }

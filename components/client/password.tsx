@@ -2,7 +2,7 @@
 
 import { ChangeEventHandler, useEffect, useState } from "react"
 import { CircleCheck, CircleAlert, ChevronDown, Eye, EyeOff } from "lucide-react"
-import ButtonClient from "@comps/client/button"
+import Button from "@comps/server/button"
 
 type PasswordClientProps = {
     name: string
@@ -74,20 +74,20 @@ export default function PasswordClient (props: PasswordClientProps) {
                 autoComplete={autoComplete}
                 autoFocus={autoFocus}
             />
-            <ButtonClient type="button" variant="outline" buttonSize="none" className="p-1" onClick={() => setShowPassword(!showPassword)}>
+            <Button type="button" variant="outline" buttonSize="none" className="p-1" onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ?
                     <Eye size={16} className="text-gray-500 hover:text-gray-700" /> :
                     <EyeOff size={16} className="text-gray-500 hover:text-gray-700" />}
-            </ButtonClient>
+            </Button>
         </div>
         <div className={`mt-1 flex flex-col gap-1 ${password ? '' : 'hidden'}`}>
-            <ButtonClient type="button" variant="transparent" buttonSize="none" ring="none" className="group flex items-center justify-between rounded-md text-sm font-medium" onClick={() => setExpanded(!expanded)}>
+            <Button type="button" variant="transparent" buttonSize="none" ring="none" className="group flex items-center justify-between rounded-md text-sm font-medium" onClick={() => setExpanded(!expanded)}>
                 <div className="text-sm font-medium">
                     <span>Strength: </span>
                     <span className={`${color}`}>{strength}</span>
                 </div>
                 <ChevronDown className={`group-hover:bg-gray-100 rounded-md transition-all duration-150 ` + (expanded ? "rotate-180" : "")} />
-            </ButtonClient>
+            </Button>
             <div className={"overflow-hidden transition-all duration-150 " + (expanded ? 'h-[100px]' : 'h-0')}>
                 <Condition valid={Boolean(password.match(/[a-z]/))} condition="At least 1 lowercase letter" />
                 <Condition valid={Boolean(password.match(/[A-Z]/))} condition="At least 1 uppercase letter" />

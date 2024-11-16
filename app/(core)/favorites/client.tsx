@@ -3,14 +3,14 @@
 import React, { useState } from "react";
 import SearchFavoriteClient from "@comps/client/search-favorite";
 import RecipeImageListClient from "@comps/client/image-listing";
-import { SelectRecipeUserFavoriteType } from "@actions/types/Favorite";
+import { ReturnFavoriteRecipeUserType } from "@actions/types/Favorite";
 import FavoriteAddClient from "@comps/client/favorite-add";
 import { BetterSessionServer } from "@lib/auth";
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 
 type FavoritesClientProps = {
-    recipeUserFavoriteList: SelectRecipeUserFavoriteType[];
+    recipeUserFavoriteList: ReturnFavoriteRecipeUserType[];
     session: BetterSessionServer;
 };
 
@@ -30,9 +30,9 @@ export default function FavoritesClient(props: FavoritesClientProps) {
             <div className="flex flex-col gap-4">
                 {filteredFavorites.length > 0 ? (
                     filteredFavorites.map((recipe, index) => (
-                        <div key={index} className="flex gap-3 rounded-lg border-2 border-gray-300 p-2 shadow-lg">
+                        <div key={index} className="flex gap-3 rounded-xl border p-3 shadow-lg">
                             <div className="h-full">
-                                <RecipeImageListClient imageList={[recipe.images[0]]} />
+                                <RecipeImageListClient imageList={[recipe.imageList[0]]} />
                             </div>
                             <div className="flex w-full flex-row justify-between text-2xl">
                                 <div className="flex flex-col">
@@ -50,13 +50,13 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                                     <FavoriteAddClient
                                         userId={session?.user.id}
                                         userFavorite={recipe.userFavorite}
-                                        recipeId={recipe.id}
+                                        recipeId={recipe.recipeId}
                                         totalFavoriteAmount={recipe.totalFavoriteAmount}
                                         classSvg="size-10"
                                     />
-                                    <ButtonClient type="link" href={`/recipe/${recipe.slug}`}>
+                                    <Button className="bg-primary hover:bg-orange-300 text-tertiary font-bold shadow-md" type="link" href={`/recipe/${recipe.slug}`}>
                                         Voir la recette
-                                    </ButtonClient>
+                                    </Button>
                                 </div>
                             </div>
                         </div>

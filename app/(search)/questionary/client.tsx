@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { getRecipeByFilter, RecipeFilterFormType } from "@actions/database/Recipe";
+import { SelectRecipeByFilter } from "@actions/database/Recipe";
 import QuestionCard from "@comps/client/questionnaire";
 import { useState } from "react";
 import { LunchStep, LunchType } from "@prisma/client";
 import FindRecipeCard from "@comps/client/find-a-recipe";
-import Button from "@comps/client/button";
+import Button from "@comps/server/button";
+import { CompleteRecipeType, ReturnSelectRecipeByFilterType } from "@actions/types/Recipe";
 
 export default function QuestionaryClient() {
     const [isVisible, setIsVisible] = useState(true);
     const [hasCompleted, setHasCompleted] = useState(false);
-    const [slugList, setSlugList] = useState<RecipeFilterFormType[]>([]);
+    const [slugList, setSlugList] = useState<ReturnSelectRecipeByFilterType[] | null>([]);
     const [generatedRecipe, setGeneratedRecipe] = useState<number>(1);
 
     const handleClickBegin = () => {
@@ -20,9 +21,8 @@ export default function QuestionaryClient() {
 
     const handleComplete = (recipes: string[]) => {
         setHasCompleted(true); // Marque comme terminé
-        console.log("Réponses de l'utilisateur : ", recipes);
         // Appel de la fonction qui va gérer les réponses
-        handleUsersrecipes(recipes);
+        handleUsersRecipes(recipes);
     };
 
     return (
@@ -32,7 +32,7 @@ export default function QuestionaryClient() {
                     <h1 className="text-center text-3xl font-bold">Trouvons un plat à cuisiner!</h1>
                     <p className="max-w-[500px] text-center text-lg">
                         Tu as faim, tu es motivé à cuisiner un bon petit plat mais tu n&apos;as pas d&apos;idée de
-                        recette ? Alors tu es au bon endroit, laisse toi guider !
+                        recette ? Laisse toi guider !
                     </p>
                     <button
                         className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800"
@@ -51,19 +51,21 @@ export default function QuestionaryClient() {
                         Voici une liste de recettes correspondant à votre recherche :
                     </p>
                     <div className="m-4 flex items-center justify-center gap-4">
-                        {slugList.slice(0, generatedRecipe).map((recipe, index) => (
-                            <FindRecipeCard
-                                key={index}
-                                index={recipe.id}
-                                slug={recipe.slug}
-                                description={recipe.description}
-                                recipeImageUrl={recipe.imageUrl}
-                                ratingAverage={recipe.ratingAverage}
-                            />
-                        ))}
+                        {slugList ? (
+                            slugList
+                                .slice(0, generatedRecipe)
+                                .map((recipe, index) => (
+                                    <FindRecipeCard
+                                        key={index}
+                                        recipe={recipe}
+                                    />
+                                ))
+                        ) : (
+                            <p className="text-center">Aucune recette ne correspond à votre recherche.</p>
+                        )}
                     </div>
                     <div>
-                        {generatedRecipe < slugList.length && (
+                        {slugList && generatedRecipe < slugList.length && (
                             <Button type="button" variant="outline" onClick={handleClickGenerate}>
                                 Voir une autre recette
                             </Button>
@@ -75,13 +77,12 @@ export default function QuestionaryClient() {
     );
 
     function handleClickGenerate() {
-        setGeneratedRecipe((prevCount) => Math.min(prevCount + 1, slugList.length)); // Empêche d'aller au-delà du nombre total de recettes.
+        setGeneratedRecipe((prevCount) => Math.min(prevCount + 1, slugList ? slugList.length : 0));
     }
 
-    function handleUsersrecipes(recipes: string[]) {
+    function handleUsersRecipes(recipes: string[]) {
         let filtreLunchType: LunchType[] = [];
         let filtrePreparationTime: number = 0;
-        let filtreDifficultyLevel;
         let filtreLunchStep: LunchStep[] = [];
 
         recipes.map((recipe) => {
@@ -117,9 +118,8 @@ export default function QuestionaryClient() {
 
         //Appel de la fonction qui va filtrer les recettes
         async function filterRecipes(lunchType: LunchType[], lunchStep: LunchStep[], preparationTime: number) {
-            const recipeList = await getRecipeByFilter(lunchType, lunchStep, preparationTime);
+            const recipeList = await SelectRecipeByFilter({ lunchType, lunchStep, preparationTime });
             setSlugList(recipeList);
-            console.log(recipeList);
         }
     }
 }

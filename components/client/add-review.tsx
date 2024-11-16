@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ButtonClient from "./button";
+import Button from "../server/button";
 import { useRouter } from "next/navigation";
 import { CreateReview } from "@actions/database/Review";
 
@@ -47,7 +47,7 @@ export default function AddReviewClient(props: AddReviewClientProps) {
                 required
             />
             <div className="w-full text-center">
-                <ButtonClient type="submit">Envoyer</ButtonClient>
+                <Button type="submit">Envoyer</Button>
             </div>
         </form>
     );

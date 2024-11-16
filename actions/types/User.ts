@@ -1,37 +1,45 @@
 "use server";
 
-export interface IdUserType {
-  userId: string;
+import Prisma from "@prisma/client";
+
+export type User = Prisma.User;
+
+export type name = User["name"];
+export type id = User["id"];
+export type email = User["email"];
+export type emailVerified = User["emailVerified"];
+export type image = User["image"];
+export type role = User["role"];
+export type restricted = User["restricted"];
+export type createdAt = User["createdAt"];
+export type updatedAt = User["updatedAt"];
+
+export interface SelectUser {
+    userId: id;
 }
 
-export interface UpdateUserRestrictionType {
-  userId: string;
-  restricted: boolean;
+export interface UpdateUserType {
+    userId: id;
+    data: {
+        name?: name;
+        email?: email;
+        emailVerified?: emailVerified;
+        image?: image;
+        role?: role;
+        restricted?: restricted;
+        createdAt?: createdAt;
+        updatedAt?: updatedAt;
+    };
 }
 
-export interface UserType {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  role: "USER" | "MODO" | "ADMIN";
-  restricted: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+export interface ReturnUserType {
+    id: id;
+    name: name;
+    email: email;
+    emailVerified: emailVerified;
+    image: image;
+    role: role;
+    restricted: restricted;
+    createdAt: createdAt;
+    updatedAt: updatedAt;
 }
-
-export interface UserFixtures {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  role: "USER" | "MODO" | "ADMIN";
-  restricted: boolean;
-}
-
-export interface UserRoleSelectProps {
-  initialRole: "USER" | "MODO" | "ADMIN";
-  userId: string;
-};

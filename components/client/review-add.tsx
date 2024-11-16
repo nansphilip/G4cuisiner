@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ReviewListProps } from "./review-display";
 import { useStore } from "@lib/zustand";
-import ButtonClient from "./button";
+import Button from "../server/button";
 
 type ReviewAddClientProps = {
     userRating: number | null;
@@ -69,7 +69,7 @@ export default function ReviewAddClient(props: ReviewAddClientProps) {
                 required
             />
             <div className="w-full text-center">
-                <ButtonClient type="submit">Envoyer</ButtonClient>
+                <Button type="submit">Envoyer</Button>
             </div>
         </form>
     );

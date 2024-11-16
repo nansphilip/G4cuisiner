@@ -1,10 +1,17 @@
 "use client";
 
-import { UpdateUserRole } from "@actions/database/User";
+import { UpdateUser } from "@actions/database/User";
 import { useState } from "react";
-import { UserRoleSelectProps } from "@actions/types/User"
+import { User } from "@actions/types/User";
 
-export default function UserRoleSelect({ initialRole, userId }: UserRoleSelectProps) {
+type UserRoleSelectProps = {
+    user: User;
+};
+
+export default function UserRoleSelect(props: UserRoleSelectProps) {
+    const { user } = props;
+    const userId = user.id;
+    const initialRole = user.role;
     const [role, setRole] = useState<"USER" | "MODO" | "ADMIN">(initialRole);
 
     const handleRoleChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -12,9 +19,11 @@ export default function UserRoleSelect({ initialRole, userId }: UserRoleSelectPr
         setRole(newRole);
 
         // Appel de la fonction pour mettre à jour le rôle dans la base de données
-        await UpdateUserRole({
+        await UpdateUser({
             userId,
-            role: newRole,
+            data: {
+                role: newRole,
+            },
         });
     };
 

@@ -48,7 +48,10 @@ export default function ReviewDisplayClient(props: ReviewDisplayClientProps) {
 
     // Preformat review list
     const preformattedReviewList: ReviewListProps = reviewListRaw.map(
-        ({ userId: currentUserId, reviewId, name, rating, review, thumbsPositive, thumbsNegative, createdAt }, index) => ({
+        (
+            { userId: currentUserId, reviewId, name, rating, review, thumbsPositive, thumbsNegative, createdAt },
+            index
+        ) => ({
             currentUserId,
             reviewId,
             name,
@@ -176,8 +179,8 @@ export default function ReviewDisplayClient(props: ReviewDisplayClientProps) {
 
         // Update database
         await UpdateReview({
-            reviewId: review.reviewId,
             userId,
+            reviewId: review.reviewId,
             thumbsPositive: thumbBool ? !review.positive.state : false,
             thumbsNegative: !thumbBool ? !review.negative.state : false,
         });
@@ -185,59 +188,68 @@ export default function ReviewDisplayClient(props: ReviewDisplayClientProps) {
 
     return (
         <div className={combo("space-y-2", classDiv)}>
-            {reviewList[0].map(({ name, currentUserId, reviewId, review, rating: ratingUser, positive, negative, createdAt }, index) => {
-                const formattedDate = new Date(createdAt).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                });
-                const formattedTime = new Date(createdAt).toLocaleTimeString("fr-FR", {
-                    hour: "numeric",
-                    minute: "numeric",
-                });
-                return (
-                    <div key={index} className={combo("border rounded-md py-2 px-4 text-black", classCom)}>
-                        <div className="flex flex-row items-center justify-between">
-                            <div className="flex flex-row gap-3">
-                                <h3 className="font-bold">{name}</h3>
-                                <RatingDisplayClient currentUserId={currentUserId} userId={userId} ratingUser={ratingUser} />
+            {reviewList[0].map(
+                (
+                    { name, currentUserId, reviewId, review, rating: ratingUser, positive, negative, createdAt },
+                    index
+                ) => {
+                    const formattedDate = new Date(createdAt).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                    });
+                    const formattedTime = new Date(createdAt).toLocaleTimeString("fr-FR", {
+                        hour: "numeric",
+                        minute: "numeric",
+                    });
+                    return (
+                        <div key={index} className={combo("border rounded-md py-2 px-4 text-black", classCom)}>
+                            <div className="flex flex-row items-center justify-between">
+                                <div className="flex flex-row gap-3">
+                                    <h3 className="font-bold">{name}</h3>
+                                    <RatingDisplayClient
+                                        currentUserId={currentUserId}
+                                        userId={userId}
+                                        ratingUser={ratingUser}
+                                    />
+                                    <div className="flex flex-row gap-2">
+                                        <span>{formattedTime}</span>
+                                        <span className="font-bold">•</span>
+                                        <span>{formattedDate}</span>
+                                    </div>
+                                </div>
                                 <div className="flex flex-row gap-2">
-                                    <span>{formattedTime}</span>
-                                    <span className="font-bold">•</span>
-                                    <span>{formattedDate}</span>
+                                    <button
+                                        onClick={() => updateThumb(reviewId, "positive")}
+                                        className={combo(
+                                            "flex w-fit flex-row items-center justify-center gap-2 rounded-full border-2 px-3 py-0.5 border-gray-300 text-gray-500 hover:bg-gray-100 transition-all duration-150 hover:border-gray-500 hover:text-gray-500",
+                                            positive.state &&
+                                                "border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500"
+                                        )}
+                                    >
+                                        <div className="flex flex-row items-center justify-center gap-2">
+                                            <ThumbsUp className="size-4" />
+                                            <span>{positive.count}</span>
+                                        </div>
+                                    </button>
+                                    <button
+                                        onClick={() => updateThumb(reviewId, "negative")}
+                                        className={combo(
+                                            "flex w-fit flex-row items-center justify-center gap-2 rounded-full border-2 px-3 py-0.5 border-gray-300 text-gray-500 hover:bg-gray-100 transition-all duration-150 hover:border-gray-500 hover:text-gray-500",
+                                            negative.state &&
+                                                "border-gray-600 text-gray-600 hover:border-gray-500 hover:text-gray-500"
+                                        )}
+                                    >
+                                        <ThumbsDown className="size-4" />
+                                        <span>{negative.count}</span>
+                                    </button>
                                 </div>
                             </div>
-                            <div className="flex flex-row gap-2">
-                                <button
-                                    onClick={() => updateThumb(reviewId, "positive")}
-                                    className={combo(
-                                        "flex w-fit flex-row items-center justify-center gap-2 rounded-full border-2 px-3 py-0.5 border-gray-300 text-gray-500 hover:bg-gray-100 transition-all duration-150 hover:border-gray-500 hover:text-gray-500",
-                                        positive.state &&
-                                            "border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500"
-                                    )}
-                                >
-                                    <div className="flex flex-row items-center justify-center gap-2">
-                                        <ThumbsUp className="size-4" />
-                                        <span>{positive.count}</span>
-                                    </div>
-                                </button>
-                                <button
-                                    onClick={() => updateThumb(reviewId, "negative")}
-                                    className={combo(
-                                        "flex w-fit flex-row items-center justify-center gap-2 rounded-full border-2 px-3 py-0.5 border-gray-300 text-gray-500 hover:bg-gray-100 transition-all duration-150 hover:border-gray-500 hover:text-gray-500",
-                                        negative.state &&
-                                            "border-gray-600 text-gray-600 hover:border-gray-500 hover:text-gray-500"
-                                    )}
-                                >
-                                    <ThumbsDown className="size-4" />
-                                    <span>{negative.count}</span>
-                                </button>
-                            </div>
+                            <p>{review}</p>
                         </div>
-                        <p>{review}</p>
-                    </div>
-                );
-            })}
+                    );
+                }
+            )}
         </div>
     );
 }

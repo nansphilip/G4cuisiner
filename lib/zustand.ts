@@ -4,11 +4,6 @@ import { FavoriteStoreProps } from "@comps/client/favorite-add";
 import { ReviewListStoreProps } from "@comps/client/review-display";
 import { create } from "zustand";
 
-interface SwitchState {
-    switchState: boolean;
-    setSwitchState: (state: boolean) => void;
-}
-
 interface ReviewListState {
     reviewListStore: ReviewListStoreProps;
     setReviewListStore: (list: ReviewListStoreProps) => void;
@@ -24,10 +19,7 @@ interface RatingState {
     setRatingStore: (state: [number, Date]) => void;
 }
 
-export const useStore = create<SwitchState & ReviewListState & FavoriteState & RatingState>((set) => ({
-    switchState: false,
-    setSwitchState: (state) => set({ switchState: state }),
-
+export const useStore = create<ReviewListState & FavoriteState & RatingState>((set) => ({
     reviewListStore: [[], new Date(0)],
     setReviewListStore: (list) => set({ reviewListStore: list }),
 

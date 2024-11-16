@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { combo } from "../../lib/combo";
 
@@ -34,7 +32,7 @@ type ButtonProps = {
       }
 );
 
-export default function ButtonClient(props: ButtonProps) {
+export default function Button(props: ButtonProps) {
     const {
         type,
         href,
@@ -49,13 +47,13 @@ export default function ButtonClient(props: ButtonProps) {
     } = props;
 
     const ringClass = {
-        default: "ring-teal-400 ring-offset-2 active:ring-2 disabled:ring-0",
+        default: "ring-transparent active:ring-teal-400 ring-offset-2 active:ring-2 disabled:ring-0",
         none: "",
     };
 
     const variantClass = {
         default: "bg-black text-white hover:bg-gray-700 disabled:bg-gray-700 disabled:text-gray-300",
-        outline: "border bg-white hover:bg-gray-200 disabled:bg-gray-200 disabled:text-gray-700",
+        outline: "border bg-white hover:bg-gray-200 disabled:bg-gray-100 disabled:text-gray-400",
         ghost: "hover:bg-gray-200 bg-white disabled:bg-gray-200 disabled:text-gray-700",
         danger: "bg-red-500 text-white hover:bg-red-700 disabled:bg-red-700 disabled:text-gray-300",
         link: "text-gray-500 decoration-gray-500 hover:underline disabled:text-gray-300 disabled:no-underline",

@@ -1,18 +1,39 @@
 "use server";
 
+import Prisma from "@prisma/client";
+
+export type Recipe = Prisma.Recipe;
+
+export type id = Recipe["id"];
+export type title = Recipe["title"];
+export type slug = Recipe["slug"];
+export type description = Recipe["description"];
+export type numberOfServing = Recipe["numberOfServing"];
+export type preparationTime = Recipe["preparationTime"];
+export type difficultyLevel = Recipe["difficultyLevel"];
+export type lunchType = Recipe["lunchType"];
+export type lunchStep = Recipe["lunchStep"];
+export type Steps = Recipe["Steps"];
+export type status = Recipe["status"];
+export type userId = Recipe["userId"];
+export type createdAt = Recipe["createdAt"];
+export type updatedAt = Recipe["updatedAt"];
+
 export interface IdRecipeType {
-    id: string;
+    id: id;
 }
 
 export interface TitleRecipeType {
-    title: string;
+    title: title;
 }
 
 export interface SlugRecipeType {
-    slug: string;
+    slug: slug;
 }
 
-export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}
+export interface StatusRecipeType {
+    status: status;
+}
 
 export interface ImageRecipeType {
     imageList: {
@@ -23,51 +44,16 @@ export interface ImageRecipeType {
 
 export interface IngredientRecipeType {
     ingredientList: {
-        quantity: number;
-        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
         ingredientId: string;
-    }[];
-}
-
-export interface StatusRecipeType {
-    status: "PENDING" | "APPROVED" | "REJECTED";
-}
-
-export interface CommonType extends TitleRecipeType {
-    description: string;
-
-    numberOfServing: number;
-    preparationTime: number;
-    Steps: string;
-    difficultyLevel: "EASY" | "MEDIUM" | "HARD"; // default medium
-    lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
-    lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
-
-    userId: string;
-}
-
-export interface CreateRecipeType extends CommonType, ImageRecipeType, IngredientRecipeType {}
-
-export interface UpdateRecipeType extends IdRecipeType, CreateRecipeType {}
-
-export interface RecipeType extends IdRecipeType, CommonType, SlugRecipeType, StatusRecipeType {
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
-    ratingAverage: number;
-    totalFavoriteAmount: number;
-    totalRatingAmount: number;
-    ingredientList: {
-        ingredientId: string;
-        // recipeId: string;
         name: string;
         description: string;
         image: string | null;
         quantity: number;
         unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
     }[];
+}
+
+export interface ReviewRecipeType {
     reviewList: {
         reviewId: string;
         userId: string;
@@ -80,56 +66,70 @@ export interface CompleteRecipeType extends RecipeType, ImageRecipeType {
     }[];
 }
 
-export interface RecipeFixtures {
-    id: string;
-    title: string;
-    // slug is generated from title
-    description: string;
-    numberOfServing: number;
-    preparationTime: number;
-    difficultyLevel: "EASY" | "MEDIUM" | "HARD";
-    lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
-    lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
-    Steps: string;
-    status: "PENDING" | "APPROVED" | "REJECTED";
-    userId: string;
+export interface TitleAndSlugRecipeType extends TitleRecipeType, SlugRecipeType {}
 
-    Image: {
-        url: string;
-        alt: string;
-    }[];
-
-    Favorite: {
-        favorite: boolean;
-        userId: string;
-    }[];
-
-    Review: {
-        review: string;
-        userId: string;
-        thumbsPositive: string[]; // userId
-        thumbsNegative: string[]; // userId
-    }[];
-
-    Rating: {
-        rating: number;
-        userId: string;
-    }[];
-
-    Quantity: {
-        quantity: number;
-        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
-        ingredientId: string;
-    }[];
+export interface CommonType extends TitleRecipeType {
+    description: description;
+    numberOfServing: numberOfServing;
+    preparationTime: preparationTime;
+    Steps: Steps;
+    difficultyLevel: difficultyLevel;
+    lunchType: lunchType;
+    lunchStep: lunchStep;
+    userId: userId;
 }
 
-export interface RecipeFilterType {
-    title: string;
-    preparationTime: number;
-    difficultyLevel: "EASY" | "MEDIUM" | "HARD";
-    lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
-    lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
-    slug: string;
-    url: string;
-    alt: string;
+export interface CreateRecipeType extends CommonType, ImageRecipeType, IngredientRecipeType {}
+
+export interface UpdateRecipeType {
+    id: id;
+    data: {
+        title?: title;
+        slug?: slug;
+        description?: description;
+        numberOfServing?: numberOfServing;
+        preparationTime?: preparationTime;
+        difficultyLevel?: difficultyLevel;
+        lunchType?: lunchType;
+        lunchStep?: lunchStep;
+        Steps?: Steps;
+        status?: status;
+        userId?: userId;
+        createdAt?: createdAt;
+        updatedAt?: updatedAt;
+    };
+}
+
+export interface ReturnSelectLastRecipe extends ImageRecipeType {
+    title: title;
+    slug: slug;
+}
+
+export interface ReturnRecipeType extends IdRecipeType, CommonType, SlugRecipeType, StatusRecipeType {
+    createdAt: createdAt;
+    updatedAt: updatedAt;
+}
+
+export interface CompleteRecipeType extends ReturnRecipeType, ImageRecipeType, IngredientRecipeType, ReviewRecipeType {
+    ratingAverage: number;
+    totalFavoriteAmount: number;
+    totalRatingAmount: number;
+}
+
+export interface SelectRecipeByFilterType {
+    lunchType: lunchType[];
+    lunchStep: lunchStep[];
+    preparationTime: preparationTime;
+}
+
+export interface ReturnSelectRecipeByFilterType extends IdRecipeType, TitleRecipeType, SlugRecipeType, ImageRecipeType {
+    description: string;
+    ratingAverage: number;
+}
+
+export interface SelectEveryRecipeType extends TitleRecipeType, SlugRecipeType, ImageRecipeType {
+    lunchType: lunchType;
+    lunchStep: lunchStep;
+    preparationTime: preparationTime;
+    difficultyLevel: difficultyLevel;
 }

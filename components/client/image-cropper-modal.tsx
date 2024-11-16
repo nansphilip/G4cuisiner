@@ -1,6 +1,6 @@
 "use client";
 
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import { useEffect, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../lib/imageToString";
@@ -111,12 +111,12 @@ export default function ImageCropperModalClient(
                     </label>
                 </div>
                 <div className="flex flex-row gap-3">
-                    <ButtonClient type="button" className="w-1/2" variant="outline" buttonSize="lg" onClick={() => setImageFile(undefined)}>
+                    <Button type="button" className="w-1/2" variant="outline" buttonSize="lg" onClick={() => setImageFile(undefined)}>
                         Cancel
-                    </ButtonClient>
-                    <ButtonClient type="button" className="w-1/2" buttonSize="lg" onClick={saveImage}>
+                    </Button>
+                    <Button type="button" className="w-1/2" buttonSize="lg" onClick={saveImage}>
                         Crop image
-                    </ButtonClient>
+                    </Button>
                 </div>
             </div>
         </div>

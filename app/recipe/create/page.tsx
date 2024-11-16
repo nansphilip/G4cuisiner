@@ -2,15 +2,8 @@ import CreateRecipeClient from "./client";
 import CounterComposant from "@comps/client/counter";
 import TypePlatCards from "@comps/client/type-plat-card";
 import AddIngredientComponent from "@comps/client/add-ingredient-component";
-// import { IngredientType } from "@actions/types/Ingredient";
-// import { GetIngredient } from "@actions/database/Ingredient";
-// import { LunchStepType } from "@actions/types/LunchStep";
-// import { GetLunchSteps } from "@actions/database/LunchStep";
-import StarRating from "@comps/client/dificulty";
-// import AddIngredientsToRecipe from "@comps/client/add-ingredient-recipe";
-//import { Suspense } from "react";
-import { selectAllIngredients } from "@actions/database/Ingredient";
-import { IngredientCreateRecipe } from "@actions/types/Ingredient";
+import StarRating from "@comps/client/difficulty";
+import { SelectEveryIngredient } from "@actions/database/Ingredient";
 import LunchTypeCombo from "@comps/client/lunch-type-combo";
 import Editor from "@comps/client/editor";
 import ImageImporter from "@comps/client/image";
@@ -21,8 +14,11 @@ export default async function CreateRecipePage() {
     const session = await getSession();
     if (!session) redirect("/login");
 
-    const ingredientList: IngredientCreateRecipe[] = await selectAllIngredients();
-    // Fonction pour gérer les données sauvegardées
+    const ingredientList = await SelectEveryIngredient();
+
+    if (!ingredientList) {
+        return <p>Il semblerait que nous ayons perdu nos ingredients...</p>;
+    }
 
     return (
         <>

@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import { ChefHat, ChevronDown, Search, X } from "lucide-react";
 import { combo } from "@lib/combo";
 import SlidingHover from "@comps/client/sliding-motion";
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import { BetterSessionClient, useSession } from "@lib/client";
 import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
-import SearchClient from "@app/(search)/search-page/client";
+import SearchClient from "@comps/client/search-bar";
 import Image from "next/image";
 import Link from "next/link";
+import { role } from "@actions/types/User";
+import { SelectUserById } from "@actions/database/User";
 
 type LinkProps = {
     label: string;
@@ -25,51 +27,36 @@ type LinkGroup = {
 type LinkPropsList = (LinkProps | LinkGroup)[];
 
 type HeaderClientProps = {
-    slugList: TitleAndSlugRecipeType[];
-    slugPageList: {
-        group: string;
-        route: string;
-        slugList: TitleAndSlugRecipeType[];
-    }[];
-    isUserAdmin: boolean | null;
+    slugList: TitleAndSlugRecipeType[] | null;
     className?: string;
 };
 
 export default function HeaderClient(props: HeaderClientProps) {
-    const { slugList, isUserAdmin, className } = props;
+    const { slugList, className } = props;
     const { data: session } = useSession();
 
-    // const slugLinkList = slugPageList.map(({ group, route, slugList }) => ({
-    //     label: group,
-    //     href: `${route}/${slugList[0].slug}`,
-    //     group: slugList.map(({ title, slug }) => ({
-    //         label: title,
-    //         href: `${route}/${slug}`,
-    //     })),
-    // }));
+    const [userRole, setUserRole] = useState<role | null>(null);
+
+    useEffect(() => {
+        if (session) {
+            const fetchUserRole = async () => {
+                const user = await SelectUserById({ userId: session.user.id });
+                if (user) setUserRole(user.role);
+            };
+            fetchUserRole();
+        }
+    }, [session]);
 
     const linkList: LinkPropsList = [
         { label: "Accueil", href: "/" },
         {
             label: "Recherche",
-            href: "/search-with-filters",
+            href: "/categories",
             group: [
-                { label: "Recherche par filtres", href: "/search-with-filters" },
-                { label: "Qu'est ce qu'on mange ce soir ?", href: "/search-form" },
+                { label: "Qu'est ce qu'on mange ce soir ?", href: "/questionary" },
+                { label: "Recherche par filtres", href: "/categories" },
             ],
         },
-        /* {
-            label: "Exemples",
-            href: "/fruits",
-            group: [
-                { label: "Cropper", href: "/cropper" },
-                { label: "Zustand Set", href: "/zustand-set" },
-                { label: "Zustand Get", href: "/zustand-get" },
-                { label: "Display Fruits", href: "/fruits" },
-                { label: "Server Fruits", href: "/random-fruit" },
-            ],
-        }, */
-        // ...slugLinkList,
         {
             label: "Mon compte",
             href: "/favorites",
@@ -79,12 +66,6 @@ export default function HeaderClient(props: HeaderClientProps) {
                     href: "/recipe/create",
                     sessionActive: true,
                 },
-                // {
-                //     label: "Édition recette",
-                //     href: "/recipe/edit",
-                //     sessionActive: true,
-                // },
-                // { label: "Favoris", href: "/favorites", sessionActive: true },
                 { label: "Dashboard", href: "/dashboard", sessionActive: true },
                 // {
                 //     label: "Profil",
@@ -125,16 +106,16 @@ export default function HeaderClient(props: HeaderClientProps) {
                 >
                     <div className="flex flex-row items-center gap-2">
                         <span className="w-full text-lg font-bold">Navigation</span>
-                        <ButtonClient
+                        <Button
                             type="button"
                             className="py-1.5"
                             variant="ghost"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             <X />
-                        </ButtonClient>
+                        </Button>
                     </div>
-                    <ButtonClient
+                    <Button
                         type="link"
                         href="/"
                         variant="outline"
@@ -142,28 +123,28 @@ export default function HeaderClient(props: HeaderClientProps) {
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         Accueil
-                    </ButtonClient>
-                    <ButtonClient
+                    </Button>
+                    <Button
                         type="link"
-                        href="/search-with-filters"
-                        variant="outline"
-                        className="py-2"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                        Recherche par filtres
-                    </ButtonClient>
-                    <ButtonClient
-                        type="link"
-                        href="/search-form"
+                        href="/questionary"
                         variant="outline"
                         className="py-2"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         Qu&apos;est ce qu&apos;on mange ce soir ?
-                    </ButtonClient>
+                    </Button>
+                    <Button
+                        type="link"
+                        href="/categories"
+                        variant="outline"
+                        className="py-2"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Recherche par filtres
+                    </Button>
                     {session ? (
                         <>
-                            <ButtonClient
+                            <Button
                                 type="link"
                                 href="/create-recipe"
                                 variant="outline"
@@ -171,18 +152,9 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Création recette
-                            </ButtonClient>
-                            {/* <ButtonClient
-                                type="link"
-                                href="/edit-recipe"
-                                variant="outline"
-                                className="py-2"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                Édition recette
-                            </ButtonClient> */}
-                            {isUserAdmin && (
-                                <ButtonClient
+                            </Button>
+                            {(userRole === "ADMIN" || userRole === "MODO") && (
+                                <Button
                                     type="link"
                                     href="/dashboard"
                                     variant="outline"
@@ -190,9 +162,9 @@ export default function HeaderClient(props: HeaderClientProps) {
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     Dashboard
-                                </ButtonClient>
+                                </Button>
                             )}
-                            <ButtonClient
+                            <Button
                                 type="link"
                                 href="/logout"
                                 variant="outline"
@@ -200,11 +172,11 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Déconnexion
-                            </ButtonClient>
+                            </Button>
                         </>
                     ) : (
                         <>
-                            <ButtonClient
+                            <Button
                                 type="link"
                                 href="/login"
                                 variant="outline"
@@ -212,8 +184,8 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Se connecter
-                            </ButtonClient>
-                            <ButtonClient
+                            </Button>
+                            <Button
                                 type="link"
                                 href="/register"
                                 variant="outline"
@@ -221,11 +193,11 @@ export default function HeaderClient(props: HeaderClientProps) {
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 S&apos;inscrire
-                            </ButtonClient>
+                            </Button>
                         </>
                     )}
                 </nav>
-                <ButtonClient
+                <Button
                     type="button"
                     className={combo(
                         "absolute bottom-8 right-8 rounded-full border-2 bg-white p-4 shadow-lg z-50",
@@ -236,7 +208,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                     onClick={() => setIsMobileMenuOpen(true)}
                 >
                     <ChefHat />
-                </ButtonClient>
+                </Button>
             </div>
             <nav className="flex justify-center bg-secondary py-3 max-md:hidden">
                 <Link href="/" className="absolute left-5 top-1.5 flex items-center gap-2">
@@ -251,13 +223,13 @@ export default function HeaderClient(props: HeaderClientProps) {
                     {linkList.map((linkOrGroup, index) => (
                         <HeaderDisplay
                             key={index}
-                            isUserAdmin={isUserAdmin}
+                            userRole={userRole}
                             index={index}
                             linkOrGroup={linkOrGroup}
                             session={session}
                         />
                     ))}
-                    <ButtonClient
+                    <Button
                         type="button"
                         variant="transparent"
                         className="relative z-30 py-1"
@@ -265,15 +237,14 @@ export default function HeaderClient(props: HeaderClientProps) {
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                     >
                         <Search />
-                    </ButtonClient>
+                    </Button>
                 </SlidingHover>
-                <SearchClient
-                    className={combo(
-                        "absolute border-1.5 border-gray-400 shadow-lg rounded-xl top-16 w-[300px]",
-                        !isSearchOpen && "hidden"
-                    )}
-                    recipeList={slugList}
-                />
+                {slugList && (
+                    <SearchClient
+                        className={combo("absolute shadow-lg rounded-xl top-16 w-[300px]", !isSearchOpen && "hidden")}
+                        recipeList={slugList}
+                    />
+                )}
                 {session?.user && (
                     <Link
                         href={"/favorites"}
@@ -307,7 +278,7 @@ type HeaderDisplayProps = {
     index: number;
     linkOrGroup: LinkProps | LinkGroup;
     session: BetterSessionClient["data"];
-    isUserAdmin: boolean | null;
+    userRole: role | null;
 };
 
 const HeaderDisplay = (props: HeaderDisplayProps) => {
@@ -318,23 +289,27 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Destructure props
-    const { index, linkOrGroup, isUserAdmin, session } = props;
+    const { index, linkOrGroup, userRole, session } = props;
 
     useEffect(() => {
+        // Get popup elements
+        const buttonEl = document.querySelector(`#popup-btn-${index}`) as HTMLElement;
+        const navigationEl = document.querySelector(`#popup-nav-${index}`) as HTMLElement;
+        const backgroundEl = document.querySelector(`#popup-bg-${index}`) as HTMLElement;
+        const hoverZoneEl = document.querySelector(`#popup-hov-${index}`) as HTMLElement;
+
+        // Check if elements exist to prevent a rendering error
+        if (!buttonEl || !navigationEl || !backgroundEl || !hoverZoneEl) {
+            return;
+        }
+
+        // Reset navigation dimensions
+        // navigationEl.style.width = "auto";
+
         if ("group" in linkOrGroup && isOpen) {
             // Set offset
             const offset = 8;
-
-            // Get popup elements
-            const buttonEl = document.querySelector(`#popup-btn-${index}`) as HTMLElement;
-            const navigationEl = document.querySelector(`#popup-nav-${index}`) as HTMLElement;
-            const backgroundEl = document.querySelector(`#popup-bg-${index}`) as HTMLElement;
-            const hoverZoneEl = document.querySelector(`#popup-hov-${index}`) as HTMLElement;
-
-            // Check if elements exist to prevent a rendering error
-            if (!buttonEl || !navigationEl || !backgroundEl || !hoverZoneEl) {
-                return;
-            }
+            const padding = 8;
 
             // Get the largest link element width
             const subButtonLinkList = Array.from(navigationEl.querySelectorAll("a")) as HTMLElement[];
@@ -349,7 +324,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
             const buttonLeft = buttonRect.left;
 
             // Get the largest width between the largest link and the button
-            const subButtonIsLarger = largestSubButtonWidth > buttonWidth ? "auto" : null;
+            const subButtonIsLarger = largestSubButtonWidth + padding > buttonWidth ? "auto" : null;
 
             // Set navigation dimensions and position
             navigationEl.style.top = `${buttonTop + buttonHeight + offset}px`;
@@ -395,7 +370,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
 
         return (
             <div className="flex flex-col gap-2">
-                <ButtonClient
+                <Button
                     id={`popup-btn-${index}`}
                     {...(href ? { type: "link", href } : { type: "button" })}
                     variant="transparent"
@@ -412,7 +387,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                 >
                     <span>{label}</span>
                     <ChevronDown className={combo("transition-transform duration-300", isOpen && "-rotate-180")} />
-                </ButtonClient>
+                </Button>
                 {/* Navigation popup */}
                 <div
                     onMouseEnter={() => setIsOpen(true)}
@@ -424,7 +399,7 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
                     )}
                 >
                     {group.map((groupLink, index) => (
-                        <HeaderLink key={index} isUserAdmin={isUserAdmin} link={groupLink} session={session} />
+                        <HeaderLink key={index} userRole={userRole} link={groupLink} session={session} />
                     ))}
                 </div>
                 {/* Background popup */}
@@ -446,18 +421,18 @@ const HeaderDisplay = (props: HeaderDisplayProps) => {
         );
     } else {
         const link: LinkProps = linkOrGroup;
-        return <HeaderLink isUserAdmin={isUserAdmin} link={link} session={session} />;
+        return <HeaderLink userRole={userRole} link={link} session={session} />;
     }
 };
 
 type HeaderLinkProps = {
     link: LinkProps;
     session: BetterSessionClient["data"];
-    isUserAdmin: boolean | null;
+    userRole: role | null;
 };
 
 const HeaderLink = (props: HeaderLinkProps) => {
-    const { link, isUserAdmin, session } = props;
+    const { link, userRole, session } = props;
     const { label, href, sessionActive = undefined } = link;
 
     // Get the current pathname
@@ -470,10 +445,10 @@ const HeaderLink = (props: HeaderLinkProps) => {
         sessionActive === undefined; // If sessionActive is undefined
 
     if (!displayButton) return <></>;
-    if (label === "Dashboard" && !isUserAdmin) return <></>;
+    if (label === "Dashboard" && !(userRole === "ADMIN" || userRole === "MODO")) return <></>;
 
     return (
-        <ButtonClient
+        <Button
             type="link"
             variant="transparent"
             buttonSize="lg"
@@ -484,6 +459,6 @@ const HeaderLink = (props: HeaderLinkProps) => {
             className={combo("relative z-30 text-nowrap py-1", pathname === href && "font-bold")}
         >
             {label}
-        </ButtonClient>
+        </Button>
     );
 };

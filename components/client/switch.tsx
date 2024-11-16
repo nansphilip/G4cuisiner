@@ -1,4 +1,4 @@
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import { combo } from "@lib/combo";
 
 type SwitchClientProps = {
@@ -30,7 +30,7 @@ export default function SwitchClient(props: SwitchClientProps) {
     };
 
     return (
-        <ButtonClient
+        <Button
             type="button"
             variant="transparent"
             ring="none"
@@ -48,6 +48,6 @@ export default function SwitchClient(props: SwitchClientProps) {
                     className
                 )}
             ></div>
-        </ButtonClient>
+        </Button>
     );
 }

@@ -1,5 +1,5 @@
 import Prisma from "@lib/prisma";
-import { accountData, fruitData, ingredientData, recipeData, userData } from "./data";
+import { accountData, ingredientData, recipeData, userData } from "./data";
 
 export const fixtures = async () => {
     try {
@@ -110,13 +110,6 @@ export const fixtures = async () => {
                         })),
                     },
                 },
-            });
-        }
-
-        // Fruit table
-        for (const { name, description, image } of fruitData) {
-            await Prisma.fruit.create({
-                data: { name, description, image },
             });
         }
 

@@ -1,4 +1,4 @@
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import { combo } from "@lib/combo";
 import Loader from "@comps/server/loader";
 
@@ -15,7 +15,7 @@ export default function LoadingButton(props: ButtonProps) {
     const { type, label, loading, disabled = null, className, onClick } = props;
 
     return (
-        <ButtonClient
+        <Button
             type={type}
             disabled={disabled ?? loading}
             className={combo("flex items-center justify-center gap-2", className)}
@@ -29,6 +29,6 @@ export default function LoadingButton(props: ButtonProps) {
             ) : (
                 <>{label}</>
             )}
-        </ButtonClient>
+        </Button>
     );
 }

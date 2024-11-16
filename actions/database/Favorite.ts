@@ -1,126 +1,119 @@
 "use server";
 
 import {
-    InputFavoriteType,
-    FavoriteType,
-    CreateUpdateFavoriteType,
-    SelectRecipeUserFavoriteType,
+    CreateFavoriteType,
+    SelectFavoriteType,
+    UpdateFavoriteType,
+    ReturnFavoriteType,
+    ReturnFavoriteRecipeUserType,
 } from "@actions/types/Favorite";
 import Prisma from "@lib/prisma";
 
-export const CreateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
+export const CreateFavorite = async (props: CreateFavoriteType): Promise<ReturnFavoriteType> => {
     try {
         const { userId, recipeId, favorite } = props;
-
-        // Check if favorite already exists
         const existingFavorite = await SelectFavorite({ userId, recipeId });
-
-        // If favorite already exists, update it
         if (existingFavorite) {
-            return UpdateFavorite(props);
+            return await UpdateFavorite(props);
         }
-
-        // Create favorite
-        const updatedFavorite = await Prisma.favorite.create({
+        const createdFavorite = await Prisma.favorite.create({
             data: {
                 favorite,
                 userId,
                 recipeId,
             },
         });
-
-        return updatedFavorite;
+        return createdFavorite;
     } catch (error) {
-        throw new Error("Unable to update recipe -> " + (error as Error).message);
+        throw new Error("CreateFavorite -> " + (error as Error).message);
     }
 };
 
-export const SelectFavorite = async (props: InputFavoriteType): Promise<FavoriteType | null> => {
-    const { userId, recipeId } = props;
+export const SelectFavorite = async (props: SelectFavoriteType) => {
+    try {
+        const { userId, recipeId } = props;
 
-    // Get favorite
-    const favorite = await Prisma.favorite.findUnique({
-        where: {
-            userId_recipeId: {
-                userId,
-                recipeId,
+        // Get favorite
+        const favorite = await Prisma.favorite.findUnique({
+            where: {
+                userId_recipeId: {
+                    userId,
+                    recipeId,
+                },
             },
-        },
-    });
-
-    if (!favorite) {
-        return null;
+        });
+        if (!favorite) {
+            return null;
+        }
+        return favorite;
+    } catch (error) {
+        throw new Error("SelectFavorite -> " + (error as Error).message);
     }
-
-    return favorite;
 };
 
-// Get All Favorites
-export async function SelectRecipeUserFavorite(userId: string): Promise<SelectRecipeUserFavoriteType[]> {
-    const recipeData = await Prisma.favorite.findMany({
-        where: { userId: userId, favorite: true },
-        select: {
-            Recipe: {
-                include: {
-                    Image: true,
-                    Rating: {
-                        select: {
-                            rating: true,
+export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFavoriteRecipeUserType[]> {
+    try {
+        const recipeData = await Prisma.favorite.findMany({
+            where: { userId: userId, favorite: true },
+            select: {
+                Recipe: {
+                    include: {
+                        Image: true,
+                        Rating: {
+                            select: {
+                                rating: true,
+                            },
                         },
-                    },
-                    Favorite: {
-                        select: {
-                            favorite: true,
-                        },
-                        where: {
-                            userId: userId,
+                        Favorite: {
+                            select: {
+                                favorite: true,
+                            },
+                            where: {
+                                userId: userId,
+                            },
                         },
                     },
                 },
             },
-        },
-    });
+        });
+        const recipeList = recipeData.map(({ Recipe }) => {
+            // Calculate average rating
+            const notNullRatingList = Recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null); // TODO : check if correct
+            const ratingAverage =
+                Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) /
+                100;
 
-    const recipes = recipeData.map(({ Recipe }) => {
-        const notNullRatingList = Recipe.Rating.map(({ rating }) => rating).filter((rating) => rating !== null); // TODO : check if correct
-        const ratingAverage =
-            Math.trunc((notNullRatingList.reduce((acc, rate) => acc + rate, 0) / notNullRatingList.length) * 100) / 100;
+            const totalFavoriteAmount = Recipe.Favorite.filter(({ favorite }) => favorite).length;
+            const totalRatingAmount = Recipe.Rating.length;
 
-        const totalFavoriteAmount = Recipe.Favorite.filter(({ favorite }) => favorite).length;
-        const totalRatingAmount = Recipe.Rating.length;
-
-        return {
-            id: Recipe.id,
-            title: Recipe.title,
-            slug: Recipe.slug,
-            description: Recipe.description,
-            ratingAverage,
-            totalFavoriteAmount,
-            totalRatingAmount,
-            userFavorite: Recipe.Favorite[0].favorite,
-            images: Recipe.Image.map(({url, alt}) => ({
-                url,
-                alt,
-            }))
-        };
-    });
-
-    return recipes;
+            return {
+                recipeId: Recipe.id,
+                title: Recipe.title,
+                slug: Recipe.slug,
+                description: Recipe.description,
+                ratingAverage,
+                totalRatingAmount,
+                totalFavoriteAmount,
+                userFavorite: Recipe.Favorite[0].favorite,
+                imageList: Recipe.Image.map(({ url, alt }) => ({
+                    url,
+                    alt,
+                })),
+            };
+        });
+        return recipeList;
+    } catch (error) {
+        throw new Error("SelectFavoriteRecipeUser -> " + (error as Error).message);
+    }
 }
 
-export const UpdateFavorite = async (props: CreateUpdateFavoriteType): Promise<FavoriteType> => {
+export const UpdateFavorite = async (props: UpdateFavoriteType): Promise<ReturnFavoriteType> => {
     try {
         const { userId, recipeId, favorite } = props;
-
-        // Check if favorite already exists
         const existingFavorite = await SelectFavorite({ userId, recipeId });
-
-        // If favorite does not exist, create it
         if (!existingFavorite) {
-            return CreateFavorite(props);
+            return await CreateFavorite(props);
         }
-
-        // Update favorite
         const updatedFavorite = await Prisma.favorite.update({
             data: {
                 favorite,
@@ -132,9 +125,8 @@ export const UpdateFavorite = async (props: CreateUpdateFavoriteType): Promise<F
                 },
             },
         });
-
         return updatedFavorite;
     } catch (error) {
-        throw new Error("Unable to update recipe -> " + (error as Error).message);
+        throw new Error("UpdateFavorite -> " + (error as Error).message);
     }
 };

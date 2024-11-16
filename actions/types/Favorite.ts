@@ -1,31 +1,53 @@
 "use server";
 
-export interface InputFavoriteType {
-    userId: string;
-    recipeId: string;
+import Prisma from "@prisma/client";
+
+export type Favorite = Prisma.Favorite;
+
+export type favorite = Favorite["favorite"];
+export type id = Favorite["id"];
+export type userId = Favorite["userId"];
+export type recipeId = Favorite["recipeId"];
+export type createdAt = Favorite["createdAt"];
+export type updatedAt = Favorite["updatedAt"];
+
+export interface CreateFavoriteType {
+    userId: userId;
+    recipeId: recipeId;
+    favorite: favorite;
 }
 
-export interface CreateUpdateFavoriteType extends InputFavoriteType {
-    favorite: boolean;
+export interface SelectFavoriteType {
+    userId: userId;
+    recipeId: recipeId;
 }
 
-export interface SelectRecipeUserFavoriteType {
-    id: string;
+export interface UpdateFavoriteType {
+    userId: userId;
+    recipeId: recipeId;
+    favorite: favorite;
+}
+
+export interface ReturnFavoriteType {
+    favorite: favorite;
+    id: id;
+    userId: userId;
+    recipeId: recipeId;
+    createdAt: createdAt;
+    updatedAt: updatedAt;
+}
+
+export interface ReturnFavoriteRecipeUserType {
+    recipeId: recipeId;
     title: string;
     slug: string;
     description: string;
-    images: {
-        url: string;
-        alt: string;
-    }[];
     ratingAverage: number;
     totalRatingAmount: number;
     totalFavoriteAmount: number;
-    userFavorite: boolean;
-}
-
-export interface FavoriteType {
-    favorite: boolean;
-    userId: string;
-    recipeId: string;
+    userFavorite: favorite;
+    imageList: {
+        url: string;
+        alt: string;
+    }[];
 }

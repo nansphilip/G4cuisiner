@@ -58,7 +58,7 @@ export default function FavoriteAddClient(props: FavoriteAddClientProps) {
         <button
             onClick={toggleFavorite}
             aria-label="Ajouter aux favoris"
-            className={combo("group flex size-fit gap-2 items-center justify-center", classDiv)}
+            className={combo("group flex flex-row size-fit gap-2 items-center justify-center", classDiv)}
         >
             <Heart
                 className={combo(
@@ -69,7 +69,7 @@ export default function FavoriteAddClient(props: FavoriteAddClientProps) {
                         : "stroke-gray-600 group-hover:stroke-gray-700 fill-white group-hover:fill-gray-200"
                 )}
             />
-            <div className="flex flex-col items-start">
+            <div className="max-lg:hidden flex flex-col items-start">
                 <span className="text-xs font-bold">Ajouter à mes favoris</span>
                 <span className="text-xs text-gray-500">{favorisCount} cuisiniers l&apos;ont déjà ajouté</span>
             </div>

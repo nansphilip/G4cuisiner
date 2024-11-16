@@ -16,3 +16,25 @@
 - [ ] Open Graph and Twitter Card
 
 - [ ] Todo comment ?
+
+- [ ] ESLint Tailwind PLUGIN ???????????????????????
+
+- [ ] À faire avant rendu
+  
+  - [ ] "Pas de commentaire pour le moment"
+  
+  - [ ] Zustand issue
+    - [ ] Rating sync
+    - [ ] Favorite sync
+  
+  - [ ] Creation page design
+    - [ ] Une fois créé, redirection vers la prévisualisation
+  
+  - [ ] Prévisualisation de page
+
+  - [ ] Consultation page
+    - [ ] Button pour les admin, modo et auteur pour éditer la page
+
+  - [ ] Edition page
+
+  - [ ] Toggle image cards

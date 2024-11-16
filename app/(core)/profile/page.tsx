@@ -1,4 +1,4 @@
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import ProfileClient from "./client";
 import type { Metadata } from "next"
 
@@ -12,9 +12,9 @@ export default async function ProfilePage() {
     return (
         <>
             <p>Cette page n&apos;est pas disponible pour le moment.</p>
-            <ButtonClient type="link" href="/" variant="outline">
+            <Button type="link" href="/" variant="outline">
                 Retour Accueil
-            </ButtonClient>
+            </Button>
             <ProfileClient />
         </>
     );

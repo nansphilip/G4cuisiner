@@ -1,17 +1,17 @@
-import { selectRecipesByCreateDate } from "@actions/database/Recipe";
+import { SelectLastRecipe } from "@actions/database/Recipe";
 import logo from "@public/logo.svg";
 import Image from "next/image";
-import { SelectRecipeUserFavorite } from "@actions/database/Favorite";
+import { SelectFavoriteRecipeUser } from "@actions/database/Favorite";
 import { getSession } from "@lib/auth";
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import FavoriteDisplayClient from "@comps/client/favorite-display";
 import RecipeImageListClient from "@comps/client/image-listing";
 
 export default async function HomePage() {
     const session = await getSession();
 
-    const recipeList = await selectRecipesByCreateDate(3);
-    const userFavoriteList = session && (await SelectRecipeUserFavorite(session.user.id));
+    const lastRecipeList = await SelectLastRecipe({limit: 3});
+    const userFavoriteList = session && (await SelectFavoriteRecipeUser(session.user.id));
 
     return (
         <>
@@ -30,58 +30,55 @@ export default async function HomePage() {
                     {userFavoriteList && userFavoriteList.length > 0 ? (
                         <>
                             {userFavoriteList.length > 0 &&
-                                userFavoriteList.map((recipe, index) => (
+                                userFavoriteList.map(({title, slug, description, imageList}, index) => (
                                     <div
                                         key={index}
-                                        className="w-[300px] flex-col rounded-lg border border-gray-300 bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
+                                        className="w-[300px] flex-col rounded-lg bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
                                     >
                                         <div className="mb-2 flex flex-row items-center justify-between text-2xl font-bold">
-                                            <span>{recipe.title}</span>
+                                            <span>{title}</span>
                                             <FavoriteDisplayClient userFavorite={true} classSvg="size-8" />
                                         </div>
                                         <div className="relative w-full">
-                                            <RecipeImageListClient isHomePage={true} imageList={recipe.images} />
+                                            <RecipeImageListClient isHomePage={true} imageList={imageList} />
                                         </div>
                                         <div className="mt-2 w-full">
-                                            <p className="m-2 w-full text-xs">{recipe.description}</p>
+                                            <p className="m-2 w-full text-xs">{description}</p>
                                         </div>
                                         <div className="mt-2 flex flex-col items-center justify-between">
-                                            <ButtonClient
+                                            <Button
                                                 type="link"
-                                                href={`/recipe/${recipe.slug}`}
-                                                // buttonSize="sm"
-                                                className="border border-gray-400 bg-primary font-bold text-tertiary"
+                                                href={`/recipe/${slug}`}
+                                                className="shadow-md bg-primary hover:bg-orange-300 font-bold text-tertiary"
                                             >
                                                 Voir la recette
-                                            </ButtonClient>
+                                            </Button>
                                         </div>
                                     </div>
                                 ))}
                         </>
                     ) : (
                         <>
-                            {recipeList.length > 0 ? (
-                                recipeList.map((recipe) => (
+                            {lastRecipeList ? (
+                                lastRecipeList.map(({title, slug, imageList}, index) => (
                                     <div
-                                        key={recipe.id}
-                                        className="w-[300px] flex-col rounded-lg border border-gray-300 bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
+                                        key={index}
+                                        className="w-[300px] flex-col rounded-lg bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
                                     >
                                         <div className="mb-2 flex flex-row items-center justify-between text-2xl font-bold">
-                                            <span>{recipe.title}</span>
+                                            <span>{title}</span>
                                         </div>
                                         <div className="relative w-full">
-                                            <RecipeImageListClient isHomePage={true} imageList={recipe.images} />
+                                            <RecipeImageListClient isHomePage={true} imageList={imageList} />
                                         </div>
                                         <div className="mt-2 flex flex-col items-center justify-between">
-                                            <ButtonClient
+                                            <Button
                                                 type="link"
-                                                href={`/recipe/${recipe.slug}`}
-                                                buttonSize="sm"
-                                                variant="outline"
-                                                className="border bg-primary font-bold text-black"
+                                                href={`/recipe/${slug}`}
+                                                className="shadow-md bg-primary hover:bg-orange-300 font-bold text-tertiary"
                                             >
                                                 Voir la recette
-                                            </ButtonClient>
+                                            </Button>
                                         </div>
                                     </div>
                                 ))

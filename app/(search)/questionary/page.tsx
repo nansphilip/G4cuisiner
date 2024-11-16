@@ -6,10 +6,6 @@ export const metadata: Metadata = {
     description: "Find a recipe by responding a few questions.",
 };
 
-export default async function CreateQuestionaryPage() {
-    return (
-        <>
-            <QuestionaryClient />
-        </>
-    );
+export default async function QuestionaryPage() {
+    return <QuestionaryClient />;
 }

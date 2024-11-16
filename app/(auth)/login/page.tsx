@@ -1,5 +1,5 @@
 import LoginClient from "@app/(auth)/login/client";
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
@@ -21,13 +21,13 @@ export default async function LoginPage() {
                 <p className="text-center text-xs text-gray-500">Se connecter avec adresse mail et mot de passe.</p>
                 <LoginClient className="flex w-[240px] flex-col items-center justify-center gap-2" />
                 <div className="flex flex-col items-center justify-center">
-                    <ButtonClient type="link" variant="link" ring="none" fontSize="sm" href="/register">
+                    <Button type="link" variant="link" ring="none" fontSize="sm" href="/register">
                         Pas encore inscrit ?
-                    </ButtonClient>
+                    </Button>
                     <p className="text-xs text-gray-300">or</p>
-                    <ButtonClient type="link" variant="link" ring="none" fontSize="sm" href="/reset">
+                    <Button type="link" variant="link" ring="none" fontSize="sm" href="/reset">
                         Mot de passe oublié ?
-                    </ButtonClient>
+                    </Button>
                 </div>
             </div>
         </>

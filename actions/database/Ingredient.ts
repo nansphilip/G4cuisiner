@@ -1,9 +1,9 @@
 "use server";
 
-import { IngredientCreateRecipe } from "@actions/types/Ingredient";
 import Prisma from "@lib/prisma";
+import { ReturnIngredientType } from "@actions/types/Ingredient";
 
-export const selectAllIngredients = async (): Promise<IngredientCreateRecipe[]> => {
+export const SelectEveryIngredient = async (): Promise<ReturnIngredientType[] | null> => {
     try {
         const ingredientList = await Prisma.ingredient.findMany({
             select: {
@@ -12,9 +12,11 @@ export const selectAllIngredients = async (): Promise<IngredientCreateRecipe[]> 
                 image: true,
             },
         });
+        if (ingredientList.length === 0) {
+            return null;
+        }
         return ingredientList;
     } catch (error) {
-        console.error("Erreur lors de la récupération des ingrédients:", error);
-        throw error;
+        throw new Error("SelectEveryIngredient -> " + (error as Error).message);
     }
 };

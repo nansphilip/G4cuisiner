@@ -14,7 +14,7 @@ interface QuantityButtonProps {
     };
 }
 
-export default function QuantityButtonClient(props: QuantityButtonProps) {
+export default function QuantityButton(props: QuantityButtonProps) {
     const { ingredient } = props;
 
     const {unit} = ingredient;

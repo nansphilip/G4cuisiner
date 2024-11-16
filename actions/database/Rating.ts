@@ -1,21 +1,15 @@
 "use server";
 
-import { InputRatingType, RatingType, CreateUpdateRatingType } from "@actions/types/Rating";
+import { CreateRatingType, SelectRatingType, UpdateRatingType, ReturnRatingType } from "@actions/types/Rating";
 import Prisma from "@lib/prisma";
 
-export const CreateRating = async (props: CreateUpdateRatingType): Promise<RatingType> => {
+export const CreateRating = async (props: CreateRatingType): Promise<ReturnRatingType> => {
     try {
         const { userId, recipeId, rating } = props;
-
-        // Check if rating already exists
         const existingRating = await SelectRating({ userId, recipeId });
-
-        // If rating already exists, update it
         if (existingRating) {
-            return UpdateRating(props);
+            return await UpdateRating(props);
         }
-
-        // Create rating
         const updatedRating = await Prisma.rating.create({
             data: {
                 rating,
@@ -23,46 +17,39 @@ export const CreateRating = async (props: CreateUpdateRatingType): Promise<Ratin
                 recipeId,
             },
         });
-
         return updatedRating;
     } catch (error) {
-        throw new Error("Unable to update recipe -> " + (error as Error).message);
+        throw new Error("CreateRating -> " + (error as Error).message);
     }
 };
 
-export const SelectRating = async (props: InputRatingType): Promise<RatingType | null> => {
-    const { userId, recipeId } = props;
-
-    // Get rating
-    const rating = await Prisma.rating.findUnique({
-        where: {
-            userId_recipeId: {
-                userId,
-                recipeId,
+export const SelectRating = async (props: SelectRatingType): Promise<ReturnRatingType | null> => {
+    try {
+        const { userId, recipeId } = props;
+        const rating = await Prisma.rating.findUnique({
+            where: {
+                userId_recipeId: {
+                    userId,
+                    recipeId,
+                },
             },
-        },
-    });
-
-    if (!rating) {
-        return null;
+        });
+        if (!rating) {
+            return null;
+        }
+        return rating;
+    } catch (error) {
+        throw new Error("SelectRating -> " + (error as Error).message);
     }
-
-    return rating;
 };
 
-export const UpdateRating = async (props: CreateUpdateRatingType): Promise<RatingType> => {
+export const UpdateRating = async (props: UpdateRatingType): Promise<ReturnRatingType> => {
     try {
         const { userId, recipeId, rating } = props;
-
-        // Check if rating already exists
         const existingRating = await SelectRating({ userId, recipeId });
-
-        // If rating does not exist, create it
         if (!existingRating) {
-            return CreateRating(props);
+            return await CreateRating(props);
         }
-
-        // Update rating
         const updatedRating = await Prisma.rating.update({
             data: {
                 rating,
@@ -74,26 +61,19 @@ export const UpdateRating = async (props: CreateUpdateRatingType): Promise<Ratin
                 },
             },
         });
-
         return updatedRating;
     } catch (error) {
-        throw new Error("Unable to update recipe -> " + (error as Error).message);
+        throw new Error("UpdateRating -> " + (error as Error).message);
     }
 };
 
-export const DeleteRating = async (props: InputRatingType): Promise<boolean> => {
+export const DeleteRating = async (props: SelectRatingType): Promise<ReturnRatingType | null> => {
     try {
         const { userId, recipeId } = props;
-
-        // Check if rating already exists
         const existingRating = await SelectRating({ userId, recipeId });
-
-        // If rating does not exist, return false
         if (!existingRating) {
-            return false;
+            return null;
         }
-
-        // Delete rating
         await Prisma.rating.delete({
             where: {
                 userId_recipeId: {
@@ -102,9 +82,8 @@ export const DeleteRating = async (props: InputRatingType): Promise<boolean> => 
                 },
             },
         });
-
-        return true;
+        return existingRating;
     } catch (error) {
-        throw new Error("Unable to delete recipe -> " + (error as Error).message);
+        throw new Error("DeleteRating -> " + (error as Error).message);
     }
 };

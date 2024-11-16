@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import ButtonClient from "@comps/client/button";
-import { UpdateRecipeStatus } from "@actions/database/Recipe";
-import { RecipeType } from "@actions/types/Recipe";
+import Button from "@comps/server/button";
+import { UpdateRecipeById } from "@actions/database/Recipe";
+import { ReturnRecipeType } from "@actions/types/Recipe";
 
 interface ReviewRecipesProps {
-    recipes: RecipeType[];
+    recipes: ReturnRecipeType[];
 }
 
 const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {
@@ -15,9 +15,9 @@ const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {
     const handleUpdateStatus = async (recipeId: string, status: "APPROVED" | "REJECTED") => {
         try {
             // Appeler la fonction pour mettre à jour le statut de la recette dans la base de données
-            await UpdateRecipeStatus({
-                recipeId,
-                status,
+            await UpdateRecipeById({
+                id: recipeId,
+                data: {status},
             });
 
             // Mettre à jour l'état local avec le nouveau statut
@@ -33,7 +33,7 @@ const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {
 
     return (
         <div className="space-y-4 p-4">
-            <h3 className="text-xl font-semibold">Evaluation des Nouvelles Recettes</h3>
+            <h3 className="text-xl font-semibold">Nouvelles recettes en attente</h3>
 
             {/* Table des recettes à réviser */}
             <div className="mt-4 overflow-x-auto">
@@ -63,62 +63,58 @@ const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {
                                     <div className="flex items-center gap-2">
                                         {recipe.status === "PENDING" && (
                                             <>
-                                                <ButtonClient
+                                                <Button
                                                     type="button"
                                                     variant="default"
-                                                    className="w-auto max-w-xs truncate bg-green-100 text-green-500 hover:bg-green-200"
+                                                    className="bg-green-100 text-green-600 hover:bg-green-200"
                                                     onClick={() => handleUpdateStatus(recipe.id, "APPROVED")}
                                                 >
                                                     Approuver
-                                                </ButtonClient>
-                                                <ButtonClient
+                                                </Button>
+                                                <Button
                                                     type="button"
                                                     variant="danger"
-                                                    className="w-auto max-w-xs truncate bg-red-100 text-red-500 hover:bg-red-200"
+                                                    className="bg-red-100 text-red-600 hover:bg-red-200"
                                                     onClick={() => handleUpdateStatus(recipe.id, "REJECTED")}
                                                 >
                                                     Rejeter
-                                                </ButtonClient>
+                                                </Button>
                                             </>
                                         )}
                                         {recipe.status === "REJECTED" && (
                                             <>
-                                                <ButtonClient
+                                                <Button
                                                     type="button"
-                                                    variant="default"
-                                                    className="w-auto max-w-xs bg-gray-100 text-gray-400 hover:bg-gray-200"
+                                                    variant="outline"
                                                     disabled
                                                 >
                                                     Approuver
-                                                </ButtonClient>
-                                                <ButtonClient
+                                                </Button>
+                                                <Button
                                                     type="button"
-                                                    variant="danger"
-                                                    className="w-auto max-w-xs bg-red-100 text-red-500 hover:bg-red-200"
+                                                    variant="outline"
                                                     disabled
                                                 >
                                                     Rejeter
-                                                </ButtonClient>
+                                                </Button>
                                             </>
                                         )}
                                         {recipe.status === "APPROVED" && (
                                             <>
-                                                <ButtonClient
+                                                <Button
                                                     type="button"
-                                                    variant="default"
-                                                    className="w-auto max-w-xs bg-green-100 text-green-500 hover:bg-green-200"
+                                                    variant="outline"
                                                     disabled
                                                 >
                                                     Approuver
-                                                </ButtonClient>
-                                                <ButtonClient
+                                                </Button>
+                                                <Button
                                                     type="button"
-                                                    variant="default"
-                                                    className="w-auto max-w-xs bg-gray-100 text-gray-400 hover:bg-gray-200"
+                                                    variant="outline"
                                                     disabled
                                                 >
                                                     Rejeter
-                                                </ButtonClient>
+                                                </Button>
                                             </>
                                         )}
                                     </div>

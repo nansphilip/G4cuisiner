@@ -1,9 +1,9 @@
 "use client";
-import { IngredientCreateRecipe } from "@actions/types/Ingredient";
 import { useState, useEffect, Key } from "react";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+import { ReturnIngredientType } from "@actions/types/Ingredient";
 
 //////////////////////////////////////////////////////////////////////////
 //// Verification que l'image de l'ingredient existe ///////////////////
@@ -24,7 +24,13 @@ const IngredientImage = ({ imageUrl, name }: { imageUrl: string; name: string })
     return <Image src={imageExists ? imageUrl : imageError} alt={name} width={60} height={60} />;
 };
 
-export default function AddIngredientComponent({ ingredientList }: { ingredientList: IngredientCreateRecipe[] }) {
+type IngredientImageProps = {
+    ingredientList: ReturnIngredientType[];
+};
+
+export default function AddIngredientComponent(props: IngredientImageProps) {
+    const { ingredientList } = props;
+
     const handleClick = () => {
         //Verify if both input are not empty
         if (inputIngredient === "" || inputQuantity === "") {

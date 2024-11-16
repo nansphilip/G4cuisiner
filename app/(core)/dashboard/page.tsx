@@ -1,4 +1,4 @@
-import ButtonClient from "@comps/client/button";
+import Button from "@comps/server/button";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CircleAlert, CircleCheck } from "lucide-react"; // Ajout des icônes Lock et Unlock
@@ -6,11 +6,11 @@ import TimerClient from "@comps/client/timer";
 import { combo } from "@lib/combo";
 import type { Metadata } from "next";
 import RestrictClient from "@comps/client/restrict-user";
-import { SelectEveryUser, SelectUserRole } from "@actions/database/User";
-import { UserType } from "@actions/types/User";
+import { SelectEveryUser, SelectUserById } from "@actions/database/User";
 import UserRoleSelect from "@comps/client/update-user-role";
-import { SelectPendingRecipes } from "@actions/database/Recipe";
+import { SelectEveryPendingRecipe } from "@actions/database/Recipe";
 import ReviewRecipes from "@/components/client/review-recipe";
+import { ReturnUserType } from "@actions/types/User";
 
 export const metadata: Metadata = {
     title: "Dashboard",
@@ -21,15 +21,16 @@ export default async function DashboardPage() {
     const session = await getSession();
     if (!session) redirect("/login");
 
-    const isUserAdmin = await SelectUserRole({ userId: session.user.id });
-    if (!isUserAdmin) redirect("/favorites");
+    const user = await SelectUserById({ userId: session.user.id });
+    const userRole = user ? user.role : null;
+    if (!(userRole === "ADMIN" || userRole === "MODO")) redirect("/favorites");
 
     const name = session.user.name;
     const email = session.user.email;
     const emailVerified = session.user.emailVerified;
 
-    const users = await SelectEveryUser();
-    const pendingRecipes = await SelectPendingRecipes();
+    const userList = await SelectEveryUser();
+    const pendingRecipes = await SelectEveryPendingRecipe();
 
     const timerList: {
         type: "Created" | "Updated" | "Expires";
@@ -45,9 +46,9 @@ export default async function DashboardPage() {
             {/* Header avec le titre et bouton Logout */}
             <div className="flex items-center justify-between p-4">
                 <h2 className="text-2xl font-bold">User Dashboard</h2>
-                <ButtonClient type="link" href="/logout" variant="danger">
+                <Button type="link" href="/logout" variant="danger">
                     Déconnexion
-                </ButtonClient>
+                </Button>
             </div>
 
             {/* Section utilisateur */}
@@ -94,8 +95,8 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </div>
-            <UserList users={users} />
-            <ReviewRecipes recipes={pendingRecipes} />
+            {userList && <UserList userList={userList} />}
+            {pendingRecipes && <ReviewRecipes recipes={pendingRecipes} />}
         </div>
     );
 }
@@ -122,10 +123,10 @@ const DisplayTimer = (props: TimerClientProps) => {
 
 // Composant UserList
 type UserListProps = {
-    users: UserType[];
+    userList: ReturnUserType[];
 };
 
-const UserList = ({ users }: UserListProps) => {
+const UserList = ({ userList }: UserListProps) => {
     return (
         <div className="space-y-4 p-4">
             <h3 className="text-xl font-bold">Gestion des utilisateurs</h3>
@@ -141,12 +142,12 @@ const UserList = ({ users }: UserListProps) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user) => (
+                        {userList.map((user) => (
                             <tr key={user.id}>
                                 <td className="border-b px-4 py-2">{user.name}</td>
                                 <td className="border-b px-4 py-2">{user.email}</td>
                                 <td className="border-b px-4 py-2">
-                                    <UserRoleSelect initialRole={user.role} userId={user.id} />
+                                    <UserRoleSelect user={user} />
                                 </td>
                                 <td className="border-b px-4 py-2">
                                     <div
@@ -242,32 +243,32 @@ const UserList = ({ users }: UserListProps) => {
 //                                     <div className="flex items-center gap-2">
 //                                         {comment.status === "Pending" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                         {comment.status === "Rejected" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                         {comment.status === "Approved" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                     </div>
@@ -280,7 +281,6 @@ const UserList = ({ users }: UserListProps) => {
 //         </div>
 //     );
 // };
-
 
 // // Composant pour la révision des recettes
 // const ReviewRecipes = ({ recipes }: ReviewRecipesProps) => {
@@ -318,32 +318,32 @@ const UserList = ({ users }: UserListProps) => {
 //                                     <div className="flex items-center gap-2">
 //                                         {recipe.status === "Pending" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                         {recipe.status === "Rejected" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                         {recipe.status === "Approved" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                     </div>
@@ -404,32 +404,32 @@ const UserList = ({ users }: UserListProps) => {
 //                                     <div className="flex items-center gap-2">
 //                                         {ingredient.status === "Pending" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="default" className="w-20 bg-yellow-100 text-yellow-600 hover:bg-yellow-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                         {ingredient.status === "Rejected" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="danger" className="w-20 bg-red-100 text-red-500 hover:bg-red-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                         {ingredient.status === "Approved" && (
 //                                             <>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
+//                                                 <Button type="button" variant="default" className="w-20 bg-green-100 text-green-500 hover:bg-green-200">
 //                                                     Approuvé
-//                                                 </ButtonClient>
-//                                                 <ButtonClient type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
+//                                                 </Button>
+//                                                 <Button type="button" variant="default" className="w-20 bg-gray-100 text-gray-400 hover:bg-gray-200">
 //                                                     Rejeté
-//                                                 </ButtonClient>
+//                                                 </Button>
 //                                             </>
 //                                         )}
 //                                     </div>

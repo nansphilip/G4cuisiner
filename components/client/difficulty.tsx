@@ -35,7 +35,7 @@ function StarRating({ number, editable = true }: StarRatingProps) {
                         onMouseEnter={() => handleMouseOver(value)}
                         onMouseLeave={handleMouseOut}
                         onClick={() => handleClick(value)}
-                        className={`size-14 cursor-pointer transition duration-200`}
+                        className={`size-10 md:size-14 cursor-pointer transition duration-200`}
                         fill="currentColor"
                         viewBox="0 0 512 512"
                         xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ function StarRating({ number, editable = true }: StarRatingProps) {
                         </g>
                     </svg>
                 ))}
-                <input type="hidden" name="dificultyLevel" value={rateClick} />
+                <input type="hidden" name="difficultyLevel" value={rateClick} />
             </div>
         </label>
     );

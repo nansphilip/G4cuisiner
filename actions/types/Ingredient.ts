@@ -1,15 +1,17 @@
 "use server";
 
-export interface IngredientFixtures {
-    id: string;
-    name: string;
-    description: string;
-    image: string | null;
-}
+import Prisma from "@prisma/client";
 
-//Type pour récupérer et afficher les ingrédients lors de la création d'une recette
-export interface IngredientCreateRecipe {
-    id: string;
-    name: string;
-    image: string | null;
+export type Ingredient = Prisma.Ingredient;
+
+export type id = Ingredient["id"];
+export type name = Ingredient["name"];
+export type image = Ingredient["image"];
+export type createdAt = Ingredient["createdAt"];
+export type updatedAt = Ingredient["updatedAt"];
+
+export interface ReturnIngredientType {
+    id: id;
+    name: name;
+    image: image;
 }

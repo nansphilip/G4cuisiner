@@ -1,6 +1,6 @@
 "use client"
 
-import ButtonClient from "@comps/client/button"
+import Button from "@comps/server/button"
 import { useEffect } from "react"
 
 export default function ErrorPage({ error, reset }: {
@@ -17,8 +17,8 @@ export default function ErrorPage({ error, reset }: {
         <h1 className="text-2xl font-bold">An error occurred</h1>
         <p>{error.message}</p>
         <div className="flex flex-row items-center justify-center gap-2">
-            <ButtonClient type="link" href="/">Home</ButtonClient>
-            <ButtonClient type="button" onClick={reset} variant="outline">Retry</ButtonClient>
+            <Button type="link" href="/">Home</Button>
+            <Button type="button" onClick={reset} variant="outline">Retry</Button>
         </div>
     </>
 }
