@@ -50,4 +50,10 @@ export interface ReturnFavoriteRecipeUserType {
         url: string;
         alt: string;
     }[];
+    latestReview: {
+        review: string;
+        userId: string;
+        userName: string
+        createdAt: string;
+    } | null;
 }

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import SearchFavoriteClient from "@comps/client/search-favorite";
 import RecipeImageListClient from "@comps/client/image-listing";
-import { ReturnFavoriteRecipeUserType } from "@actions/types/Favorite";
+import {ReturnFavoriteRecipeUserType} from "@actions/types/Favorite";
 import FavoriteAddClient from "@comps/client/favorite-add";
-import { BetterSessionServer } from "@lib/auth";
+import {BetterSessionServer} from "@lib/auth";
 import Button from "@comps/server/button";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 
@@ -15,7 +15,7 @@ type FavoritesClientProps = {
 };
 
 export default function FavoritesClient(props: FavoritesClientProps) {
-    const { recipeUserFavoriteList, session } = props;
+    const {recipeUserFavoriteList, session} = props;
 
     const [filteredFavorites, setFilteredFavorites] = useState(recipeUserFavoriteList);
 
@@ -24,15 +24,16 @@ export default function FavoritesClient(props: FavoritesClientProps) {
         setFilteredFavorites(filtered);
     };
 
+
     return (
         <div className="space-y-5 pb-4">
-            <SearchFavoriteClient onSearch={handleSearch} />
+            <SearchFavoriteClient onSearch={handleSearch}/>
             <div className="flex flex-col gap-4">
                 {filteredFavorites.length > 0 ? (
                     filteredFavorites.map((recipe, index) => (
                         <div key={index} className="flex gap-3 rounded-xl border p-3 shadow-lg">
                             <div className="h-full">
-                                <RecipeImageListClient imageList={[recipe.imageList[0]]} />
+                                <RecipeImageListClient imageList={[recipe.imageList[0]]}/>
                             </div>
                             <div className="flex w-full flex-row justify-between text-2xl">
                                 <div className="flex flex-col">
@@ -45,6 +46,18 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                                         />
                                     </div>
                                     <span className="text-xs">{recipe.description}</span>
+                                    {recipe.latestReview ? (
+                                        <div className="m-4 grow rounded-md border p-2 text-xs text-black">
+                                            <span className="font-semibold">Dernier commentaire :</span>
+                                            <p>{recipe.latestReview.review}</p>
+
+                                            <span className="text-xs text-gray-400">
+                            Posté par {recipe.latestReview.User.name} le {new Date(recipe.latestReview.createdAt).toLocaleDateString()}</span>
+                                        </div>
+                                    ) : (
+                                        <div className="mt-2 text-sm text-gray-400">Aucun commentaire pour cette
+                                            recette.</div>
+                                    )}
                                 </div>
                                 <div className="flex flex-col items-end justify-between">
                                     <FavoriteAddClient
@@ -54,7 +67,9 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                                         totalFavoriteAmount={recipe.totalFavoriteAmount}
                                         classSvg="size-10"
                                     />
-                                    <Button className="bg-primary font-bold text-tertiary shadow-md hover:bg-orange-300" type="link" href={`/recipe/${recipe.slug}`}>
+                                    <Button
+                                        className="w-full bg-primary font-bold text-tertiary shadow-md hover:bg-orange-300"
+                                        type="link" href={`/recipe/${recipe.slug}`}>
                                         Voir la recette
                                     </Button>
                                 </div>

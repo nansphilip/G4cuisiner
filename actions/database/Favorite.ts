@@ -72,6 +72,22 @@ export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFa
                                 userId: userId,
                             },
                         },
+                        Review : {
+                            select: {
+                                id: true,
+                                review: true,
+                                userId: true,
+                                createdAt: true,
+                                User: {
+                                    select: {
+                                        name: true,
+                                    }
+                                }
+                            },
+                            orderBy: {
+                                createdAt: 'desc',
+                            },
+                        }
                     },
                 },
             },
@@ -86,6 +102,9 @@ export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFa
             const totalFavoriteAmount = Recipe.Favorite.filter(({ favorite }) => favorite).length;
             const totalRatingAmount = Recipe.Rating.length;
 
+            const latestReview = Recipe.Review[0] || null;
+
+
             return {
                 recipeId: Recipe.id,
                 title: Recipe.title,
@@ -94,6 +113,7 @@ export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFa
                 ratingAverage,
                 totalRatingAmount,
                 totalFavoriteAmount,
+                latestReview,
                 userFavorite: Recipe.Favorite[0].favorite,
                 imageList: Recipe.Image.map(({ url, alt }) => ({
                     url,
@@ -102,6 +122,7 @@ export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFa
             };
         });
         return recipeList;
+
     } catch (error) {
         throw new Error("SelectFavoriteRecipeUser -> " + (error as Error).message);
     }
