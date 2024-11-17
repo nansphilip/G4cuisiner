@@ -168,13 +168,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                         <input
                             type="radio"
                             name="lunchStep"
-                            id="allSteps"
+                            id="allinstructions"
                             onChange={(e) => handleChangeRadio(e, 4)}
                             checked={filtersLunchStep[4]}
                             className="mr-2"
                             aria-label="Toutes les étapes"
                         />
-                        <label htmlFor="allSteps" className="text-gray-700">
+                        <label htmlFor="allinstructions" className="text-gray-700">
                             Toutes
                         </label>
                     </div>

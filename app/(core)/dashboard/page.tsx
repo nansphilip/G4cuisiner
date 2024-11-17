@@ -7,7 +7,7 @@ import { combo } from "@lib/combo";
 import type { Metadata } from "next";
 import RestrictClient from "@comps/client/restrict-user";
 import { SelectEveryUser, SelectUserById } from "@actions/database/User";
-import UserRoleSelect from "@comps/client/update-user-role";
+import UserRoleToggler from "@comps/client/update-user-role";
 import { SelectEveryPendingRecipe } from "@actions/database/Recipe";
 import ReviewRecipes from "@/components/client/review-recipe";
 import { ReturnUserType } from "@actions/types/User";
@@ -147,7 +147,7 @@ const UserList = ({ userList }: UserListProps) => {
                                 <td className="border-b px-4 py-2">{user.name}</td>
                                 <td className="border-b px-4 py-2">{user.email}</td>
                                 <td className="border-b px-4 py-2">
-                                    <UserRoleSelect user={user} />
+                                    <UserRoleToggler user={user} />
                                 </td>
                                 <td className="border-b px-4 py-2">
                                     <div

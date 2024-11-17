@@ -16,24 +16,22 @@ type ButtonProps = {
     onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
     onMouseEnter?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
     onMouseLeave?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
-    props?: React.LinkHTMLAttributes<HTMLLinkElement> | React.ButtonHTMLAttributes<HTMLButtonElement>;
 } & (
     | {
           // If type "link"
           type: "link";
           href: string;
-          props?: React.LinkHTMLAttributes<HTMLLinkElement>;
       }
     | {
           // If type "button" or "submit"
           type: "button" | "submit";
           href?: never;
-          props?: React.ButtonHTMLAttributes<HTMLButtonElement>;
       }
 );
 
 export default function Button(props: ButtonProps) {
     const {
+        id,
         type,
         href,
         variant = "default",
@@ -42,8 +40,11 @@ export default function Button(props: ButtonProps) {
         roundedSize = "default",
         ring = "default",
         className = "",
+        disabled = false,
         children,
-        ...others
+        onClick,
+        onMouseEnter,
+        onMouseLeave,
     } = props;
 
     const ringClass = {
@@ -94,13 +95,28 @@ export default function Button(props: ButtonProps) {
 
     if (type === "link") {
         return (
-            <Link href={href} className={classList} {...others}>
+            <Link
+                id={id}
+                href={href}
+                onClick={onClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                className={classList}
+            >
                 {children}
             </Link>
         );
     } else {
         return (
-            <button className={classList} {...others}>
+            <button
+                id={id}
+                type={type}
+                disabled={disabled}
+                onClick={onClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                className={classList}
+            >
                 {children}
             </button>
         );

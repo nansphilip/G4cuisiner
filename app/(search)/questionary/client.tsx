@@ -5,9 +5,9 @@ import { SelectRecipeByFilter } from "@actions/database/Recipe";
 import QuestionCard from "@comps/client/questionnaire";
 import { useState } from "react";
 import { LunchStep, LunchType } from "@prisma/client";
-import FindRecipeCard from "@comps/client/find-a-recipe";
 import Button from "@comps/server/button";
-import { CompleteRecipeType, ReturnSelectRecipeByFilterType } from "@actions/types/Recipe";
+import { ReturnSelectRecipeByFilterType } from "@actions/types/Recipe";
+import FindRecipeCard from "@comps/client/find-a-recipe";
 
 export default function QuestionaryClient() {
     const [isVisible, setIsVisible] = useState(true);
@@ -54,12 +54,7 @@ export default function QuestionaryClient() {
                         {slugList ? (
                             slugList
                                 .slice(0, generatedRecipe)
-                                .map((recipe, index) => (
-                                    <FindRecipeCard
-                                        key={index}
-                                        recipe={recipe}
-                                    />
-                                ))
+                                .map((recipe, index) => <FindRecipeCard key={index} recipe={recipe} />)
                         ) : (
                             <p className="text-center">Aucune recette ne correspond à votre recherche.</p>
                         )}

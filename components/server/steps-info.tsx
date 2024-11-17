@@ -4,12 +4,12 @@ type RecipeInfoProps = {
     recipe: CompleteRecipeType;
 };
 
-export default function StepsInfo(props: RecipeInfoProps) {
+export default function InstructionsInfo(props: RecipeInfoProps) {
     const { recipe } = props;
-    const { Steps } = recipe;
+    const { instructions } = recipe;
     return (
         <div>
-            {Steps.split("@@@@@").map((step, index) => {
+            {instructions.split("@@@@@").map((step, index) => {
                 return (
                     // Ajoutez le 'return' ici
                     <div key={index}>

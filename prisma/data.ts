@@ -530,7 +530,7 @@ export interface RecipeFixtures {
     difficultyLevel: "EASY" | "MEDIUM" | "HARD";
     lunchType: "BREAKFAST" | "LUNCH" | "BRUNCH" | "DINNER" | "SNACK";
     lunchStep: "APPETIZER" | "STARTER" | "MAIN" | "DESSERT";
-    Steps: string;
+    instructions: string;
     status: "PENDING" | "APPROVED" | "REJECTED";
     userId: string;
 
@@ -573,7 +573,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "MEDIUM",
         lunchType: "LUNCH",
         lunchStep: "MAIN",
-        Steps: "Préchauffez le four à 180°C.@@@@@Étalez la pâte brisée dans un moule à tarte et piquez le fond avec une fourchette.@@@@@Faites revenir les lardons à la poêle jusqu'à ce qu'ils soient dorés.@@@@@Disposez les lardons sur le fond de tarte.@@@@@Dans un bol, battez les œufs avec la crème fraîche, du sel et du poivre.@@@@@Versez le mélange sur les lardons.@@@@@Parsemez de fromage râpé.@@@@@Enfournez pendant 30 à 35 minutes jusqu'à ce que la quiche soit dorée.@@@@@Laissez refroidir légèrement avant de servir.",
+        instructions: "Préchauffez le four à 180°C.@@@@@Étalez la pâte brisée dans un moule à tarte et piquez le fond avec une fourchette.@@@@@Faites revenir les lardons à la poêle jusqu'à ce qu'ils soient dorés.@@@@@Disposez les lardons sur le fond de tarte.@@@@@Dans un bol, battez les œufs avec la crème fraîche, du sel et du poivre.@@@@@Versez le mélange sur les lardons.@@@@@Parsemez de fromage râpé.@@@@@Enfournez pendant 30 à 35 minutes jusqu'à ce que la quiche soit dorée.@@@@@Laissez refroidir légèrement avant de servir.",
         status: "PENDING",
         userId: "user2-id", // Bob Martin
         Image: [
@@ -637,7 +637,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "EASY",
         lunchType: "DINNER",
         lunchStep: "STARTER",
-        Steps: "Épluchez et émincez les oignons.@@@@@Faites fondre le beurre dans une casserole.@@@@@Ajoutez les oignons et faites-les cuire à feu doux jusqu'à ce qu'ils soient caramélisés.@@@@@Saupoudrez de farine et mélangez bien.@@@@@Versez le bouillon de bœuf en remuant constamment.@@@@@Laissez mijoter pendant 20 minutes.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Versez la soupe dans des bols.@@@@@Ajoutez des croûtons de pain et du fromage râpé sur le dessus.@@@@@Faites gratiner au four jusqu'à ce que le fromage soit fondu.",
+        instructions: "Épluchez et émincez les oignons.@@@@@Faites fondre le beurre dans une casserole.@@@@@Ajoutez les oignons et faites-les cuire à feu doux jusqu'à ce qu'ils soient caramélisés.@@@@@Saupoudrez de farine et mélangez bien.@@@@@Versez le bouillon de bœuf en remuant constamment.@@@@@Laissez mijoter pendant 20 minutes.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Versez la soupe dans des bols.@@@@@Ajoutez des croûtons de pain et du fromage râpé sur le dessus.@@@@@Faites gratiner au four jusqu'à ce que le fromage soit fondu.",
         status: "PENDING",
         userId: "user3-id", // Chloé Bernard
         Image: [{ url: "/recipes/soupe-a-l-oignon-1.webp", alt: "Soupe à l'oignon 1" }],
@@ -696,7 +696,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "MEDIUM",
         lunchType: "BRUNCH",
         lunchStep: "DESSERT",
-        Steps: "Mélangez la farine et le sucre dans un bol.@@@@@Ajoutez les œufs et fouettez jusqu'à obtenir une pâte lisse.@@@@@Incorporez le lait progressivement en remuant.@@@@@Ajoutez le beurre fondu et mélangez bien.@@@@@Laissez reposer la pâte pendant 30 minutes.@@@@@Faites cuire les crêpes dans une poêle chaude légèrement beurrée.@@@@@Pour la sauce, faites fondre le beurre avec le sucre dans une poêle.@@@@@Ajoutez le jus d'orange, le zeste et le Grand Marnier, laissez mijoter.@@@@@Pliez les crêpes et trempez-les dans la sauce chaude.@@@@@Servez les crêpes nappées de sauce à l'orange.",
+        instructions: "Mélangez la farine et le sucre dans un bol.@@@@@Ajoutez les œufs et fouettez jusqu'à obtenir une pâte lisse.@@@@@Incorporez le lait progressivement en remuant.@@@@@Ajoutez le beurre fondu et mélangez bien.@@@@@Laissez reposer la pâte pendant 30 minutes.@@@@@Faites cuire les crêpes dans une poêle chaude légèrement beurrée.@@@@@Pour la sauce, faites fondre le beurre avec le sucre dans une poêle.@@@@@Ajoutez le jus d'orange, le zeste et le Grand Marnier, laissez mijoter.@@@@@Pliez les crêpes et trempez-les dans la sauce chaude.@@@@@Servez les crêpes nappées de sauce à l'orange.",
         status: "APPROVED",
         userId: "user1-id", // Alice Dupont
         Image: [
@@ -773,7 +773,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "EASY",
         lunchType: "LUNCH",
         lunchStep: "MAIN",
-        Steps: "Lavez et coupez tous les légumes en morceaux.@@@@@Faites cuire les haricots verts dans de l'eau bouillante salée pendant 5 minutes.@@@@@Faites cuire les œufs durs pendant 10 minutes, puis écalez-les.@@@@@Dans un grand saladier, mélangez la laitue, les tomates, les haricots verts, les olives et les anchois.@@@@@Ajoutez le thon émietté.@@@@@Coupez les œufs en quartiers et ajoutez-les à la salade.@@@@@Assaisonnez avec la vinaigrette.@@@@@Mélangez délicatement et servez frais.",
+        instructions: "Lavez et coupez tous les légumes en morceaux.@@@@@Faites cuire les haricots verts dans de l'eau bouillante salée pendant 5 minutes.@@@@@Faites cuire les œufs durs pendant 10 minutes, puis écalez-les.@@@@@Dans un grand saladier, mélangez la laitue, les tomates, les haricots verts, les olives et les anchois.@@@@@Ajoutez le thon émietté.@@@@@Coupez les œufs en quartiers et ajoutez-les à la salade.@@@@@Assaisonnez avec la vinaigrette.@@@@@Mélangez délicatement et servez frais.",
         status: "REJECTED",
         userId: "user2-id", // Bob Martin
         Image: [
@@ -846,7 +846,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "HARD",
         lunchType: "DINNER",
         lunchStep: "MAIN",
-        Steps: "Coupez le bœuf en gros morceaux.@@@@@Faites revenir les lardons dans une cocotte puis réservez-les.@@@@@Dans la même cocotte, faites dorer les morceaux de bœuf.@@@@@Ajoutez les oignons émincés et les carottes en rondelles, faites revenir quelques minutes.@@@@@Remettez les lardons dans la cocotte.@@@@@Saupoudrez de farine et mélangez bien.@@@@@Versez le vin rouge et ajoutez le bouquet garni et l'ail.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Couvrez et laissez mijoter à feu doux pendant 3 heures.@@@@@Ajoutez les champignons émincés 30 minutes avant la fin de la cuisson.@@@@@Servez chaud avec des pommes de terre ou des pâtes.",
+        instructions: "Coupez le bœuf en gros morceaux.@@@@@Faites revenir les lardons dans une cocotte puis réservez-les.@@@@@Dans la même cocotte, faites dorer les morceaux de bœuf.@@@@@Ajoutez les oignons émincés et les carottes en rondelles, faites revenir quelques minutes.@@@@@Remettez les lardons dans la cocotte.@@@@@Saupoudrez de farine et mélangez bien.@@@@@Versez le vin rouge et ajoutez le bouquet garni et l'ail.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Couvrez et laissez mijoter à feu doux pendant 3 heures.@@@@@Ajoutez les champignons émincés 30 minutes avant la fin de la cuisson.@@@@@Servez chaud avec des pommes de terre ou des pâtes.",
         status: "APPROVED",
         userId: "user3-id", // Chloé Bernard
         Image: [{ url: "/recipes/boeuf-bourguignon-1.webp", alt: "Bœuf Bourguignon 1" }],
@@ -931,7 +931,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "MEDIUM",
         lunchType: "DINNER",
         lunchStep: "DESSERT",
-        Steps: "Préchauffez le four à 180°C.@@@@@Épluchez les pommes et coupez-les en quartiers.@@@@@Dans une poêle, faites fondre le beurre avec le sucre jusqu'à obtenir un caramel.@@@@@Ajoutez les pommes et la cannelle, laissez caraméliser quelques minutes.@@@@@Versez les pommes caramélisées dans un moule.@@@@@Recouvrez avec la pâte feuilletée en rentrant les bords à l'intérieur du moule.@@@@@Piquez la pâte avec une fourchette.@@@@@Enfournez pendant 30 à 35 minutes jusqu'à ce que la pâte soit dorée.@@@@@Laissez refroidir légèrement puis démoulez en retournant la tarte sur un plat.@@@@@Servez tiède, éventuellement avec une boule de glace à la vanille.",
+        instructions: "Préchauffez le four à 180°C.@@@@@Épluchez les pommes et coupez-les en quartiers.@@@@@Dans une poêle, faites fondre le beurre avec le sucre jusqu'à obtenir un caramel.@@@@@Ajoutez les pommes et la cannelle, laissez caraméliser quelques minutes.@@@@@Versez les pommes caramélisées dans un moule.@@@@@Recouvrez avec la pâte feuilletée en rentrant les bords à l'intérieur du moule.@@@@@Piquez la pâte avec une fourchette.@@@@@Enfournez pendant 30 à 35 minutes jusqu'à ce que la pâte soit dorée.@@@@@Laissez refroidir légèrement puis démoulez en retournant la tarte sur un plat.@@@@@Servez tiède, éventuellement avec une boule de glace à la vanille.",
         status: "APPROVED",
         userId: "user1-id", // Alice Dupont
         Image: [
@@ -994,7 +994,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "EASY",
         lunchType: "SNACK",
         lunchStep: "MAIN",
-        Steps: "Préchauffez le four à 200°C.@@@@@Beurrez légèrement les tranches de pain de mie.@@@@@Étalez la sauce béchamel sur une face de chaque tranche.@@@@@Placez une tranche de jambon et du fromage entre deux tranches de pain, côté béchamel vers l'intérieur.@@@@@Recouvrez le dessus du sandwich avec de la sauce béchamel et du fromage râpé.@@@@@Disposez les croque-monsieur sur une plaque de cuisson.@@@@@Enfournez pendant 10 minutes jusqu'à ce que le fromage soit fondu et doré.@@@@@Servez chaud avec une salade verte si désiré.",
+        instructions: "Préchauffez le four à 200°C.@@@@@Beurrez légèrement les tranches de pain de mie.@@@@@Étalez la sauce béchamel sur une face de chaque tranche.@@@@@Placez une tranche de jambon et du fromage entre deux tranches de pain, côté béchamel vers l'intérieur.@@@@@Recouvrez le dessus du sandwich avec de la sauce béchamel et du fromage râpé.@@@@@Disposez les croque-monsieur sur une plaque de cuisson.@@@@@Enfournez pendant 10 minutes jusqu'à ce que le fromage soit fondu et doré.@@@@@Servez chaud avec une salade verte si désiré.",
         status: "APPROVED",
         userId: "user2-id", // Bob Martin
         Image: [{ url: "/recipes/croque-monsieur-1.webp", alt: "Croque-Monsieur 1" }],
@@ -1048,7 +1048,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "MEDIUM",
         lunchType: "DINNER",
         lunchStep: "MAIN",
-        Steps: "Lavez et coupez les aubergines, les courgettes, les tomates et le poivron en dés.@@@@@Émincez l'oignon et hachez l'ail.@@@@@Faites chauffer l'huile d'olive dans une grande poêle.@@@@@Faites revenir l'oignon et l'ail jusqu'à ce qu'ils soient translucides.@@@@@Ajoutez les poivrons et faites cuire 5 minutes.@@@@@Ajoutez les aubergines et les courgettes, faites cuire encore 10 minutes.@@@@@Incorporez les tomates et les herbes de Provence.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Laissez mijoter à feu doux pendant 30 minutes en remuant de temps en temps.@@@@@Servez chaud ou froid en accompagnement ou plat principal.",
+        instructions: "Lavez et coupez les aubergines, les courgettes, les tomates et le poivron en dés.@@@@@Émincez l'oignon et hachez l'ail.@@@@@Faites chauffer l'huile d'olive dans une grande poêle.@@@@@Faites revenir l'oignon et l'ail jusqu'à ce qu'ils soient translucides.@@@@@Ajoutez les poivrons et faites cuire 5 minutes.@@@@@Ajoutez les aubergines et les courgettes, faites cuire encore 10 minutes.@@@@@Incorporez les tomates et les herbes de Provence.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Laissez mijoter à feu doux pendant 30 minutes en remuant de temps en temps.@@@@@Servez chaud ou froid en accompagnement ou plat principal.",
         status: "APPROVED",
         userId: "user3-id", // Chloé Bernard
         Image: [
@@ -1122,7 +1122,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "EASY",
         lunchType: "SNACK",
         lunchStep: "DESSERT",
-        Steps: "Préchauffez le four à 180°C.@@@@@Fouettez les œufs avec le sucre jusqu'à ce que le mélange blanchisse.@@@@@Ajoutez le zeste de citron et la vanille.@@@@@Incorporez la farine et la levure tamisées, mélangez délicatement.@@@@@Ajoutez le beurre fondu et mélangez jusqu'à obtenir une pâte homogène.@@@@@Beurrez les moules à madeleines et remplissez-les aux deux tiers.@@@@@Enfournez pendant 10 à 12 minutes jusqu'à ce que les madeleines soient dorées.@@@@@Démoulez et laissez refroidir sur une grille.@@@@@Dégustez avec un thé ou un café.",
+        instructions: "Préchauffez le four à 180°C.@@@@@Fouettez les œufs avec le sucre jusqu'à ce que le mélange blanchisse.@@@@@Ajoutez le zeste de citron et la vanille.@@@@@Incorporez la farine et la levure tamisées, mélangez délicatement.@@@@@Ajoutez le beurre fondu et mélangez jusqu'à obtenir une pâte homogène.@@@@@Beurrez les moules à madeleines et remplissez-les aux deux tiers.@@@@@Enfournez pendant 10 à 12 minutes jusqu'à ce que les madeleines soient dorées.@@@@@Démoulez et laissez refroidir sur une grille.@@@@@Dégustez avec un thé ou un café.",
         status: "APPROVED",
         userId: "user1-id", // Alice Dupont
         Image: [
@@ -1201,7 +1201,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "HARD",
         lunchType: "DINNER",
         lunchStep: "MAIN",
-        Steps: "Coupez le poulet en morceaux.@@@@@Faites mariner le poulet dans le vin rouge avec le bouquet garni pendant au moins 2 heures.@@@@@Égouttez le poulet et réservez la marinade.@@@@@Dans une cocotte, faites revenir les lardons puis réservez-les.@@@@@Faites dorer les morceaux de poulet dans la cocotte avec l'huile d'olive.@@@@@Ajoutez les oignons et les carottes émincés, faites revenir quelques minutes.@@@@@Saupoudrez de farine et mélangez bien.@@@@@Versez la marinade filtrée, ajoutez l'ail et le bouquet garni.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Couvrez et laissez mijoter à feu doux pendant 2 heures.@@@@@Ajoutez les champignons et les lardons 30 minutes avant la fin de la cuisson.@@@@@Servez chaud avec des pâtes ou des pommes de terre vapeur.",
+        instructions: "Coupez le poulet en morceaux.@@@@@Faites mariner le poulet dans le vin rouge avec le bouquet garni pendant au moins 2 heures.@@@@@Égouttez le poulet et réservez la marinade.@@@@@Dans une cocotte, faites revenir les lardons puis réservez-les.@@@@@Faites dorer les morceaux de poulet dans la cocotte avec l'huile d'olive.@@@@@Ajoutez les oignons et les carottes émincés, faites revenir quelques minutes.@@@@@Saupoudrez de farine et mélangez bien.@@@@@Versez la marinade filtrée, ajoutez l'ail et le bouquet garni.@@@@@Assaisonnez avec du sel et du poivre.@@@@@Couvrez et laissez mijoter à feu doux pendant 2 heures.@@@@@Ajoutez les champignons et les lardons 30 minutes avant la fin de la cuisson.@@@@@Servez chaud avec des pâtes ou des pommes de terre vapeur.",
         status: "APPROVED",
         userId: "user2-id", // Bob Martin
         Image: [{ url: "/recipes/coq-au-vin-1.webp", alt: "Coq au Vin 1" }],
@@ -1302,7 +1302,7 @@ export const recipeData: RecipeFixtures[] = [
         difficultyLevel: "MEDIUM",
         lunchType: "LUNCH",
         lunchStep: "STARTER",
-        Steps: "Préchauffez le four à 200°C.@@@@@Beurrez un moule à soufflé et saupoudrez-le de farine.@@@@@Faites fondre le beurre dans une casserole.@@@@@Ajoutez la farine et mélangez pour obtenir un roux.@@@@@Versez le lait progressivement en remuant pour éviter les grumeaux.@@@@@Laissez épaissir la béchamel quelques minutes.@@@@@Ajoutez le fromage râpé, le sel, le poivre et la muscade, mélangez bien.@@@@@Séparez les blancs des jaunes d'œufs.@@@@@Incorporez les jaunes à la préparation hors du feu.@@@@@Montez les blancs en neige ferme.@@@@@Incorporez délicatement les blancs en neige à la préparation.@@@@@Versez le mélange dans le moule à soufflé.@@@@@Enfournez pendant 25 à 30 minutes sans ouvrir la porte du four.@@@@@Servez immédiatement dès la sortie du four.",
+        instructions: "Préchauffez le four à 200°C.@@@@@Beurrez un moule à soufflé et saupoudrez-le de farine.@@@@@Faites fondre le beurre dans une casserole.@@@@@Ajoutez la farine et mélangez pour obtenir un roux.@@@@@Versez le lait progressivement en remuant pour éviter les grumeaux.@@@@@Laissez épaissir la béchamel quelques minutes.@@@@@Ajoutez le fromage râpé, le sel, le poivre et la muscade, mélangez bien.@@@@@Séparez les blancs des jaunes d'œufs.@@@@@Incorporez les jaunes à la préparation hors du feu.@@@@@Montez les blancs en neige ferme.@@@@@Incorporez délicatement les blancs en neige à la préparation.@@@@@Versez le mélange dans le moule à soufflé.@@@@@Enfournez pendant 25 à 30 minutes sans ouvrir la porte du four.@@@@@Servez immédiatement dès la sortie du four.",
         status: "APPROVED",
         userId: "user3-id", // Chloé Bernard
         Image: [

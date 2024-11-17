@@ -15,8 +15,7 @@ import {
     ReturnSelectRecipeByFilterType,
     SelectEveryRecipeType,
 } from "@actions/types/Recipe";
-import { LunchStep, LunchType } from "@prisma/client";
-import { title } from "process";
+import ToSlug from "@actions/utils/ToSlug";
 
 export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecipeType> => {
     try {
@@ -28,9 +27,9 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecip
             difficultyLevel,
             lunchType,
             lunchStep,
-            Steps,
             userId,
-            imageList,
+            instructions,
+            imageNameList,
             ingredientList,
         } = props;
         // Check if recipe already exists
@@ -40,21 +39,14 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecip
         }
 
         // Create slug
-        const slug = title
-            .toLowerCase()
-            .replace(/œ/g, "oe")
-            .replace(/æ/g, "ae")
-            .replace(/ç/g, "c")
-            .replace(/'/g, "-")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/\s+/g, "-");
+        const slug = ToSlug(title);
 
         // Check if slug already exists
         const existingSlug = await SelectRecipeBySlug({ slug });
         if (existingSlug) {
             throw new Error("Slug already exists");
         }
+
         // Create recipe
         const recipe = await Prisma.recipe.create({
             data: {
@@ -66,13 +58,21 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecip
                 difficultyLevel,
                 lunchType,
                 lunchStep,
-                Steps,
+                instructions,
                 userId,
                 Image: {
-                    create: imageList.map(({ url, alt }) => ({
-                        url,
-                        alt,
-                    })),
+                    create: imageNameList.map((name, index) => {
+                        // Get image extension
+                        const imageExtensionIndex = name.lastIndexOf(".");
+                        const imageExtension = name.slice(imageExtensionIndex + 1);
+
+                        // Create complete image name
+                        const newImageName = slug + "-" + (index + 1) + "." + imageExtension;
+                        return {
+                            url: `/recipes/${newImageName}`,
+                            alt: title + "-" + (index + 1),
+                        };
+                    }),
                 },
                 Quantity: {
                     create: ingredientList.map(({ quantity, unit, ingredientId }) => ({
@@ -220,7 +220,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             difficultyLevel: recipe.difficultyLevel,
             lunchType: recipe.lunchType,
             lunchStep: recipe.lunchStep,
-            Steps: recipe.Steps,
+            instructions: recipe.instructions,
             status: recipe.status,
             userId: recipe.userId,
             createdAt: recipe.createdAt,
@@ -314,7 +314,9 @@ export const SelectEveryRecipe = async (): Promise<SelectEveryRecipeType[] | nul
     }
 };
 
-export const SelectRecipeByFilter = async (props:SelectRecipeByFilterType): Promise<ReturnSelectRecipeByFilterType[] | null> => {
+export const SelectRecipeByFilter = async (
+    props: SelectRecipeByFilterType
+): Promise<ReturnSelectRecipeByFilterType[] | null> => {
     const { lunchType, lunchStep, preparationTime } = props;
     try {
         const recipeList = await Prisma.recipe.findMany({
@@ -373,9 +375,9 @@ export const SelectRecipeByFilter = async (props:SelectRecipeByFilterType): Prom
     }
 };
 
-export const SelectLastRecipe = async (props: {limit: number}): Promise<ReturnSelectLastRecipe[] | null> => {
+export const SelectLastRecipe = async (props: { limit: number }): Promise<ReturnSelectLastRecipe[] | null> => {
     try {
-        const { limit=10 } = props;
+        const { limit = 10 } = props;
         const recipeList = await Prisma.recipe.findMany({
             where: {
                 status: "APPROVED",
@@ -424,32 +426,33 @@ export const SelectEveryPendingRecipe = async (): Promise<ReturnRecipeType[] | n
 export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<ReturnRecipeType> => {
     try {
         const { id, data } = props;
+        const { title } = data;
+
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
             throw new Error("Recipe does not exist");
         }
-        const isNewTitleAlreadyExists = await SelectRecipeByTitle({ title });
+
+        const isNewTitleAlreadyExists = title && (await SelectRecipeByTitle({ title }));
         if (isNewTitleAlreadyExists && isNewTitleAlreadyExists.id !== id) {
             throw new Error("New title already exists");
         }
-        const slug = title
-            .toLowerCase()
-            .replace(/œ/g, "oe")
-            .replace(/æ/g, "ae")
-            .replace(/ç/g, "c")
-            .replace(/'/g, "-")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/\s+/g, "-");
-        const existingSlug = await SelectRecipeBySlug({ slug });
-        if (existingSlug) {
-            throw new Error("Slug already exists");
+
+        const slug = title ? ToSlug(title) : undefined;
+
+        if (slug) {
+            const existingSlug = slug && (await SelectRecipeBySlug({ slug }));
+            if (existingSlug) {
+                throw new Error("Slug already exists");
+            }
         }
+
         const recipe = await Prisma.recipe.update({
-            where: {
-                id,
+            where: { id },
+            data: {
+                ...data,
+                ...(slug && { slug }),
             },
-            data,
         });
         return recipe;
     } catch (error) {

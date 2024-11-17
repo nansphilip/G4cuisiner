@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Rating from "./rating-recipe";
 import Button from "@comps/server/button";
 import { ReturnSelectRecipeByFilterType } from "@actions/types/Recipe";
+import RatingDisplayAverageClient from "./rating-display-average";
 
 export type RecipeProps = {
     recipe: ReturnSelectRecipeByFilterType;
@@ -29,7 +29,7 @@ export default function FindRecipeCard(props: RecipeProps) {
             <div className="flex flex-col gap-4 p-4">
                 <div className="flex flex-row justify-between">
                     <p className="text-xl font-bold text-gray-500">{title}</p>
-                    <Rating rating={ratingAverage} />
+                    <RatingDisplayAverageClient ratingAverage={ratingAverage} />
                 </div>
                 <p className="text-xs text-gray-500">{description}</p>
 

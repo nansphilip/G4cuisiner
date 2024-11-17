@@ -4,11 +4,11 @@ import { UpdateUser } from "@actions/database/User";
 import { useState } from "react";
 import { User } from "@actions/types/User";
 
-type UserRoleSelectProps = {
+type UserRoleTogglerProps = {
     user: User;
 };
 
-export default function UserRoleSelect(props: UserRoleSelectProps) {
+export default function UserRoleToggler(props: UserRoleTogglerProps) {
     const { user } = props;
     const userId = user.id;
     const initialRole = user.role;

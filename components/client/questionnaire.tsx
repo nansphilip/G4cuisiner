@@ -4,7 +4,9 @@ interface QuestionCardProps {
     onComplete: (answers: string[]) => void;
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ onComplete }) => {
+export default function QuestionCard(props: QuestionCardProps) {
+    const { onComplete } = props;
+    
     const [selected, setSelected] = useState<number | null>(null);
     const [numQuestion, setNumQuestion] = useState(1);
     const [answer, setAnswer] = useState<string[]>([]);
@@ -75,5 +77,3 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ onComplete }) => {
         </>
     );
 };
-
-export default QuestionCard;

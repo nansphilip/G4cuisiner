@@ -9,7 +9,9 @@ interface ReviewRecipesProps {
     recipes: ReturnRecipeType[];
 }
 
-const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {
+export default function ReviewRecipes (props: ReviewRecipesProps) {
+    const { recipes } = props;
+    
     const [recipeList, setRecipeList] = useState(recipes);
 
     const handleUpdateStatus = async (recipeId: string, status: "APPROVED" | "REJECTED") => {
@@ -127,5 +129,3 @@ const ReviewRecipes: React.FC<ReviewRecipesProps> = ({ recipes }) => {
         </div>
     );
 };
-
-export default ReviewRecipes;

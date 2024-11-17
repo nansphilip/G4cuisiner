@@ -1,5 +1,6 @@
 import Prisma from "@lib/prisma";
 import { accountData, ingredientData, recipeData, userData } from "./data";
+import ToSlug from "@actions/utils/ToSlug";
 
 export const fixtures = async () => {
     try {
@@ -35,7 +36,7 @@ export const fixtures = async () => {
                 difficultyLevel,
                 lunchStep,
                 lunchType,
-                Steps,
+                instructions,
                 status,
                 userId,
                 Image,
@@ -49,22 +50,14 @@ export const fixtures = async () => {
                 data: {
                     id,
                     title,
-                    slug: title
-                        .toLowerCase()
-                        .replace(/œ/g, "oe")
-                        .replace(/æ/g, "ae")
-                        .replace(/ç/g, "c")
-                        .replace(/'/g, "-")
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                        .replace(/\s+/g, "-"),
+                    slug: ToSlug(title),
                     description,
                     numberOfServing,
                     preparationTime,
                     difficultyLevel,
                     lunchStep,
                     lunchType,
-                    Steps,
+                    instructions,
                     status,
                     userId,
 

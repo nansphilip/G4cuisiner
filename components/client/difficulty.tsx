@@ -7,7 +7,9 @@ type StarRatingProps = {
     editable?: boolean; // Nouvelle prop pour contrôler si le composant est modifiable
 };
 
-function StarRating({ number, editable = true }: StarRatingProps) {
+function StarRating(props: StarRatingProps) {
+    const { number, editable = true } = props;
+
     const [rateHover, setRateHover] = useState(0);
     const [rateClick, setRateClick] = useState(number);
 
@@ -25,6 +27,7 @@ function StarRating({ number, editable = true }: StarRatingProps) {
     const handleClick = (value: number) => {
         if (editable) setRateClick(value);
     };
+
     return (
         <label className="flex flex-col items-center justify-center gap-2">
             <h2 className="text-xl font-bold">Difficulté : </h2>

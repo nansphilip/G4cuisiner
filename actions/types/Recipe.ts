@@ -13,7 +13,7 @@ export type preparationTime = Recipe["preparationTime"];
 export type difficultyLevel = Recipe["difficultyLevel"];
 export type lunchType = Recipe["lunchType"];
 export type lunchStep = Recipe["lunchStep"];
-export type Steps = Recipe["Steps"];
+export type instructions = Recipe["instructions"];
 export type status = Recipe["status"];
 export type userId = Recipe["userId"];
 export type createdAt = Recipe["createdAt"];
@@ -72,27 +72,33 @@ export interface CommonType extends TitleRecipeType {
     description: description;
     numberOfServing: numberOfServing;
     preparationTime: preparationTime;
-    Steps: Steps;
+    instructions: instructions;
     difficultyLevel: difficultyLevel;
     lunchType: lunchType;
     lunchStep: lunchStep;
     userId: userId;
 }
 
-export interface CreateRecipeType extends CommonType, ImageRecipeType, IngredientRecipeType {}
+export interface CreateRecipeType extends CommonType {
+    imageNameList: string[];
+    ingredientList: {
+        ingredientId: string;
+        quantity: number;
+        unit: "GRAM" | "KILOGRAM" | "LITER" | "CENTILITER" | "MILLILITER" | "PIECE";
+    }[];
+}
 
 export interface UpdateRecipeType {
     id: id;
     data: {
         title?: title;
-        slug?: slug;
         description?: description;
         numberOfServing?: numberOfServing;
         preparationTime?: preparationTime;
         difficultyLevel?: difficultyLevel;
         lunchType?: lunchType;
         lunchStep?: lunchStep;
-        Steps?: Steps;
+        instructions?: instructions;
         status?: status;
         userId?: userId;
         createdAt?: createdAt;
