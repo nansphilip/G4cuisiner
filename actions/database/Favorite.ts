@@ -102,8 +102,12 @@ export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFa
             const totalFavoriteAmount = Recipe.Favorite.filter(({ favorite }) => favorite).length;
             const totalRatingAmount = Recipe.Rating.length;
 
-            const latestReview = Recipe.Review[0] || null;
-
+            const latestReview = Recipe.Review[0] ? {
+                review: Recipe.Review[0].review,
+                userId: Recipe.Review[0].userId,
+                userName: Recipe.Review[0].User.name,
+                createdAt: Recipe.Review[0].createdAt,
+            } : null;
 
             return {
                 recipeId: Recipe.id,
@@ -113,12 +117,12 @@ export async function SelectFavoriteRecipeUser(userId: string): Promise<ReturnFa
                 ratingAverage,
                 totalRatingAmount,
                 totalFavoriteAmount,
-                latestReview,
                 userFavorite: Recipe.Favorite[0].favorite,
                 imageList: Recipe.Image.map(({ url, alt }) => ({
                     url,
                     alt,
                 })),
+                latestReview,
             };
         });
         return recipeList;

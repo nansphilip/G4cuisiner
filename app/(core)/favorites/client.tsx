@@ -1,80 +1,72 @@
 "use client";
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import SearchFavoriteClient from "@comps/client/search-favorite";
 import RecipeImageListClient from "@comps/client/image-listing";
-import {ReturnFavoriteRecipeUserType} from "@actions/types/Favorite";
-import FavoriteAddClient from "@comps/client/favorite-add";
-import {BetterSessionServer} from "@lib/auth";
-import Button from "@comps/server/button";
+import { ReturnFavoriteRecipeUserType } from "@actions/types/Favorite";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
+import Link from "next/link";
+import FavoriteDisplayClient from "@comps/client/favorite-display";
 
 type FavoritesClientProps = {
     recipeUserFavoriteList: ReturnFavoriteRecipeUserType[];
-    session: BetterSessionServer;
 };
 
 export default function FavoritesClient(props: FavoritesClientProps) {
-    const {recipeUserFavoriteList, session} = props;
+    const { recipeUserFavoriteList } = props;
 
     const [filteredFavorites, setFilteredFavorites] = useState(recipeUserFavoriteList);
 
     const handleSearch = (query: string) => {
-        const filtered = recipeUserFavoriteList.filter((fav) => fav.title.toLowerCase().startsWith(query.toLowerCase()));
+        const filtered = recipeUserFavoriteList.filter((fav) =>
+            fav.title.toLowerCase().startsWith(query.toLowerCase())
+        );
         setFilteredFavorites(filtered);
     };
 
-
     return (
         <div className="space-y-5 pb-4">
-            <SearchFavoriteClient onSearch={handleSearch}/>
+            <SearchFavoriteClient onSearch={handleSearch} />
             <div className="flex flex-col gap-4">
                 {filteredFavorites.length > 0 ? (
                     filteredFavorites.map((recipe, index) => (
-                        <div key={index} className="flex gap-3 rounded-xl border p-3 shadow-lg">
-                            <div className="h-full">
-                                <RecipeImageListClient imageList={[recipe.imageList[0]]}/>
-                            </div>
-                            <div className="flex w-full flex-row justify-between text-2xl">
-                                <div className="flex flex-col">
-                                    <div className="flex flex-row">
-                                        <span className="font-bold">{recipe.title}</span>
-                                        <RatingDisplayAverageClient
-                                            totalRatingAmount={recipe.totalRatingAmount}
-                                            ratingAverage={recipe.ratingAverage}
-                                            classDiv="flex flex-row"
+                        <Link
+                            href={`/recipe/${recipe.slug}`}
+                            key={index}
+                            className="flex gap-3 rounded-xl border p-3 shadow-lg"
+                        >
+                            <RecipeImageListClient imageList={[recipe.imageList[0]]} />
+                            <div className="flex w-full flex-col justify-between gap-3">
+                                <div>
+                                    <div className="flex flex-row items-center justify-between">
+                                        <div className="flex flex-row items-center justify-start gap-3">
+                                            <div className="text-xl font-bold">{recipe.title}</div>
+                                            <RatingDisplayAverageClient
+                                                ratingAverage={recipe.ratingAverage}
+                                                classSvg="size-6"
+                                            />
+                                        </div>
+                                        <FavoriteDisplayClient
+                                            userFavorite={recipe.userFavorite}
+                                            classSvg="size-8"
                                         />
                                     </div>
-                                    <span className="text-xs">{recipe.description}</span>
-                                    {recipe.latestReview ? (
-                                        <div className="m-4 grow rounded-md border p-2 text-xs text-black">
-                                            <span className="font-semibold">Dernier commentaire :</span>
-                                            <p>{recipe.latestReview.review}</p>
-
-                                            <span className="text-xs text-gray-400">
-                            Posté par {recipe.latestReview.User.name} le {new Date(recipe.latestReview.createdAt).toLocaleDateString()}</span>
+                                    <div className="text-xs">{recipe.description}</div>
+                                </div>
+                                {recipe.latestReview && (
+                                    <div className="flex h-full flex-col justify-between gap-1 rounded-md border p-2">
+                                        <div className="text-sm font-bold">Dernier commentaire</div>
+                                        <div className="line-clamp-2 text-xs">{recipe.latestReview.review}</div>
+                                        <div className="text-xs text-gray-400">
+                                            <span>Posté par </span>
+                                            <span>{recipe.latestReview.userName}</span>
+                                            <span> le </span>
+                                            <span>{new Date(recipe.latestReview.createdAt).toLocaleDateString()}</span>
                                         </div>
-                                    ) : (
-                                        <div className="mt-2 text-sm text-gray-400">Aucun commentaire pour cette
-                                            recette.</div>
-                                    )}
-                                </div>
-                                <div className="flex flex-col items-end justify-between">
-                                    <FavoriteAddClient
-                                        userId={session?.user.id}
-                                        userFavorite={recipe.userFavorite}
-                                        recipeId={recipe.recipeId}
-                                        totalFavoriteAmount={recipe.totalFavoriteAmount}
-                                        classSvg="size-10"
-                                    />
-                                    <Button
-                                        className="w-full bg-primary font-bold text-tertiary shadow-md hover:bg-orange-300"
-                                        type="link" href={`/recipe/${recipe.slug}`}>
-                                        Voir la recette
-                                    </Button>
-                                </div>
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                        </Link>
                     ))
                 ) : (
                     <div className="p-4">

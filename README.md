@@ -81,3 +81,13 @@ G4cuisiner is G4 School student project.
 - (optional)
 
   Clear your `localhost:3000` browser cookies is you have an error
+
+## Fixtures
+
+There is two types of users.
+
+| Email                         | Password   | User type |
+| ----------------------------- | ---------- | --------- |
+| alice.dupont@example.com      | User1234!  | User      |
+| gabriel.rousseau@example.com  | Modo1234!  | Modo      |
+| isabelle.petit@example.com    | Admin1234! | Admin     |

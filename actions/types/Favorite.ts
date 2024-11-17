@@ -54,6 +54,6 @@ export interface ReturnFavoriteRecipeUserType {
         review: string;
         userId: string;
         userName: string
-        createdAt: string;
+        createdAt: Date;
     } | null;
 }

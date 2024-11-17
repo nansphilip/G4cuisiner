@@ -15,7 +15,7 @@ export default async function FavoritesPage() {
             <div className="text-2xl font-bold">
                 <h1>Mes Favoris</h1>
             </div>
-            <FavoritesClient session={session} recipeUserFavoriteList={recipeUserFavoriteList} />
+            <FavoritesClient recipeUserFavoriteList={recipeUserFavoriteList} />
         </div>
     );
 };
