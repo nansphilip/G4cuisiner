@@ -33,7 +33,7 @@ export default async function HomePage() {
                                 userFavoriteList.map(({title, slug, description, imageList}, index) => (
                                     <div
                                         key={index}
-                                        className="w-[300px] flex-col rounded-lg bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
+                                        className="w-[300px] flex-col bg-white duration-150 p-4 shadow-md rounded-lg transition-all hover:shadow-lg"
                                     >
                                         <div className="mb-2 flex flex-row items-center justify-between text-2xl font-bold">
                                             <span>{title}</span>

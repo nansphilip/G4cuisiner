@@ -1,6 +1,10 @@
 {
     "root": true,
-    "extends": ["next/core-web-vitals", "next/typescript", "plugin:tailwindcss/recommended"],
+    "extends": [
+        "next/core-web-vitals",
+        "next/typescript",
+        "plugin:tailwindcss/recommended"
+    ],
     "overrides": [
         {
             "files": ["*.ts", "*.tsx", "*.js"],
@@ -8,6 +12,6 @@
         }
     ],
     "settings": {
-        "whitelist": []
+        "callees": ["classnames", "combo", "ctl"]
     }
 }
