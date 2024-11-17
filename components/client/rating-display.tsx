@@ -33,21 +33,19 @@ export default function RatingDisplayClient(props: RatingDisplayClientProps) {
     const stars = [1, 2, 3, 4, 5];
 
     return (
-        <div className="flex flex-col items-center gap-1">
-            <span className={combo("flex items-center", classDiv)}>
-                {stars.map((star) => (
-                    <Star
-                        key={star}
-                        className={combo(
-                            "size-5 stroke-[1.5px]",
-                            classSvg,
-                            star <= (currentUserId === userId ? rating[0] : ratingUser ?? 0)
-                                ? "text-yellow-400 fill-yellow-400"
-                                : "text-gray-400 fill-white"
-                        )}
-                    />
-                ))}
-            </span>
-        </div>
+        <span className={combo("flex items-center", classDiv)}>
+            {stars.map((star) => (
+                <Star
+                    key={star}
+                    className={combo(
+                        "size-5 stroke-[1.5px]",
+                        classSvg,
+                        star <= (currentUserId === userId ? rating[0] : ratingUser ?? 0)
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-400 fill-white"
+                    )}
+                />
+            ))}
+        </span>
     );
 }

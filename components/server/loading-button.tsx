@@ -1,4 +1,4 @@
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { combo } from "@lib/combo";
 import Loader from "@comps/server/loader";
 

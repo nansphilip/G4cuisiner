@@ -75,7 +75,7 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
     }, [filtersLunchStep, filtersPreparationTime, filtersLunchType, filtersDifficultyLevel, listRecipes]);
 
     return (
-        <div className="flex h-full flex-col items-center gap-3 rounded-xl bg-gray-100 p-6">
+        <div className="flex h-full flex-col items-center gap-3 rounded-xl">
             <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4">
                 <fieldset className="rounded-lg border border-gray-300 bg-white p-4 shadow-md">
                     <legend className="text-lg font-semibold">Type de repas</legend>
@@ -330,7 +330,7 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                 </div>
                 </fieldset>
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {recipes.map((recipe, index) => {
                     const difficultyLevelFormatted =
                         (recipe.difficultyLevel === "EASY" && "Facile") ||

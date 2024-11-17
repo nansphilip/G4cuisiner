@@ -1,4 +1,4 @@
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next"

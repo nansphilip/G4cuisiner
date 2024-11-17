@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { ReturnSelectRecipeByFilterType } from "@actions/types/Recipe";
 import RatingDisplayAverageClient from "./rating-display-average";
 

@@ -2,14 +2,14 @@ import { SelectLastRecipe } from "@actions/database/Recipe";
 import Image from "next/image";
 import { SelectFavoriteRecipeUser } from "@actions/database/Favorite";
 import { getSession } from "@lib/auth";
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import FavoriteDisplayClient from "@comps/client/favorite-display";
 import RecipeImageListClient from "@comps/client/image-listing";
 
 export default async function HomePage() {
     const session = await getSession();
 
-    const lastRecipeList = await SelectLastRecipe({limit: 3});
+    const lastRecipeList = await SelectLastRecipe({ limit: 3 });
     const userFavoriteList = session && (await SelectFavoriteRecipeUser(session.user.id));
 
     return (
@@ -29,22 +29,22 @@ export default async function HomePage() {
                     {userFavoriteList && userFavoriteList.length > 0 ? (
                         <>
                             {userFavoriteList.length > 0 &&
-                                userFavoriteList.map(({title, slug, description, imageList}, index) => (
+                                userFavoriteList.map(({ title, slug, description, imageList }, index) => (
                                     <div
                                         key={index}
-                                        className="w-[300px] flex-col rounded-lg bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
+                                        className="flex w-[300px] flex-col justify-between gap-2 rounded-lg bg-white p-4 shadow-md"
                                     >
-                                        <div className="mb-2 flex flex-row items-center justify-between text-2xl font-bold">
-                                            <span>{title}</span>
-                                            <FavoriteDisplayClient userFavorite={true} classSvg="size-8" />
+                                        <div className="space-y-2">
+                                            <div className="flex flex-row items-center justify-between text-2xl font-bold">
+                                                <span>{title}</span>
+                                                <FavoriteDisplayClient userFavorite={true} classSvg="size-8" />
+                                            </div>
+                                            <div className="relative w-full">
+                                                <RecipeImageListClient isHomePage={true} imageList={imageList} />
+                                            </div>
+                                            <p className="line-clamp-2 w-full text-xs">{description}</p>
                                         </div>
-                                        <div className="relative w-full">
-                                            <RecipeImageListClient isHomePage={true} imageList={imageList} />
-                                        </div>
-                                        <div className="mt-2 w-full">
-                                            <p className="m-2 w-full text-xs">{description}</p>
-                                        </div>
-                                        <div className="mt-2 flex flex-col items-center justify-between">
+                                        <div className="flex flex-col items-center justify-between">
                                             <Button
                                                 type="link"
                                                 href={`/recipe/${slug}`}
@@ -59,18 +59,20 @@ export default async function HomePage() {
                     ) : (
                         <>
                             {lastRecipeList ? (
-                                lastRecipeList.map(({title, slug, imageList}, index) => (
+                                lastRecipeList.map(({ title, slug, imageList }, index) => (
                                     <div
                                         key={index}
-                                        className="w-[300px] flex-col rounded-lg bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
+                                        className="flex w-[300px] flex-col justify-between gap-2 rounded-lg bg-white p-4 shadow-md"
                                     >
-                                        <div className="mb-2 flex flex-row items-center justify-between text-2xl font-bold">
-                                            <span>{title}</span>
+                                        <div className="space-y-2">
+                                            <div className="flex flex-row items-center justify-between text-2xl font-bold">
+                                                <span>{title}</span>
+                                            </div>
+                                            <div className="relative w-full">
+                                                <RecipeImageListClient isHomePage={true} imageList={imageList} />
+                                            </div>
                                         </div>
-                                        <div className="relative w-full">
-                                            <RecipeImageListClient isHomePage={true} imageList={imageList} />
-                                        </div>
-                                        <div className="mt-2 flex flex-col items-center justify-between">
+                                        <div className="flex flex-col items-center justify-between">
                                             <Button
                                                 type="link"
                                                 href={`/recipe/${slug}`}

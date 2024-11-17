@@ -13,23 +13,34 @@ import {
     numberOfServing,
     preparationTime,
     instructions,
-    title,
+    CompleteRecipeType,
 } from "@actions/types/Recipe";
 import Button from "@comps/client/button";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import Image from "next/image";
 import { Quantity } from "@prisma/client";
-import UploadImages from "@actions/utils/UploadImages";
-import { CreateRecipe, SelectRecipeByTitle } from "@actions/database/Recipe";
+import { SelectRecipeById, UpdateRecipeById } from "@actions/database/Recipe";
 import { combo } from "@lib/combo";
 
-type CreateRecipeClientProps = {
-    userId: string;
+type EditRecipeClientProps = {
+    recipe: CompleteRecipeType;
     ingredientList: ReturnIngredientType[];
 };
 
-export default function CreateRecipeClient(props: CreateRecipeClientProps) {
-    const { userId, ingredientList } = props;
+export default function EditRecipeClient(props: EditRecipeClientProps) {
+    const { recipe, ingredientList } = props;
+
+    const {
+        title: titleRaw,
+        description: descriptionRaw,
+        lunchStep: lunchStepRaw,
+        lunchType: lunchTypeRaw,
+        difficultyLevel: difficultyLevelRaw,
+        numberOfServing: numberOfServingRaw,
+        preparationTime: preparationTimeRaw,
+        instructions: instructionsRaw,
+        ingredientList: ingredientListRaw,
+    } = recipe;
 
     // Submit feedback
     const [loading, setLoading] = useState(false);
@@ -37,22 +48,19 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
     const [message, setMessage] = useState("");
 
     // Simple input states
-    const [title, setTitle] = useState<title | "">("");
-    const [description, setDescription] = useState<description | "">("");
-    const [lunchStep, setLunchStep] = useState<lunchStep>("APPETIZER");
-    const [lunchType, setLunchType] = useState<lunchType>("BREAKFAST");
-    const [difficultyLevel, setDifficultyLevel] = useState<difficultyLevel>("EASY");
-    const [numberOfServing, setNumberOfServing] = useState<numberOfServing>(1);
-    const [instructionList, setInstructionList] = useState<instructions[]>([""]);
-
-    // Image list
-    const [importFeedback, setImportFeedback] = useState<string>("");
-    const [imageFileList, setImageFileList] = useState<File[] | null>(null);
+    const [description, setDescription] = useState<description | "">(descriptionRaw);
+    const [lunchStep, setLunchStep] = useState<lunchStep>(lunchStepRaw);
+    const [lunchType, setLunchType] = useState<lunchType>(lunchTypeRaw);
+    const [difficultyLevel, setDifficultyLevel] = useState<difficultyLevel>(difficultyLevelRaw);
+    const [numberOfServing, setNumberOfServing] = useState<numberOfServing>(numberOfServingRaw);
+    const [instructionList, setInstructionList] = useState<instructions[]>(instructionsRaw.split("@@@@@"));
 
     // Preparation time
-    const [hour, setHour] = useState<number>(0);
-    const [minute, setMinute] = useState<number>(0);
-    const [preparationTime, setPreparationTime] = useState<preparationTime>(0);
+    const hourRaw = Math.trunc(preparationTimeRaw / 60);
+    const minuteRaw = preparationTimeRaw % 60;
+    const [hour, setHour] = useState<number>(hourRaw);
+    const [minute, setMinute] = useState<number>(minuteRaw);
+    const [preparationTime, setPreparationTime] = useState<preparationTime>(hourRaw * 60 + minuteRaw);
     useEffect(() => {
         if (hour && minute) {
             const totalMinute = hour * 60 + minute;
@@ -63,20 +71,6 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             setPreparationTime(minute);
         }
     }, [hour, minute]);
-
-    // Ingredient list
-    const [quantity, setQuantity] = useState<Quantity["quantity"]>(1);
-    const [unit, setUnit] = useState<Quantity["unit"]>("GRAM");
-    const [currentIngredient, setCurrentIngredient] = useState<ReturnIngredientType["id"] | null>(null);
-    const [inputIngredientList, setInputIngredientList] = useState<ReturnIngredientType[]>(
-        ingredientList.sort((a, b) => a.name.localeCompare(b.name))
-    );
-    interface SelectedIngredientList extends ReturnIngredientType {
-        quantity: Quantity["quantity"];
-        unit: Quantity["unit"];
-        unitTranslate: string;
-    }
-    const [selectedIngredientList, setSelectedIngredientList] = useState<SelectedIngredientList[]>([]);
 
     // Mapping list
     const lunchStepList = [
@@ -105,6 +99,33 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
         { enum: "MILLILITER", translate: "ml" },
         { enum: "PIECE", translate: "pièce" },
     ];
+
+    // Ingredient list
+    interface SelectedIngredientList extends ReturnIngredientType {
+        quantity: Quantity["quantity"];
+        unit: Quantity["unit"];
+        unitTranslate: string;
+    }
+
+    const ingredientListRawFormatted = ingredientListRaw.map(({ ingredientId, name, image, quantity, unit }) => ({
+        id: ingredientId,
+        name: name,
+        image: image,
+        quantity: quantity as Quantity["quantity"],
+        unit: unit as Quantity["unit"],
+        unitTranslate: unitList.find((u) => u.enum === unit)?.translate ?? "",
+    }));
+
+    const [selectedIngredientList, setSelectedIngredientList] =
+        useState<SelectedIngredientList[]>(ingredientListRawFormatted);
+    const [quantity, setQuantity] = useState<Quantity["quantity"]>(1);
+    const [unit, setUnit] = useState<Quantity["unit"]>("GRAM");
+    const [currentIngredient, setCurrentIngredient] = useState<ReturnIngredientType["id"] | null>(null);
+    const [inputIngredientList, setInputIngredientList] = useState<ReturnIngredientType[]>(
+        ingredientList
+            .filter((ingredient) => !ingredientListRaw.some((item) => item.ingredientId === ingredient.id))
+            .sort((a, b) => a.name.localeCompare(b.name))
+    );
 
     // Functions
     const addIngredientToList = () => {
@@ -142,51 +163,19 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
         }
     };
 
-    const handleImageList = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const fileList = Array.from(e.target.files as FileList);
-
-        if (!fileList) {
-            return setImportFeedback("Aucun fichier sélectionné");
-        }
-
-        if (fileList.length > 3) {
-            return setImportFeedback("Trop d'images sélectionnées");
-        }
-
-        const imageExtensions = ["image/jpeg", "image/png", "image/webp"];
-        const imageSize = 5 * 1024 * 1024; // 5MB
-
-        fileList.map((file) => {
-            if (file.size > imageSize) {
-                return setImportFeedback("Fichier trop volumineux");
-            }
-            if (!imageExtensions.includes(file.type)) {
-                return setImportFeedback("Format de fichier invalide");
-            }
-        });
-
-        // Store raw file list
-        setImportFeedback("Fichiers importés avec succès");
-        setImageFileList(fileList);
-    };
-
     const handleRecipeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         // Start loading
         e.preventDefault();
         setLoading(true);
 
         if (
-            title === "" ||
             description === "" ||
             preparationTime === 0 ||
             numberOfServing === 0 ||
-            imageFileList === null ||
-            imageFileList.length === 0 ||
             instructionList[0] === "" ||
             selectedIngredientList.length === 0
         ) {
             console.log(
-                `Title: ${title}\n`,
                 `Description: ${description}\n`,
                 `Lunch step: ${lunchStep}\n`,
                 `Lunch type: ${lunchType}\n`,
@@ -194,7 +183,6 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
                 `Preparation time: ${preparationTime}\n`,
                 `Number of serving: ${numberOfServing}\n`,
                 `Instructions: ${instructionList}\n`,
-                `Image list: ${imageFileList}\n`,
                 `Ingredient list: ${selectedIngredientList}\n`
             );
             setMessage("Veuillez remplir tous les champs obligatoires.");
@@ -203,9 +191,9 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             return;
         }
 
-        const existingRecipe = await SelectRecipeByTitle({ title });
+        const existingRecipe = await SelectRecipeById({ id: recipe.id });
 
-        if (existingRecipe) {
+        if (!existingRecipe) {
             setMessage("Cette recette existe déjà, veuillez en choisir un autre titre.");
             setMode("warning");
             setLoading(false);
@@ -213,36 +201,26 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
         }
 
         // Send recipe to server
-        const recipeDate = await CreateRecipe({
-            title,
-            description,
-            lunchStep,
-            lunchType,
-            difficultyLevel,
-            numberOfServing,
-            preparationTime,
-            userId,
-            instructions: instructionList.join("@@@@@"),
-            imageNameList: imageFileList?.map((image) => image.name) ?? [],
-            ingredientList: selectedIngredientList.map(({ id: ingredientId, quantity, unit }) => ({
-                ingredientId,
-                quantity,
-                unit,
-            })),
+        const recipeDate = await UpdateRecipeById({
+            id: recipe.id,
+            data: {
+                description,
+                lunchStep,
+                lunchType,
+                difficultyLevel,
+                numberOfServing,
+                preparationTime,
+                instructions: instructionList.join("@@@@@"),
+                ingredientList: selectedIngredientList.map(({ id: ingredientId, quantity, unit }) => ({
+                    ingredientId,
+                    quantity,
+                    unit,
+                })),
+            },
         });
 
         if (!recipeDate) {
             setMessage("Une erreur est survenue lors de l'envoi de la recette. Veuillez réessayer.");
-            setMode("danger");
-            setLoading(false);
-            return;
-        }
-
-        // Send image to server
-        const confirmation = await UploadImages({ recipeTitle: title, imageList: imageFileList as File[] });
-
-        if (!confirmation) {
-            setMessage("Une erreur est survenue lors de l'envoi des images. La recette n'a pas été créée.");
             setMode("danger");
             setLoading(false);
             return;
@@ -256,49 +234,11 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
 
     return (
         <form onSubmit={handleRecipeSubmit} className="w-full space-y-6">
-            <h1 className="text-2xl font-bold">Créer une recette</h1>
-            <section className="flex flex-col gap-8  md:flex-row">
-                <div className="w-full space-y-1 md:w-1/2">
-                    <label htmlFor="title" className="text-lg font-bold">
-                        Titre
-                    </label>
-                    <input
-                        id="title"
-                        name="title"
-                        className="w-full rounded border px-2 outline-none ring-teal-400 ring-offset-2 transition-all duration-150 focus:ring-2"
-                        type="text"
-                        onChange={(e) => setTitle(e.target.value)}
-                        value={title}
-                        autoFocus
-                    />
-                </div>
-                <div className="w-full space-y-1 md:w-1/2">
-                    <div className="flex flex-row items-baseline justify-between">
-                        <div className="flex flex-row items-baseline gap-2">
-                            <label htmlFor="image-import" className="text-lg font-bold">
-                                Images
-                            </label>
-                            <span
-                                className={combo(
-                                    "text-xs italic text-red-500",
-                                    importFeedback === "Fichiers importés avec succès" && "text-green-500"
-                                )}
-                            >
-                                {importFeedback}
-                            </span>
-                        </div>
-                        <div className="text-xxs italic text-gray-500">3 maximum / JPG, PNG ou WEBP</div>
-                    </div>
-                    <input
-                        id="image-import"
-                        name="image-import"
-                        className="h-6 w-full cursor-pointer rounded border text-xs ring-teal-400 ring-offset-2 transition-all duration-150 file:pointer-events-none file:h-6 file:cursor-pointer file:border-none file:text-xs file:transition-all file:duration-150 hover:bg-gray-50 hover:file:bg-gray-200 focus:ring-2"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageList}
-                        multiple
-                    />
-                </div>
+            <h1 className="text-2xl font-bold">Mettre à jour la recette</h1>
+
+            <section>
+                <div className="text-lg font-bold">Titre</div>
+                <div className="text-gray-500">{titleRaw}</div>
             </section>
 
             <section className="space-y-1">
@@ -604,12 +544,17 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
             <section className="flex flex-col items-center gap-2">
                 <div className="flex w-full flex-row items-center justify-center gap-2">
                     <div className="h-px w-full rounded-full bg-gray-300" />
-                    <div className="whitespace-nowrap text-lg font-bold">Envoyer la recette</div>
+                    <div className="whitespace-nowrap text-lg font-bold">Envoyer les modifications</div>
                     <div className="h-px w-full rounded-full bg-gray-300" />
                 </div>
                 <div className="text-gray-500">Prenez le temps de vous relire avant de valider 😃</div>
                 <FormFeedback mode={mode}>{message}</FormFeedback>
-                <LoadingButton className="my-4 px-16 py-1" type="submit" label="Créer la recette" loading={loading} />
+                <LoadingButton
+                    className="my-4 px-16 py-1"
+                    type="submit"
+                    label="Mettre à jour la recette"
+                    loading={loading}
+                />
             </section>
         </form>
     );

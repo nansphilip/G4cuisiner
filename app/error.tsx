@@ -1,6 +1,6 @@
 "use client"
 
-import Button from "@comps/server/button"
+import Button from "@comps/client/button"
 import { useEffect } from "react"
 
 export default function ErrorPage({ error, reset }: {

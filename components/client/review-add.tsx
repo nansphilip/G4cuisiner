@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ReviewListProps } from "./review-display";
 import { useStore } from "@lib/zustand";
-import Button from "../server/button";
+import Button from "./button";
 
 type ReviewAddClientProps = {
     userRating: number | null;

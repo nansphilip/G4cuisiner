@@ -2,7 +2,11 @@
 
 G4cuisiner is G4 School student project.
 
-## Project installation (local)
+## Coding chart
+
+Follow this link: [Coding chart](https://github.com/nansphilip/G4cuisiner/blob/main/coding-chart.md)
+
+## Project installation
 
 - Make sure you already had installed:
 
@@ -91,3 +95,23 @@ There is two types of users.
 | alice.dupont@example.com      | User1234!  | User      |
 | gabriel.rousseau@example.com  | Modo1234!  | Modo      |
 | isabelle.petit@example.com    | Admin1234! | Admin     |
+
+# Deployment
+
+## Init
+
+```bash
+pnpm install && pnpm dlx prisma generate && pnpm dlx prisma migrate deploy && pnpm run reload
+```
+
+## Build
+
+```bash
+pnpm run build
+```
+
+## Start
+
+```bash
+pnpm run start
+```

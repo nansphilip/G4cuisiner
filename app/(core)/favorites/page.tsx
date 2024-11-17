@@ -11,11 +11,9 @@ export default async function FavoritesPage() {
     const recipeUserFavoriteList = session && (await SelectFavoriteRecipeUser(session.user.id));
 
     return (
-        <div className="flex size-full flex-col gap-4">
-            <div className="text-2xl font-bold">
-                <h1>Mes Favoris</h1>
-            </div>
+        <div className="h-screen w-full space-y-4">
+            <h1 className="text-2xl font-bold">Mes Favoris</h1>
             <FavoritesClient recipeUserFavoriteList={recipeUserFavoriteList} />
         </div>
     );
-};
+}

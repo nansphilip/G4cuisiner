@@ -1,5 +1,7 @@
+"use client";
+
+import { combo } from "@lib/combo";
 import Link from "next/link";
-import { combo } from "../../lib/combo";
 
 type ButtonProps = {
     id?: string;
@@ -83,16 +85,6 @@ export default function Button(props: ButtonProps) {
         lg: "rounded-lg",
     };
 
-    const classList = combo(
-        "text-center transition-all duration-150",
-        ringClass[ring],
-        variantClass[variant],
-        buttonSizeClass[buttonSize],
-        fontSizeClass[fontSize],
-        roundedClass[roundedSize],
-        className
-    );
-
     if (type === "link") {
         return (
             <Link
@@ -101,7 +93,15 @@ export default function Button(props: ButtonProps) {
                 onClick={onClick}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                className={classList}
+                className={combo(
+                    "text-center transition-all duration-150",
+                    ringClass[ring],
+                    variantClass[variant],
+                    buttonSizeClass[buttonSize],
+                    fontSizeClass[fontSize],
+                    roundedClass[roundedSize],
+                    className
+                )}
             >
                 {children}
             </Link>
@@ -115,7 +115,15 @@ export default function Button(props: ButtonProps) {
                 onClick={onClick}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                className={classList}
+                className={combo(
+                    "text-center transition-all duration-150",
+                    ringClass[ring],
+                    variantClass[variant],
+                    buttonSizeClass[buttonSize],
+                    fontSizeClass[fontSize],
+                    roundedClass[roundedSize],
+                    className
+                )}
             >
                 {children}
             </button>

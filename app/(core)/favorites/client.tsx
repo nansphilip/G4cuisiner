@@ -38,12 +38,12 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                             <RecipeImageListClient imageList={[recipe.imageList[0]]} />
                             <div className="flex w-full flex-col justify-between gap-3">
                                 <div>
-                                    <div className="flex flex-row items-center justify-between">
-                                        <div className="flex flex-row items-center justify-start gap-3">
-                                            <div className="text-xl font-bold">{recipe.title}</div>
+                                    <div className="flex flex-row items-start justify-between">
+                                        <div className="flex flex-col items-start justify-start md:flex-row md:gap-3">
+                                            <div className="line-clamp-1 text-base font-bold md:text-xl">{recipe.title}</div>
                                             <RatingDisplayAverageClient
                                                 ratingAverage={recipe.ratingAverage}
-                                                classSvg="size-6"
+                                                classSvg="size-4 md:size-6"
                                             />
                                         </div>
                                         <FavoriteDisplayClient
@@ -51,13 +51,13 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                                             classSvg="size-8"
                                         />
                                     </div>
-                                    <div className="text-xs">{recipe.description}</div>
+                                    <div className="line-clamp-2 text-xxs md:text-xs">{recipe.description}</div>
                                 </div>
                                 {recipe.latestReview && (
                                     <div className="flex h-full flex-col justify-between gap-1 rounded-md border p-2">
-                                        <div className="text-sm font-bold">Dernier commentaire</div>
-                                        <div className="line-clamp-2 text-xs">{recipe.latestReview.review}</div>
-                                        <div className="text-xs text-gray-400">
+                                        <div className="line-clamp-1 text-xs font-bold md:text-sm">Dernier commentaire</div>
+                                        <div className="line-clamp-2 text-xxs md:text-xs">{recipe.latestReview.review}</div>
+                                        <div className="line-clamp-1 text-xxs text-gray-400 md:text-xs">
                                             <span>Posté par </span>
                                             <span>{recipe.latestReview.userName}</span>
                                             <span> le </span>

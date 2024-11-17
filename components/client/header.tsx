@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ChefHat, ChevronDown, Search, X } from "lucide-react";
 import { combo } from "@lib/combo";
 import SlidingHover from "@comps/client/sliding-motion";
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { BetterSessionClient, useSession } from "@lib/client";
 import { TitleAndSlugRecipeType } from "@actions/types/Recipe";
 import SearchClient from "@comps/client/search-bar";
@@ -92,12 +92,28 @@ export default function HeaderClient(props: HeaderClientProps) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            const searchEl = document?.querySelector("#search-bar") as HTMLElement;
+            const searchInputEl = searchEl?.querySelector("input") as HTMLElement;
+            searchInputEl?.focus();
+        }
+    }, [isMobileMenuOpen]);
+
     const firstName = session?.user.name.split(" ")[0];
     const profileImage = session?.user.image;
 
     return (
         <header className={className}>
-            <div className="md:hidden">
+            <div className="w-full md:hidden">
+                <div className="flex w-full flex-row justify-center">
+                    {slugList && (
+                        <SearchClient
+                            className={combo("absolute shadow-lg rounded-xl top-16 w-[300px]", !isSearchOpen && "hidden")}
+                            recipeList={slugList}
+                        />
+                    )}
+                </div>
                 <nav
                     className={combo(
                         "absolute bottom-0 rounded-t-2xl flex flex-col gap-2 border-1.5 z-50 w-full bg-white p-3",
@@ -142,16 +158,35 @@ export default function HeaderClient(props: HeaderClientProps) {
                     >
                         Recherche par filtres
                     </Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="flex justify-center gap-3 py-2"
+                        ring="none"
+                        onClick={() => setIsSearchOpen(!isSearchOpen)}
+                    >
+                        <span>Recherche</span>
+                        <Search id="search-bar" />
+                    </Button>
                     {session ? (
                         <>
                             <Button
                                 type="link"
-                                href="/create-recipe"
+                                href="/recipe/create"
                                 variant="outline"
                                 className="py-2"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Création recette
+                            </Button>
+                            <Button
+                                type="link"
+                                href="/favorites"
+                                variant="outline"
+                                className="py-2"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Favoris
                             </Button>
                             {(userRole === "ADMIN" || userRole === "MODO") && (
                                 <Button
@@ -236,7 +271,7 @@ export default function HeaderClient(props: HeaderClientProps) {
                         ring="none"
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                     >
-                        <Search />
+                        <Search id="search-bar" />
                     </Button>
                 </SlidingHover>
                 {slugList && (

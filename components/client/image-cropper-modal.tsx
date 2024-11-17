@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { useEffect, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../lib/imageToString";

@@ -1,5 +1,4 @@
 import { CompleteRecipeType } from "@actions/types/Recipe";
-import StarRating from "@comps/client/difficulty";
 
 type RecipeInfoProps = {
     recipe: CompleteRecipeType;
@@ -11,7 +10,7 @@ export default function RecipeInfo(props: RecipeInfoProps) {
 
     // Format data
     const difficultyLevelFormatted =
-        ((difficultyLevel === "EASY" && 1) || (difficultyLevel === "MEDIUM" && 2) || (difficultyLevel === "HARD" && 3)) as number;
+        ((difficultyLevel === "EASY" && "Facile") || (difficultyLevel === "MEDIUM" && "Moyen") || (difficultyLevel === "HARD" && "Difficile"));
 
     const lunchTypeFormatted =
         (lunchType === "BREAKFAST" && "Petit déjeuner") ||
@@ -41,7 +40,8 @@ export default function RecipeInfo(props: RecipeInfoProps) {
                 </div>
             ))}
             <div className="flex h-32 w-full flex-col items-center justify-center rounded-md border">
-                <StarRating number={difficultyLevelFormatted} editable={false} />
+                <span className="text-xl font-bold">{difficultyLevelFormatted}</span>
+                <span className="text-xs text-gray-500">Difficulté</span>
             </div>
         </div>
     );

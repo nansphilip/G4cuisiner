@@ -1,4 +1,4 @@
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {

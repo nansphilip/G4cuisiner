@@ -17,7 +17,7 @@ import {
 } from "@actions/types/Recipe";
 import ToSlug from "@actions/utils/ToSlug";
 
-export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecipeType> => {
+export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecipeType | null> => {
     try {
         const {
             title,
@@ -85,7 +85,9 @@ export const CreateRecipe = async (props: CreateRecipeType): Promise<ReturnRecip
         });
         return recipe;
     } catch (error) {
-        throw new Error("CreateRecipe -> " + (error as Error).message);
+        console.log(error);
+        return null;
+        // throw new Error("CreateRecipe -> " + (error as Error).message);
     }
 };
 
@@ -132,6 +134,11 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
                 status: "APPROVED",
             },
             include: {
+                User: {
+                    select: {
+                        name: true,
+                    }
+                },
                 Image: {
                     select: {
                         url: true,
@@ -223,6 +230,7 @@ export const SelectRecipeBySlug = async (props: SlugRecipeType): Promise<Complet
             instructions: recipe.instructions,
             status: recipe.status,
             userId: recipe.userId,
+            userName: recipe.User.name,
             createdAt: recipe.createdAt,
             updatedAt: recipe.updatedAt,
             ratingAverage,
@@ -423,10 +431,10 @@ export const SelectEveryPendingRecipe = async (): Promise<ReturnRecipeType[] | n
     }
 };
 
-export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<ReturnRecipeType> => {
+export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<ReturnRecipeType | null> => {
     try {
         const { id, data } = props;
-        const { title } = data;
+        const { title, ingredientList } = data;
 
         const existingRecipe = await SelectRecipeById({ id });
         if (!existingRecipe) {
@@ -438,24 +446,35 @@ export const UpdateRecipeById = async (props: UpdateRecipeType): Promise<ReturnR
             throw new Error("New title already exists");
         }
 
-        const slug = title ? ToSlug(title) : undefined;
-
-        if (slug) {
-            const existingSlug = slug && (await SelectRecipeBySlug({ slug }));
-            if (existingSlug) {
-                throw new Error("Slug already exists");
-            }
-        }
-
         const recipe = await Prisma.recipe.update({
             where: { id },
             data: {
-                ...data,
-                ...(slug && { slug }),
+                title: title ?? existingRecipe.title,
+                description: data.description ?? existingRecipe.description,
+                numberOfServing: data.numberOfServing ?? existingRecipe.numberOfServing,
+                preparationTime: data.preparationTime ?? existingRecipe.preparationTime,
+                difficultyLevel: data.difficultyLevel ?? existingRecipe.difficultyLevel,
+                lunchType: data.lunchType ?? existingRecipe.lunchType,
+                lunchStep: data.lunchStep ?? existingRecipe.lunchStep,
+                instructions: data.instructions ?? existingRecipe.instructions,
+                status: data.status ?? existingRecipe.status,
+                ...(ingredientList &&
+                    ingredientList.length > 0 && {
+                        Quantity: {
+                            deleteMany: {},
+                            create: ingredientList.map(({ quantity, unit, ingredientId }) => ({
+                                quantity: quantity,
+                                unit,
+                                ingredientId,
+                            })),
+                        },
+                    }),
             },
         });
         return recipe;
     } catch (error) {
-        throw new Error("UpdateRecipeById -> " + (error as Error).message);
+        console.log(error);
+        return null;
+        // throw new Error("UpdateRecipeById -> " + (error as Error).message);
     }
 };

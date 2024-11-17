@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "../server/button";
+import Button from "./button";
 import { useRouter } from "next/navigation";
 import { CreateReview } from "@actions/database/Review";
 

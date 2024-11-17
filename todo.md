@@ -17,8 +17,6 @@
 
 - [ ] À faire avant rendu
   
-  - [ ] "Pas de commentaire pour le moment"
-  
   - [ ] Zustand issue
     - [ ] Rating sync
     - [ ] Favorite sync

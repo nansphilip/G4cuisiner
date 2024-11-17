@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { UpdateRecipeById } from "@actions/database/Recipe";
 import { ReturnRecipeType } from "@actions/types/Recipe";
 

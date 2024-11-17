@@ -2,7 +2,7 @@
 
 import { ChangeEventHandler, useEffect, useState } from "react"
 import { CircleCheck, CircleAlert, ChevronDown, Eye, EyeOff } from "lucide-react"
-import Button from "@comps/server/button"
+import Button from "@comps/client/button"
 
 type PasswordClientProps = {
     name: string

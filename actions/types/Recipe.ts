@@ -1,6 +1,6 @@
 "use server";
 
-import Prisma from "@prisma/client";
+import Prisma, { Ingredient, Quantity } from "@prisma/client";
 
 export type Recipe = Prisma.Recipe;
 
@@ -100,9 +100,11 @@ export interface UpdateRecipeType {
         lunchStep?: lunchStep;
         instructions?: instructions;
         status?: status;
-        userId?: userId;
-        createdAt?: createdAt;
-        updatedAt?: updatedAt;
+        ingredientList?: {
+            ingredientId: Ingredient["id"];
+            quantity: Quantity["quantity"];
+            unit: Quantity["unit"];
+        }[];
     };
 }
 
@@ -117,6 +119,7 @@ export interface ReturnRecipeType extends IdRecipeType, CommonType, SlugRecipeTy
 }
 
 export interface CompleteRecipeType extends ReturnRecipeType, ImageRecipeType, IngredientRecipeType, ReviewRecipeType {
+    userName: string;
     ratingAverage: number;
     totalFavoriteAmount: number;
     totalRatingAmount: number;

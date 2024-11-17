@@ -15,9 +15,10 @@ import RatingAddClient from "@comps/client/rating-add";
 import RatingDisplayAverageClient from "@comps/client/rating-display-average";
 import { SelectUserById } from "@actions/database/User";
 import InstructionsInfo from "@comps/server/steps-info";
+import Button from "@comps/client/button";
 
 export const metadata: Metadata = {
-    title: "Recipe",
+    title: "Consultation de recette",
     description: "Recipe page.",
 };
 
@@ -46,6 +47,8 @@ export default async function RecipePage(props: RecipePageProps) {
         totalRatingAmount,
         totalFavoriteAmount,
         imageList,
+        userId: authorId,
+        userName: authorName,
     } = recipe;
 
     // Get current user session
@@ -61,12 +64,13 @@ export default async function RecipePage(props: RecipePageProps) {
         }));
 
     const user = session ? await SelectUserById({ userId: session.user.id }) : null;
-    // const userRole = user ? user.role : null;
+    const userRole = user ? user.role : null;
+    const sessionUserId = session ? session.user.id : null;
     const isUserRestricted = user ? user.restricted : null;
 
     return (
-        <div className="mt-2 w-full space-y-5">
-            <section>
+        <div className="w-full space-y-5">
+            <section className="space-y-2">
                 <div className="flex flex-row flex-wrap items-start justify-between gap-1">
                     <div>
                         <div className="flex w-full flex-row items-center justify-start gap-6">
@@ -80,12 +84,23 @@ export default async function RecipePage(props: RecipePageProps) {
                             />
                         </div>
                         <p>{description}</p>
+                        <div className="text-xs text-gray-500">
+                            <span>Recette rédigée par </span>
+                            <span className="font-bold">{authorName}</span>
+                        </div>
                     </div>
                     <RatingDisplayAverageClient
                         ratingAverage={ratingAverage}
                         totalRatingAmount={totalRatingAmount}
                         classSvg="size-11"
                     />
+                </div>
+                <div>
+                    {(authorId === sessionUserId || userRole === "ADMIN" || userRole === "MODO") && (
+                        <Button type="link" href={`/recipe/edit/${slug}`} variant="danger" buttonSize="lg">
+                            Éditer cette page
+                        </Button>
+                    )}
                 </div>
             </section>
             <RecipeImageListClient imageList={imageList} />

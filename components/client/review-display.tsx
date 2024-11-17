@@ -206,7 +206,7 @@ export default function ReviewDisplayClient(props: ReviewDisplayClientProps) {
                         return (
                             <div key={index} className={combo("border rounded-md py-2 px-4 text-black", classCom)}>
                                 <div className="flex flex-row items-center justify-between">
-                                    <div className="flex flex-row gap-3">
+                                    <div className="flex flex-col gap-0 md:flex-row md:gap-3">
                                         <h3 className="font-bold">{name}</h3>
                                         <RatingDisplayClient
                                             currentUserId={currentUserId}

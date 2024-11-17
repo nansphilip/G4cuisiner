@@ -5,7 +5,7 @@ import { SelectRecipeByFilter } from "@actions/database/Recipe";
 import QuestionCard from "@comps/client/questionnaire";
 import { useState } from "react";
 import { LunchStep, LunchType } from "@prisma/client";
-import Button from "@comps/server/button";
+import Button from "@comps/client/button";
 import { ReturnSelectRecipeByFilterType } from "@actions/types/Recipe";
 import FindRecipeCard from "@comps/client/find-a-recipe";
 

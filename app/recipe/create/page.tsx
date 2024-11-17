@@ -2,6 +2,12 @@ import CreateRecipeClient from "./client";
 import { SelectEveryIngredient } from "@actions/database/Ingredient";
 import { getSession } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Création de recipe",
+    description: "Create recipe page.",
+};
 
 export default async function CreateRecipePage() {
     const session = await getSession();
