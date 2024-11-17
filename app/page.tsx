@@ -1,5 +1,4 @@
 import { SelectLastRecipe } from "@actions/database/Recipe";
-import logo from "@public/logo.svg";
 import Image from "next/image";
 import { SelectFavoriteRecipeUser } from "@actions/database/Favorite";
 import { getSession } from "@lib/auth";
@@ -24,7 +23,7 @@ export default async function HomePage() {
             ></div>
             <div className="flex w-full flex-col items-center justify-center gap-2">
                 <div className="flex justify-center">
-                    <Image src={logo} height={250} width={250} alt="logo" />
+                    <Image src={"/logo-2.png"} height={250} width={250} alt="logo" />
                 </div>
                 <div className="flex w-full flex-row flex-wrap justify-center gap-3">
                     {userFavoriteList && userFavoriteList.length > 0 ? (
