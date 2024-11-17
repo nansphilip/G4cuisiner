@@ -23,7 +23,7 @@ export default async function HomePage() {
             ></div>
             <div className="flex w-full flex-col items-center justify-center gap-2">
                 <div className="flex justify-center">
-                    <Image src={"/logo-2.png"} height={250} width={250} alt="logo" />
+                    <Image src={"/logo-4.png"} height={250} width={250} alt="logo" />
                 </div>
                 <div className="flex w-full flex-row flex-wrap justify-center gap-3">
                     {userFavoriteList && userFavoriteList.length > 0 ? (
@@ -32,7 +32,7 @@ export default async function HomePage() {
                                 userFavoriteList.map(({title, slug, description, imageList}, index) => (
                                     <div
                                         key={index}
-                                        className="w-[300px] flex-col bg-white duration-150 p-4 shadow-md rounded-lg transition-all hover:shadow-lg"
+                                        className="w-[300px] flex-col rounded-lg bg-white p-4 shadow-md transition-all duration-150 hover:shadow-lg"
                                     >
                                         <div className="mb-2 flex flex-row items-center justify-between text-2xl font-bold">
                                             <span>{title}</span>
@@ -48,7 +48,7 @@ export default async function HomePage() {
                                             <Button
                                                 type="link"
                                                 href={`/recipe/${slug}`}
-                                                className="shadow-md bg-primary hover:bg-orange-300 font-bold text-tertiary"
+                                                className="bg-primary font-bold text-tertiary shadow-md hover:bg-orange-300"
                                             >
                                                 Voir la recette
                                             </Button>
@@ -74,7 +74,7 @@ export default async function HomePage() {
                                             <Button
                                                 type="link"
                                                 href={`/recipe/${slug}`}
-                                                className="shadow-md bg-primary hover:bg-orange-300 font-bold text-tertiary"
+                                                className="bg-primary font-bold text-tertiary shadow-md hover:bg-orange-300"
                                             >
                                                 Voir la recette
                                             </Button>

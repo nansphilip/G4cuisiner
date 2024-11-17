@@ -54,7 +54,7 @@ export default function FavoritesClient(props: FavoritesClientProps) {
                                         totalFavoriteAmount={recipe.totalFavoriteAmount}
                                         classSvg="size-10"
                                     />
-                                    <Button className="bg-primary hover:bg-orange-300 text-tertiary font-bold shadow-md" type="link" href={`/recipe/${recipe.slug}`}>
+                                    <Button className="bg-primary font-bold text-tertiary shadow-md hover:bg-orange-300" type="link" href={`/recipe/${recipe.slug}`}>
                                         Voir la recette
                                     </Button>
                                 </div>

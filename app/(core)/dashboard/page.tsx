@@ -95,7 +95,7 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </div>
-            {userList && <UserList userList={userList} />}
+            {userRole === "ADMIN" && userList && <UserList userList={userList} />}
             {pendingRecipes && <ReviewRecipes recipes={pendingRecipes} />}
         </div>
     );

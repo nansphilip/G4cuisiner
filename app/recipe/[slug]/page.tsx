@@ -67,9 +67,9 @@ export default async function RecipePage(props: RecipePageProps) {
     return (
         <div className="mt-2 w-full space-y-5">
             <section>
-                <div className="flex flex-row flex-wrap gap-1 items-start justify-between">
+                <div className="flex flex-row flex-wrap items-start justify-between gap-1">
                     <div>
-                        <div className="w-full flex flex-row items-center justify-start gap-6">
+                        <div className="flex w-full flex-row items-center justify-start gap-6">
                             <h1 className="text-4xl font-bold">{title}</h1>
                             <FavoriteAddClient
                                 userId={session?.user.id}

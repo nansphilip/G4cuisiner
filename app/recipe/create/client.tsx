@@ -82,7 +82,7 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
                 });
             }
 
-            //Get the lunchstep
+            //Get the lunch step
             const lunchStep = formData.get("lunchStep") as CommonType["lunchStep"];
 
             //             //Get the lunch type
@@ -139,7 +139,7 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
                 ingredientList: listeIngredient,
             };
 
-            //Verification des chammps requis
+            //Verification des champs requis
             const missingField = validateFormData(newRecipe);
             if (missingField) {
                 Swal.fire({
@@ -149,15 +149,6 @@ export default function CreateRecipeClient(props: CreateRecipeClientProps) {
                     confirmButtonColor: "#d33",
                     confirmButtonText: "OK",
                 });
-                // if (image === null) {
-                //     Swal.fire({
-                //         icon: "error",
-                //         title: "Champ manquant",
-                //         text: `Le champ "image" est requis. Veuillez le remplir avant de soumettre.`,
-                //         confirmButtonColor: "#d33",
-                //         confirmButtonText: "OK",
-                //     });
-                // }
                 setLoading(false);
                 return;
             }

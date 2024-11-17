@@ -69,7 +69,7 @@ export default function FavoriteAddClient(props: FavoriteAddClientProps) {
                         : "stroke-gray-600 group-hover:stroke-gray-700 fill-white group-hover:fill-gray-200"
                 )}
             />
-            <div className="max-lg:hidden flex flex-col items-start">
+            <div className="flex flex-col items-start max-lg:hidden">
                 <span className="text-xs font-bold">Ajouter à mes favoris</span>
                 <span className="text-xs text-gray-500">{favorisCount} cuisiniers l&apos;ont déjà ajouté</span>
             </div>

@@ -75,11 +75,11 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
     }, [filtersLunchStep, filtersPreparationTime, filtersLunchType, filtersDifficultyLevel, listRecipes]);
 
     return (
-        <div className="flex flex-col gap-3 items-center rounded-xl h-full bg-gray-100 p-6">
-            <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="flex h-full flex-col items-center gap-3 rounded-xl bg-gray-100 p-6">
+            <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4">
                 <fieldset className="rounded-lg border border-gray-300 bg-white p-4 shadow-md">
                     <legend className="text-lg font-semibold">Type de repas</legend>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -87,11 +87,12 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 5)}
                             checked={filtersLunchType[5]}
                             className="mr-2"
+                            aria-label="Tous les types de repas"
                         />
                         <label htmlFor="resetLunchType">Tous</label>
                     </div>
-                    <hr className="my-2"/>
-                    <div className="flex items-center cursor-pointer">
+                    <hr className="my-2" />
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -99,12 +100,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 0)}
                             checked={filtersLunchType[0]}
                             className="mr-2"
+                            aria-label="Petit-déjeuner"
                         />
                         <label htmlFor="breakfast" className="text-gray-700">
                             Petit-déjeuner
                         </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -112,12 +114,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 1)}
                             checked={filtersLunchType[1]}
                             className="mr-2"
+                            aria-label="Déjeuner"
                         />
                         <label htmlFor="lunch" className="text-gray-700">
                             Déjeuner
                         </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -125,10 +128,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 2)}
                             checked={filtersLunchType[2]}
                             className="mr-2"
+                            aria-label="Brunch"
                         />
-                        <label htmlFor="brunch">Brunch</label>
+                        <label htmlFor="brunch" className="text-gray-700">
+                            Brunch
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -136,10 +142,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 3)}
                             checked={filtersLunchType[3]}
                             className="mr-2"
+                            aria-label="Dîner"
                         />
-                        <label htmlFor="dinner">Dîner</label>
+                        <label htmlFor="dinner" className="text-gray-700">
+                            Dîner
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchType"
@@ -147,25 +156,31 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 4)}
                             checked={filtersLunchType[4]}
                             className="mr-2"
+                            aria-label="Snack"
                         />
-                        <label htmlFor="snack">Snack</label>
+                        <label htmlFor="snack" className="text-gray-700">
+                            Snack
+                        </label>
                     </div>
                 </fieldset>
                 <fieldset className="rounded-lg border border-gray-300 bg-white p-4 shadow-md">
-                    <legend className="text-lg font-semibold">Etape du repas</legend>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchStep"
-                            id="resetLunchStep"
+                            id="allSteps"
                             onChange={(e) => handleChangeRadio(e, 4)}
                             checked={filtersLunchStep[4]}
                             className="mr-2"
+                            aria-label="Toutes les étapes"
                         />
-                        <label htmlFor="resetLunchStep">Tous</label>
+                        <label htmlFor="allSteps" className="text-gray-700">
+                            Toutes
+                        </label>
                     </div>
                     <hr className="my-2" />
-                    <div className="flex items-center cursor-pointer">
+                    <legend className="text-lg font-semibold">Étape du repas</legend>
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -173,10 +188,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 0)}
                             checked={filtersLunchStep[0]}
                             className="mr-2"
+                            aria-label="Apéritif"
                         />
-                        <label htmlFor="appetizer">Apéritif</label>
+                        <label htmlFor="appetizer" className="text-gray-700">
+                            Apéritif
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -184,10 +202,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 1)}
                             checked={filtersLunchStep[1]}
                             className="mr-2"
+                            aria-label="Entrée"
                         />
-                        <label htmlFor="starter">Entrée</label>
+                        <label htmlFor="starter" className="text-gray-700">
+                            Entrée
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -195,10 +216,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 2)}
                             checked={filtersLunchStep[2]}
                             className="mr-2"
+                            aria-label="Plat principal"
                         />
-                        <label htmlFor="main">Plat</label>
+                        <label htmlFor="main" className="text-gray-700">
+                            Plat principal
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="lunchStep"
@@ -206,25 +230,31 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 3)}
                             checked={filtersLunchStep[3]}
                             className="mr-2"
+                            aria-label="Dessert"
                         />
-                        <label htmlFor="dessert">Dessert</label>
+                        <label htmlFor="dessert" className="text-gray-700">
+                            Dessert
+                        </label>
                     </div>
                 </fieldset>
                 <fieldset className="rounded-lg border border-gray-300 bg-white p-4 shadow-md">
-                    <legend className="text-lg font-semibold">Difficulté</legend>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
-                            id="resetDifficultyLevel"
+                            id="allLevels"
                             onChange={(e) => handleChangeRadio(e, 3)}
                             checked={filtersDifficultyLevel[3]}
                             className="mr-2"
+                            aria-label="Tous les niveaux"
                         />
-                        <label htmlFor="resetDifficultyLevel">Tous</label>
+                        <label htmlFor="allLevels" className="text-gray-700">
+                            Tous
+                        </label>
                     </div>
                     <hr className="my-2" />
-                    <div className="flex items-center cursor-pointer">
+                    <legend className="text-lg font-semibold">Niveau de difficulté</legend>
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
@@ -232,10 +262,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 0)}
                             checked={filtersDifficultyLevel[0]}
                             className="mr-2"
+                            aria-label="Facile"
                         />
-                        <label htmlFor="easy">Facile</label>
+                        <label htmlFor="easy" className="text-gray-700">
+                            Facile
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
@@ -243,10 +276,13 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 1)}
                             checked={filtersDifficultyLevel[1]}
                             className="mr-2"
+                            aria-label="Moyen"
                         />
-                        <label htmlFor="medium">Moyen</label>
+                        <label htmlFor="medium" className="text-gray-700">
+                            Moyen
+                        </label>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div className="flex cursor-pointer items-center">
                         <input
                             type="radio"
                             name="difficultyLevel"
@@ -254,12 +290,15 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                             onChange={(e) => handleChangeRadio(e, 2)}
                             checked={filtersDifficultyLevel[2]}
                             className="mr-2"
+                            aria-label="Difficile"
                         />
-                        <label htmlFor="hard">Difficile</label>
+                        <label htmlFor="hard" className="text-gray-700">
+                            Difficile
+                        </label>
                     </div>
                 </fieldset>
-                <fieldset className="flex flex-col line-clamp-1 whitespace-nowrap items-center justify-around rounded-lg border border-gray-300 bg-white p-4 shadow-md">
-                    <legend className="text-lg font-semibold">Temps préparation</legend>
+                <fieldset className="line-clamp-1 flex flex-col items-center justify-around whitespace-nowrap rounded-lg border border-gray-300 bg-white p-4 shadow-md">
+                    <legend className="text-lg font-semibold">Temps de préparation</legend>
                     <Slider
                         id="preparationTime"
                         step={5}
@@ -277,13 +316,21 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                                 setFiltersPreparationTime([value[0], value[1]]);
                             }
                         }}
+                        aria-label="Temps de préparation en minutes"
                     />
-                    <label htmlFor="preparationTime" className="mt-2 text-gray-700">
-                        {filtersPreparationTime[0]} - {filtersPreparationTime[1]} Minutes
-                    </label>
+                <div>
+                    <div>
+                        <span>Min : </span>
+                        <span>{filtersPreparationTime[0]} minutes</span>
+                    </div>
+                    <div>
+                        <span>Max : </span>
+                        <span>{filtersPreparationTime[1]} minutes</span>
+                    </div>
+                </div>
                 </fieldset>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {recipes.map((recipe, index) => {
                     const difficultyLevelFormatted =
                         (recipe.difficultyLevel === "EASY" && "Facile") ||
@@ -320,7 +367,6 @@ export default function SearchWithFiltersClient(props: SearchWithFiltersClientPr
                                         object-cover"
                                         width={300}
                                         height={200}
-                                        layout="responsive"
                                         src={recipe.imageList[0].url}
                                     />
                                 </CardBody>

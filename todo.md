@@ -1,7 +1,5 @@
 # Todo
 
-- [ ] Prisma [Type safety](https://www.prisma.io/docs/orm/prisma-client/type-safety)
-
 - [ ] Main start or center (needs optimisation)
 
 - [ ] Image management
@@ -16,8 +14,6 @@
 - [ ] Open Graph and Twitter Card
 
 - [ ] Todo comment ?
-
-- [ ] ESLint Tailwind PLUGIN ???????????????????????
 
 - [ ] À faire avant rendu
   

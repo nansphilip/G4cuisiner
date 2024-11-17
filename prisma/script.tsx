@@ -122,7 +122,6 @@ export const fixtures = async () => {
 
 export const reset = async () => {
     try {
-        await Prisma.fruit.deleteMany({});
         await Prisma.quantity.deleteMany({});
         await Prisma.rating.deleteMany({});
         await Prisma.review.deleteMany({});

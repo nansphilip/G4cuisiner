@@ -580,13 +580,7 @@ export const recipeData: RecipeFixtures[] = [
             { url: "/recipes/quiche-lorraine-1.webp", alt: "Quiche Lorraine 1" },
             { url: "/recipes/quiche-lorraine-2.webp", alt: "Quiche Lorraine 2" },
         ],
-        Favorite: [
-            { favorite: true, userId: "user1-id" }, // Alice Dupont
-            { favorite: false, userId: "user2-id" }, // Bob Martin
-            { favorite: true, userId: "user3-id" }, // Chloé Bernard
-            { favorite: true, userId: "modo1-id" }, // Gabriel Rousseau
-            { favorite: false, userId: "admin1-id" }, // Isabelle Petit
-        ],
+        Favorite: [],
         Review: [
             {
                 review: "Je n'ai pas aimé du tout. La quiche était trop grasse et manquait de goût. Les proportions ne semblent pas correctes. Je ne recommanderais pas cette recette.",
@@ -647,11 +641,7 @@ export const recipeData: RecipeFixtures[] = [
         status: "PENDING",
         userId: "user3-id", // Chloé Bernard
         Image: [{ url: "/recipes/soupe-a-l-oignon-1.webp", alt: "Soupe à l'oignon 1" }],
-        Favorite: [
-            { favorite: true, userId: "user2-id" },
-            { favorite: true, userId: "user1-id" },
-            { favorite: false, userId: "admin2-id" },
-        ],
+        Favorite: [],
         Review: [
             {
                 review: "Parfaite pour les soirées d'hiver, un vrai régal.",
@@ -790,11 +780,7 @@ export const recipeData: RecipeFixtures[] = [
             { url: "/recipes/salade-nicoise-1.webp", alt: "Salade Niçoise 1" },
             { url: "/recipes/salade-nicoise-2.webp", alt: "Salade Niçoise 2" },
         ],
-        Favorite: [
-            { favorite: true, userId: "user3-id" },
-            { favorite: false, userId: "user1-id" },
-            { favorite: true, userId: "modo2-id" },
-        ],
+        Favorite: [],
         Review: [
             {
                 review: "Très frais et savoureux. Parfait pour l'été.",

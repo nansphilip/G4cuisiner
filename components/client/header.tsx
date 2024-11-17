@@ -212,7 +212,7 @@ export default function HeaderClient(props: HeaderClientProps) {
             </div>
             <nav className="flex justify-center bg-secondary py-3 max-md:hidden">
                 <Link href="/" className="absolute left-5 top-1.5 flex items-center gap-2">
-                    <Image src="/logo-mobile.svg" width={40} height={40} alt="Logo" />
+                    <Image src="/logo-3.png" width={40} height={40} alt="Logo" />
                 </Link>
                 <SlidingHover
                     className="flex items-start justify-center gap-1"

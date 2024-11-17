@@ -33,14 +33,14 @@ export default function RecipeInfo(props: RecipeInfoProps) {
     ];
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             {infoList.map((info, index) => (
                 <div key={index} className="flex h-32 flex-col items-center justify-center rounded-md border">
                     <span className="text-xl font-bold">{info.value}</span>
                     <span className="text-xs text-gray-500">{info.label}</span>
                 </div>
             ))}
-            <div className="w-full flex h-32 flex-col items-center justify-center rounded-md border">
+            <div className="flex h-32 w-full flex-col items-center justify-center rounded-md border">
                 <StarRating number={difficultyLevelFormatted} editable={false} />
             </div>
         </div>
